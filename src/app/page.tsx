@@ -1,5 +1,5 @@
-import { redirect } from "next/navigation";
+import { DashboardShell } from "@/features/dashboard/components/dashboard-shell"
 
 export default function Home() {
-  redirect("/sign-in");
+  return <DashboardShell />
 }

@@ -1,36 +1,79 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🚀 ResourceIQ Frontend
 
-## Getting Started
+ResourceIQ is an intelligent task allocation and resource monitoring platform. This frontend is built with **Next.js 15**, **React 19**, and **Tailwind CSS**, providing a premium, high-performance dashboard for managing development resources and GitHub activities.
 
-First, run the development server:
+---
 
+## ✨ Features
+
+- **Premium Dashboard**: Real-time overview of platform health, active developers, and recent tasks.
+- **GitHub Integration**: Live tracking of pull requests and activity feeds directly from GitHub.
+- **Role-Based Protection**: Secure routes and interfaces for Admins and Team Members.
+- **Modern UI/UX**: Built with shadcn/ui components, featuring a sleek dark-mode compatible design with glassmorphism effects.
+- **Type Safety**: Fully implemented with TypeScript for robust development.
+
+---
+
+## 🛠️ Tech Stack
+
+- **Framework**: [Next.js 15 (App Router)](https://nextjs.org/)
+- **Language**: [TypeScript](https://www.typescriptlang.org/)
+- **Styling**: [Tailwind CSS 4](https://tailwindcss.com/)
+- **Icons**: [Lucide React](https://lucide.dev/)
+- **Components**: [Radix UI](https://www.radix-ui.com/) / [shadcn/ui](https://ui.shadcn.com/)
+- **API Client**: Native Fetch with JWT interceptors
+
+---
+
+## 🚀 Getting Started
+
+### 1. Prerequisites
+- Node.js 18+ 
+- [ResourceIQ Backend](https://github.com/your-repo/resource_iq-backend) running at `http://localhost:8000`
+
+### 2. Installation
+Clone the repository and install dependencies:
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+cd resource_iq-frontend
+npm install
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 3. Environment Setup
+Create a `.env.local` file in the root directory:
+```env
+NEXT_PUBLIC_API_URL=http://localhost:8000/api/v1
+```
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+### 4. Run Development Server
+```bash
+npm run dev
+```
+The application will be available at [http://localhost:3000](http://localhost:3000).
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## 🔐 Authentication
+The frontend connects to the FastAPI backend using **OAuth2 Password Grant (JWT)**.
+1. Sign in via `/sign-in`.
+2. The token is stored in `localStorage`.
+3. Private routes (`/`) automatically check for the token and redirect if it's missing or expired.
 
-To learn more about Next.js, take a look at the following resources:
+---
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+## 📁 Project Structure
+- `src/app`: Layouts, pages (Dashboard, Sign-in), and global styles.
+- `src/components`: Reusable UI components (Buttons, Cards, Icons).
+- `src/lib`: API client utilities and helper functions.
+- `public`: Static assets and images.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🛡️ Security
+- **JWT Protection**: Tokens are automatically attached to all API requests.
+- **CORS Configuration**: Ensure the backend `.env` file includes `http://localhost:3000` in `BACKEND_CORS_ORIGINS`.
+- **Environment Variables**: No sensitive backend keys (like GitHub Private Keys) are stored in the frontend.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+---
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+## 👤 Author
+Developed as part of the ResourceIQ suite.
