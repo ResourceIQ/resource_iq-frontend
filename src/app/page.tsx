@@ -1,4 +1,4 @@
-import { DashboardShell } from "@/features/dashboard/components/dashboard-shell"
+import { DashboardShell } from "@/app/dashboard/components/dashboard-shell"
 
 export default function Home() {
   return <DashboardShell />
