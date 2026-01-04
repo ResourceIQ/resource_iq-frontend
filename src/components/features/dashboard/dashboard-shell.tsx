@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { StatCard } from "@/components/common/stat-card"
-import { useDashboard } from "../hooks/use-dashboard"
+import { useDashboard } from "@/hooks/use-dashboard"
 import { Loader2 } from "lucide-react"
 
 export function DashboardShell() {
@@ -28,45 +28,9 @@ export function DashboardShell() {
     }
 
     return (
-        <div className="flex min-h-screen bg-neutral-50/50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50">
-            {/* Sidebar */}
-            <aside className="fixed left-0 top-0 z-40 h-screen w-64 border-r bg-white dark:bg-neutral-900 hidden lg:block">
-                <div className="flex h-full flex-col p-4 shadow-sm">
-                    <div className="flex items-center gap-3 px-2 mb-10">
-                        <div className="bg-primary p-1.5 rounded-lg">
-                            <Icons.logo className="h-6 w-6 text-primary-foreground" />
-                        </div>
-                        <span className="text-xl font-bold tracking-tight">ResourceIQ</span>
-                    </div>
-
-                    <nav className="flex-1 space-y-1">
-                        <SidebarLink icon={LayoutDashboard} label="Overview" active />
-                        <SidebarLink icon={Briefcase} label="Projects" />
-                        <SidebarLink icon={Users} label="Developers" count={developers.length} />
-                        <SidebarLink icon={BarChart3} label="Analytics" />
-                        <SidebarLink icon={Settings} label="Settings" />
-                        <SidebarLink icon={Settings} label="System Configuration" />
-                    </nav>
-
-                    <div className="mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800">
-                        <div className="flex items-center gap-3 p-2 rounded-xl hover:bg-neutral-100 dark:hover:bg-neutral-800 transition-colors cursor-pointer group">
-                            <div className="h-9 w-9 rounded-full bg-primary/10 flex items-center justify-center text-primary font-bold group-hover:scale-105 transition-transform">
-                                {user?.email?.[0]?.toUpperCase()}
-                            </div>
-                            <div className="flex-1 min-w-0">
-                                <p className="text-sm font-semibold truncate leading-none mb-1">{user?.full_name || 'Admin User'}</p>
-                                <p className="text-xs text-neutral-500 truncate">{user?.email}</p>
-                            </div>
-                            <Button variant="ghost" size="icon" className="h-8 w-8 text-neutral-400" onClick={handleLogout}>
-                                <LogOut className="h-4 w-4" />
-                            </Button>
-                        </div>
-                    </div>
-                </div>
-            </aside>
-
+        <div className="flex min-h-screen bg-neutral-50/50 dark:bg-neutral-950 text-neutral-900 dark:text-neutral-50 w-full">
             {/* Main Content */}
-            <main className="flex-1 lg:ml-64 p-4 md:p-8 lg:p-10">
+            <main className="flex-1 p-4 md:p-8 lg:p-10 w-full">
                 <header className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-8">
                     <div>
                         <h1 className="text-2xl md:text-3xl font-bold tracking-tight mb-1">Good Morning, Admin</h1>
@@ -241,24 +205,3 @@ export function DashboardShell() {
     )
 }
 
-function SidebarLink({ icon: Icon, label, active = false, count }: any) {
-    return (
-        <a
-            href="#"
-            className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl transition-all ${active
-                    ? 'bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20'
-                    : 'text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100'
-                }`}
-        >
-            <div className="flex items-center gap-3">
-                <Icon className={`h-5 w-5 ${active ? 'text-primary' : ''}`} />
-                <span className="text-sm uppercase tracking-wider font-bold antialiased text-[11px]">{label}</span>
-            </div>
-            {count !== undefined && (
-                <span className="text-[10px] px-1.5 py-0.5 rounded-md bg-neutral-100 dark:bg-neutral-800 font-bold text-neutral-500">
-                    {count}
-                </span>
-            )}
-        </a>
-    )
-}
