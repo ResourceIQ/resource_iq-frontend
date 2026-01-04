@@ -45,6 +45,7 @@ export function DashboardShell() {
                         <SidebarLink icon={Users} label="Developers" count={developers.length} />
                         <SidebarLink icon={BarChart3} label="Analytics" />
                         <SidebarLink icon={Settings} label="Settings" />
+                        <SidebarLink icon={Settings} label="System Configuration" />
                     </nav>
 
                     <div className="mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800">
