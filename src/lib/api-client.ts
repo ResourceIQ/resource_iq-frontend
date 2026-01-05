@@ -18,6 +18,12 @@ export async function apiFetch(endpoint: string, options: RequestInit = {}) {
   });
 
   if (!response.ok) {
+    if (response.status === 401) {
+      authApi.logout();
+      if (typeof window !== 'undefined') {
+        window.location.href = '/sign-in';
+      }
+    }
     const error = await response.json().catch(() => ({ detail: 'An error occurred' }));
     throw new Error(error.detail || 'Something went wrong');
   }
