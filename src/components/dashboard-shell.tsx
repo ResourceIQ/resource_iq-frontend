@@ -10,7 +10,7 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button"
 import { Icons } from "@/components/icons"
 import { StatCard } from "@/components/common/stat-card"
-import { useDashboard } from "../hooks/use-dashboard"
+import { useDashboard } from "@/hooks/use-dashboard"
 import { Loader2 } from "lucide-react"
 
 export function DashboardShell() {
@@ -245,8 +245,8 @@ function SidebarLink({ icon: Icon, label, active = false, count }: any) {
         <a
             href="#"
             className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl transition-all ${active
-                    ? 'bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20'
-                    : 'text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100'
+                ? 'bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20'
+                : 'text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100'
                 }`}
         >
             <div className="flex items-center gap-3">
