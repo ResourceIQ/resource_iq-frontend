@@ -1,5 +1,3 @@
-"use client"
-
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { githubApi, authApi } from "@/lib/api-client"
