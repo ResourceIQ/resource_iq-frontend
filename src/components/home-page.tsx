@@ -43,9 +43,9 @@ export function HomePage() {
                         <Link href="/sign-in" className="hidden sm:block">
                             <Button variant="ghost" className="font-semibold px-6">Sign In</Button>
                         </Link>
-                        <Link href="/dashboard">
+                        <Link href="/sign-in">
                             <Button className="rounded-full px-8 h-11 font-bold shadow-lg shadow-primary/25 hover:shadow-primary/40 transition-all active:scale-95">
-                                Launch Dashboard
+                                Sign In
                             </Button>
                         </Link>
                     </div>
@@ -79,9 +79,9 @@ export function HomePage() {
                         </p>
 
                         <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
-                            <Link href="/dashboard">
+                            <Link href="/sign-in">
                                 <Button size="lg" className="h-16 px-10 text-xl font-black rounded-2xl shadow-2xl shadow-primary/30 gap-3 group transition-all hover:px-12">
-                                    Start Building
+                                    Get Started
                                     <ArrowRight className="h-6 w-6 group-hover:translate-x-1 transition-transform" />
                                 </Button>
                             </Link>
@@ -98,7 +98,7 @@ export function HomePage() {
                             <div className="relative rounded-[32px] border border-neutral-200 dark:border-neutral-800 bg-white/50 dark:bg-neutral-900 shadow-2xl overflow-hidden aspect-video flex items-center justify-center">
                                 <div className="flex flex-col items-center gap-4 text-neutral-400">
                                     <LayoutDashboard className="h-20 w-20 stroke-[1px]" />
-                                    <p className="text-sm font-medium uppercase tracking-widest italic opacity-50">Intelligent Dashboard Interface</p>
+                                    <p className="text-sm font-medium uppercase tracking-widest italic opacity-50">Intelligent Platform Interface</p>
                                 </div>
                             </div>
                         </div>
@@ -174,9 +174,9 @@ export function HomePage() {
                                     No credit card required. Experience the future of engineering management in less than 60 seconds.
                                 </p>
                                 <div className="flex flex-col sm:flex-row items-center justify-center gap-6 pt-6">
-                                    <Link href="/dashboard">
+                                    <Link href="/sign-in">
                                         <Button size="lg" className="h-16 px-12 text-xl font-bold rounded-2xl bg-white text-neutral-900 hover:bg-neutral-100 dark:bg-neutral-900 dark:text-white dark:hover:bg-neutral-800">
-                                            Launch System
+                                            Join Now
                                         </Button>
                                     </Link>
                                     <Button variant="ghost" className="text-white dark:text-neutral-900 hover:bg-white/10 dark:hover:bg-black/5 text-lg font-bold h-16 px-8 rounded-2xl">
