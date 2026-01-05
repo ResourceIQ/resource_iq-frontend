@@ -26,11 +26,11 @@ export default function SignInPage() {
             const formData = new FormData()
             formData.append("username", email)
             formData.append("password", password)
-            
+
             const data = await authApi.login(formData)
             localStorage.setItem("token", data.access_token)
-            
-            router.push("/")
+
+            router.push("/dashboard")
         } catch (err: any) {
             setError(err.message || "Invalid email or password")
         } finally {
@@ -58,11 +58,11 @@ export default function SignInPage() {
                         )}
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input 
-                                id="email" 
-                                placeholder="name@example.com" 
-                                type="email" 
-                                className="h-11" 
+                            <Input
+                                id="email"
+                                placeholder="name@example.com"
+                                type="email"
+                                className="h-11"
                                 value={email}
                                 onChange={(e) => setEmail(e.target.value)}
                                 required
@@ -70,18 +70,18 @@ export default function SignInPage() {
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="password">Password</Label>
-                            <Input 
-                                id="password" 
-                                placeholder="••••••••" 
-                                type="password" 
-                                className="h-11" 
+                            <Input
+                                id="password"
+                                placeholder="••••••••"
+                                type="password"
+                                className="h-11"
                                 value={password}
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
                         </div>
-                        <Button 
-                            className="w-full h-11 text-base font-medium shadow-sm" 
+                        <Button
+                            className="w-full h-11 text-base font-medium shadow-sm"
                             type="submit"
                             disabled={isLoading}
                         >

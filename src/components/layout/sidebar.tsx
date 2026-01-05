@@ -1,6 +1,6 @@
 "use client"
 
-import { LucideIcon, LogOut } from "lucide-react"
+import { LucideIcon, LogOut, LayoutDashboard, Briefcase, Users, BarChart3, Settings } from "lucide-react"
 import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import { User } from "@/types"
@@ -18,8 +18,8 @@ function SidebarLink({ icon: Icon, label, active = false, count, href = "#" }: S
         <a
             href={href}
             className={`flex items-center justify-between gap-3 px-3 py-2.5 rounded-xl transition-all ${active
-                    ? "bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20"
-                    : "text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
+                ? "bg-primary/10 text-primary font-bold shadow-sm ring-1 ring-primary/20"
+                : "text-neutral-500 hover:bg-neutral-100 dark:hover:bg-neutral-800 hover:text-neutral-900 dark:hover:text-neutral-100"
                 }`}
         >
             <div className="flex items-center gap-3">
@@ -44,11 +44,11 @@ interface SidebarProps {
 
 export function Sidebar({ user, developersCount, onLogout, currentPath = "overview" }: SidebarProps) {
     const navItems = [
-        { icon: Icons.logo, label: "Overview", id: "overview" },
-        { icon: Icons.logo, label: "Projects", id: "projects" },
-        { icon: Icons.logo, label: "Developers", id: "developers", count: developersCount },
-        { icon: Icons.logo, label: "Analytics", id: "analytics" },
-        { icon: Icons.logo, label: "Settings", id: "settings" },
+        { icon: LayoutDashboard, label: "Overview", id: "overview" },
+        { icon: Briefcase, label: "Projects", id: "projects" },
+        { icon: Users, label: "Developers", id: "developers", count: developersCount },
+        { icon: BarChart3, label: "Analytics", id: "analytics" },
+        { icon: Settings, label: "Settings", id: "settings" },
     ]
 
     // Note: Replacing Icons.logo with actual lucide icons in the list below for better visual
@@ -65,7 +65,16 @@ export function Sidebar({ user, developersCount, onLogout, currentPath = "overvi
                 </div>
 
                 <nav className="flex-1 space-y-1">
-                    {/* The actual icons would be passed here in a real implementation */}
+                    {navItems.map((item) => (
+                        <SidebarLink
+                            key={item.id}
+                            icon={item.icon}
+                            label={item.label}
+                            active={currentPath === item.id}
+                            count={item.count}
+                            href={`/dashboard/${item.id === 'overview' ? '' : item.id}`}
+                        />
+                    ))}
                 </nav>
 
                 <div className="mt-auto pt-4 border-t border-neutral-100 dark:border-neutral-800">
