@@ -1,5 +1,8 @@
-import { Calendar, Home, Inbox, Search, Settings, Users } from "lucide-react"
+"use client"
+
+import { Home, Inbox, Settings, Users } from "lucide-react"
 import Link from "next/link"
+import { usePathname } from "next/navigation"
 import {
     Sidebar,
     SidebarContent,
@@ -20,22 +23,24 @@ const items = [
     },
     {
         title: "Best Fit",
-        url: "/Best Fit",
+        url: "/best-fit",
         icon: Inbox,
     },
     {
         title: "Configuration",
-        url: "/Configuration",
+        url: "/configuration",
         icon: Settings,
     },
     {
         title: "Developers",
-        url: "/Developers",
+        url: "/developers",
         icon: Users,
     },
 ]
 
 export function AppSidebar() {
+    const pathname = usePathname()
+
     return (
         <Sidebar>
             <SidebarContent>
@@ -45,7 +50,7 @@ export function AppSidebar() {
                         <SidebarMenu>
                             {items.map((item) => (
                                 <SidebarMenuItem key={item.title}>
-                                    <SidebarMenuButton asChild>
+                                    <SidebarMenuButton asChild isActive={pathname === item.url}>
                                         <Link href={item.url}>
                                             <item.icon />
                                             <span>{item.title}</span>

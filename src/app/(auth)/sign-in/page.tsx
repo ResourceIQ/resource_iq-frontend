@@ -30,9 +30,9 @@ export default function SignInPage() {
             const data = await authApi.login(formData)
             localStorage.setItem("token", data.access_token)
 
-            router.push("/")
-        } catch (err: any) {
-            setError(err.message || "Invalid email or password")
+            router.push("/dashboard")
+        } catch (err) {
+            setError(err instanceof Error ? err.message : "Invalid email or password")
         } finally {
             setIsLoading(false)
         }

@@ -3,18 +3,9 @@ import { Icons } from "@/components/icons"
 import { Button } from "@/components/ui/button"
 import {
     ArrowRight,
-    BarChart3,
-    Cpu,
-    Github,
     LayoutDashboard,
-    ShieldCheck,
-    Zap,
-    Users,
     CheckCircle2,
-    Rocket,
-    Globe,
-    Star,
-    Layers
+    Rocket
 } from "lucide-react"
 
 export function HomePage() {
