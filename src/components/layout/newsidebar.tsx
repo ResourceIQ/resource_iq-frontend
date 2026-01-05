@@ -1,7 +1,8 @@
 "use client"
 
 import * as React from "react"
-import { useRouter } from "next/navigation"
+import { useRouter, usePathname } from "next/navigation"
+import Link from "next/link"
 import { authApi } from "@/lib/api-client"
 
 import {
@@ -64,6 +65,7 @@ import {
 
 export function AppSidebar() {
   const router = useRouter()
+  const pathname = usePathname()
 
   const data = {
     user: {
@@ -79,55 +81,30 @@ export function AppSidebar() {
     ],
     navMain: [
       {
-        title: "Platform",
-        url: "#",
+        title: "Dashboard",
+        url: "/dashboard",
         icon: <LayoutDashboard />,
         isActive: true,
-        items: [
-          {
-            title: "Dashboard",
-            url: "/dashboard",
-          },
-          {
-            title: "Best Fit",
-            url: "#",
-          },
-          {
-            title: "Developers",
-            url: "#",
-          },
-        ],
+        items: [] as { title: string; url: string }[]
       },
       {
-        title: "Analytics",
-        url: "#",
+        title: "Best Fit",
+        url: "/best-fit",
         icon: <PieChartIcon />,
-        items: [
-          {
-            title: "Reports",
-            url: "#",
-          },
-          {
-            title: "Performance",
-            url: "#",
-          },
-        ],
+        items: [] as { title: string; url: string }[]
+      },
+      {
+        title: "Developers",
+        url: "/developers",
+        icon: <Users />,
+        items: [] as { title: string; url: string }[]
       },
       {
         title: "Configuration",
-        url: "#",
+        url: "/configuration",
         icon: <Settings />,
-        items: [
-          {
-            title: "General",
-            url: "#",
-          },
-          {
-            title: "Team Settings",
-            url: "#",
-          },
-        ],
-      },
+        items: [] as { title: string; url: string }[]
+      }
     ],
     projects: [
       {
@@ -201,31 +178,43 @@ export function AppSidebar() {
           <SidebarGroupLabel>Platform</SidebarGroupLabel>
           <SidebarMenu>
             {data.navMain.map((item) => (
-              <Collapsible
-                key={item.title}
-                asChild
-                defaultOpen={item.isActive}
-                className="group/collapsible"
-              >
-                <SidebarMenuItem>
-                  <SidebarMenuButton tooltip={item.title}>
-                    {item.icon}
-                    <span>{item.title}</span>
-                    <ChevronRightIcon className="ml-auto transition-transform duration-100 group-data-open/collapsible:rotate-90" />
+              <SidebarMenuItem key={item.title}>
+                {item.items && item.items.length > 0 ? (
+                  <Collapsible
+                    asChild
+                    defaultOpen={item.isActive}
+                    className="group/collapsible"
+                  >
+                    <>
+                      <CollapsibleTrigger asChild>
+                        <SidebarMenuButton tooltip={item.title}>
+                          {item.icon}
+                          <span>{item.title}</span>
+                          <ChevronRightIcon className="ml-auto transition-transform duration-100 group-data-open/collapsible:rotate-90" />
+                        </SidebarMenuButton>
+                      </CollapsibleTrigger>
+                      <CollapsibleContent>
+                        <SidebarMenuSub>
+                          {item.items.map((subItem) => (
+                            <SidebarMenuSubItem key={subItem.title}>
+                              <SidebarMenuSubButton asChild>
+                                <Link href={subItem.url}>{subItem.title}</Link>
+                              </SidebarMenuSubButton>
+                            </SidebarMenuSubItem>
+                          ))}
+                        </SidebarMenuSub>
+                      </CollapsibleContent>
+                    </>
+                  </Collapsible>
+                ) : (
+                  <SidebarMenuButton asChild tooltip={item.title} isActive={pathname === item.url}>
+                    <Link href={item.url}>
+                      {item.icon}
+                      <span>{item.title}</span>
+                    </Link>
                   </SidebarMenuButton>
-                  <CollapsibleContent>
-                    <SidebarMenuSub>
-                      {item.items?.map((subItem) => (
-                        <SidebarMenuSubItem key={subItem.title}>
-                          <SidebarMenuSubButton asChild>
-                            <a href={subItem.url}>{subItem.title}</a>
-                          </SidebarMenuSubButton>
-                        </SidebarMenuSubItem>
-                      ))}
-                    </SidebarMenuSub>
-                  </CollapsibleContent>
-                </SidebarMenuItem>
-              </Collapsible>
+                )}
+              </SidebarMenuItem>
             ))}
           </SidebarMenu>
         </SidebarGroup>
@@ -234,11 +223,11 @@ export function AppSidebar() {
           <SidebarMenu>
             {data.projects.map((item) => (
               <SidebarMenuItem key={item.name}>
-                <SidebarMenuButton asChild>
-                  <a href={item.url}>
+                <SidebarMenuButton asChild isActive={pathname === item.url}>
+                  <Link href={item.url}>
                     {item.icon}
                     <span>{item.name}</span>
-                  </a>
+                  </Link>
                 </SidebarMenuButton>
               </SidebarMenuItem>
             ))}
