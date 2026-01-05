@@ -40,6 +40,11 @@ export const authApi = {
     return response.json();
   },
   getMe: () => apiFetch('/users/me', { method: 'GET' }),
+  logout: () => {
+    if (typeof window !== 'undefined') {
+      localStorage.removeItem('token');
+    }
+  },
 };
 
 export const githubApi = {
