@@ -41,10 +41,8 @@ export default function BreadcrumbHeader() {
   return (
     <Breadcrumb>
       <BreadcrumbList>
-        <BreadcrumbItem>
-          <BreadcrumbLink href="/">Home</BreadcrumbLink>
-        </BreadcrumbItem>
-        <BreadcrumbSeparator />
+        
+        
         {crumbs.map((c, i) => (
           <React.Fragment key={c.href}>
             <BreadcrumbItem>
