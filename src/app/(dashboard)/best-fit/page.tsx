@@ -1,8 +1,52 @@
+
+import {
+  Card,
+  CardAction,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card"
+
+import { NewTaskForm } from "@/components/new-task"
+
+
 export default function BestFitPage() {
     return (
-        <div className="p-6">
-            <h1 className="text-3xl font-bold mb-4">Best Fit</h1>
-            <p className="text-muted-foreground">Analyze and find the best resource allocation for your projects.</p>
+        <div className="w-full mx-auto flex justify-between gap-4">
+
+            <div className="w-1/2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Card Title</CardTitle>
+                        <CardDescription>Card Description</CardDescription>
+                        <CardAction>Card Action</CardAction>
+                    </CardHeader>
+                    <CardContent>
+                        <p>Card Content</p>
+                        <NewTaskForm />
+                    </CardContent>
+                    <CardFooter>
+                        <p>Card Footer</p>
+                    </CardFooter>
+                </Card>
+            </div>
+            <div className="w-1/2">
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Card Title</CardTitle>
+                        <CardDescription>Card Description</CardDescription>
+                        <CardAction>Card Action</CardAction>
+                    </CardHeader>
+                    <CardContent>
+                        <p>Card Content</p>
+                    </CardContent>
+                    <CardFooter>
+                        <p>Card Footer</p>
+                    </CardFooter>
+                </Card>
+            </div>
         </div>
     )
 }
