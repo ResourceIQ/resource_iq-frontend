@@ -2,7 +2,7 @@ import { SidebarProvider, SidebarTrigger, SidebarInset } from "@/components/ui/s
 import { AppSidebar } from "@/components/layout/newsidebar"
 import BreadcrumbHeader from "@/components/layout/breadcrumb-header"
 
-export default function DashboardLayout({
+export default function AppLayout({
     children,
 }: {
     children: React.ReactNode
