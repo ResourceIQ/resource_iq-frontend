@@ -142,7 +142,7 @@ export function AppSidebar() {
                   className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground"
                 >
                   
-                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
+                  <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-primary-foreground">
                     <Image src="/Logo.png" alt="ResourceIQ Logo" width={28} height={28} />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
