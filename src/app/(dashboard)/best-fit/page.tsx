@@ -9,9 +9,12 @@ import {
   CardTitle,
 } from "@/components/ui/card"
 
+import { NewTaskForm } from "@/components/new-task"
+
+
 export default function BestFitPage() {
     return (
-        <div className="w-full max-w-4xl mx-auto flex justify-between gap-4">
+        <div className="w-full mx-auto flex justify-between gap-4">
 
             <div className="w-1/2">
                 <Card>
@@ -22,6 +25,7 @@ export default function BestFitPage() {
                     </CardHeader>
                     <CardContent>
                         <p>Card Content</p>
+                        <NewTaskForm />
                     </CardContent>
                     <CardFooter>
                         <p>Card Footer</p>
