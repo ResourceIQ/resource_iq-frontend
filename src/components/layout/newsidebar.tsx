@@ -4,6 +4,9 @@ import * as React from "react"
 import { useRouter, usePathname } from "next/navigation"
 import Link from "next/link"
 import { authApi } from "@/lib/api-client"
+import Image from "next/image"
+import Imdage from "../../../public/Logo.svg"
+
 
 import {
   Avatar,
@@ -139,7 +142,7 @@ export function AppSidebar() {
                   className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground"
                 >
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg bg-primary text-primary-foreground">
-                    <Briefcase className="size-4" />
+                    <Image src="/Logo.png" alt="ResourceIQ Logo" width={32} height={32} />
                   </div>
                   <div className="grid flex-1 text-left text-sm leading-tight">
                     <span className="truncate font-medium">
@@ -173,6 +176,7 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
         <SidebarGroup>
           <SidebarGroupLabel>Platform</SidebarGroupLabel>
@@ -240,6 +244,7 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
+      
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
