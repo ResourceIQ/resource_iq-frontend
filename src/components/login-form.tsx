@@ -46,9 +46,9 @@ export function LoginForm({
                   <div className="h-10 w-10 bg-primary rounded-full mb-2" />
                 )}
 
-                <h1 className="text-2xl font-bold">Welcome back</h1>
-                <p className="text-muted-foreground text-sm">
-                  Login to your ResourceIQ account
+                <h1 className="text-2xl font-bold font-albert-sans">ResourceIQ</h1>
+                <p className="text-sm font-albert-sans font-semibold font-size-24">
+                  Intelligent Task Allocation Platform
                 </p>
               </div>
 
@@ -63,7 +63,7 @@ export function LoginForm({
                 <Input
                   id="email"
                   type="email"
-                  placeholder="name@example.com"
+                  placeholder="name@resourceiq.com"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
@@ -73,12 +73,6 @@ export function LoginForm({
               <div className="grid gap-2">
                 <div className="flex items-center">
                   <Label htmlFor="password">Password</Label>
-                  <a
-                    href="#"
-                    className="ml-auto text-xs underline hover:text-primary"
-                  >
-                    Forgot password?
-                  </a>
                 </div>
                 <Input
                   id="password"
@@ -97,11 +91,12 @@ export function LoginForm({
 
           <div className="bg-muted relative hidden md:flex items-center justify-center">
             <div className="text-muted-foreground text-sm italic p-8 text-center">
-              ResourceIQ: Intelligent Task Allocation
+              ResourceIQ: Animation part shows here
             </div>
           </div>
         </CardContent>
       </Card>
+      <p className="bg-muted relative hidden md:flex items-center justify-center">© 2025 ResourceIQ. All rights reserved..</p>
     </div>
   );
 }
