@@ -37,7 +37,10 @@ import type {
   UpdateSkillsRequest
 } from '../../model';
 
+import { customFetch } from '../../../lib/custom-fetch';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -62,25 +65,19 @@ export const getProfilesGetMyProfileUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/me`
+  return `/api/v1/profiles/me`
 }
 
 export const profilesGetMyProfile = async ( options?: RequestInit): Promise<profilesGetMyProfileResponse> => {
   
-  const res = await fetch(getProfilesGetMyProfileUrl(),
+  return customFetch<profilesGetMyProfileResponse>(getProfilesGetMyProfileUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesGetMyProfileResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesGetMyProfileResponse
-}
+);}
 
 
 
@@ -88,21 +85,21 @@ export const profilesGetMyProfile = async ( options?: RequestInit): Promise<prof
 
 export const getProfilesGetMyProfileQueryKey = () => {
     return [
-    `http://127.0.0.1:8000/api/v1/profiles/me`
+    `/api/v1/profiles/me`
     ] as const;
     }
 
     
-export const getProfilesGetMyProfileQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetMyProfile>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetMyProfile>>, TError, TData>>, fetch?: RequestInit}
+export const getProfilesGetMyProfileQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetMyProfile>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetMyProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProfilesGetMyProfileQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetMyProfile>>> = ({ signal }) => profilesGetMyProfile({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetMyProfile>>> = ({ signal }) => profilesGetMyProfile({ signal, ...requestOptions });
 
       
 
@@ -122,7 +119,7 @@ export function useProfilesGetMyProfile<TData = Awaited<ReturnType<typeof profil
           TError,
           Awaited<ReturnType<typeof profilesGetMyProfile>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetMyProfile<TData = Awaited<ReturnType<typeof profilesGetMyProfile>>, TError = unknown>(
@@ -132,11 +129,11 @@ export function useProfilesGetMyProfile<TData = Awaited<ReturnType<typeof profil
           TError,
           Awaited<ReturnType<typeof profilesGetMyProfile>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetMyProfile<TData = Awaited<ReturnType<typeof profilesGetMyProfile>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetMyProfile>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetMyProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -144,7 +141,7 @@ export function useProfilesGetMyProfile<TData = Awaited<ReturnType<typeof profil
  */
 
 export function useProfilesGetMyProfile<TData = Awaited<ReturnType<typeof profilesGetMyProfile>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetMyProfile>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetMyProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -186,12 +183,12 @@ export const getProfilesCreateProfileUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/`
+  return `/api/v1/profiles/`
 }
 
 export const profilesCreateProfile = async (resourceProfileCreate: ResourceProfileCreate, options?: RequestInit): Promise<profilesCreateProfileResponse> => {
   
-  const res = await fetch(getProfilesCreateProfileUrl(),
+  return customFetch<profilesCreateProfileResponse>(getProfilesCreateProfileUrl(),
   {      
     ...options,
     method: 'POST',
@@ -199,27 +196,21 @@ export const profilesCreateProfile = async (resourceProfileCreate: ResourceProfi
     body: JSON.stringify(
       resourceProfileCreate,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesCreateProfileResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesCreateProfileResponse
-}
+);}
 
 
 
 
 export const getProfilesCreateProfileMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesCreateProfile>>, TError,{data: ResourceProfileCreate}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesCreateProfile>>, TError,{data: ResourceProfileCreate}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof profilesCreateProfile>>, TError,{data: ResourceProfileCreate}, TContext> => {
 
 const mutationKey = ['profilesCreateProfile'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -227,7 +218,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof profilesCreateProfile>>, {data: ResourceProfileCreate}> = (props) => {
           const {data} = props ?? {};
 
-          return  profilesCreateProfile(data,fetchOptions)
+          return  profilesCreateProfile(data,requestOptions)
         }
 
 
@@ -245,7 +236,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Create Profile
  */
 export const useProfilesCreateProfile = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesCreateProfile>>, TError,{data: ResourceProfileCreate}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesCreateProfile>>, TError,{data: ResourceProfileCreate}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profilesCreateProfile>>,
         TError,
@@ -289,25 +280,19 @@ export const getProfilesListProfilesUrl = (params?: ProfilesListProfilesParams,)
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/profiles/?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/profiles/`
+  return stringifiedParams.length > 0 ? `/api/v1/profiles/?${stringifiedParams}` : `/api/v1/profiles/`
 }
 
 export const profilesListProfiles = async (params?: ProfilesListProfilesParams, options?: RequestInit): Promise<profilesListProfilesResponse> => {
   
-  const res = await fetch(getProfilesListProfilesUrl(params),
+  return customFetch<profilesListProfilesResponse>(getProfilesListProfilesUrl(params),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesListProfilesResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesListProfilesResponse
-}
+);}
 
 
 
@@ -315,21 +300,21 @@ export const profilesListProfiles = async (params?: ProfilesListProfilesParams, 
 
 export const getProfilesListProfilesQueryKey = (params?: ProfilesListProfilesParams,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/profiles/`, ...(params ? [params] : [])
+    `/api/v1/profiles/`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getProfilesListProfilesQueryOptions = <TData = Awaited<ReturnType<typeof profilesListProfiles>>, TError = HTTPValidationError>(params?: ProfilesListProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesListProfiles>>, TError, TData>>, fetch?: RequestInit}
+export const getProfilesListProfilesQueryOptions = <TData = Awaited<ReturnType<typeof profilesListProfiles>>, TError = HTTPValidationError>(params?: ProfilesListProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesListProfiles>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProfilesListProfilesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesListProfiles>>> = ({ signal }) => profilesListProfiles(params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesListProfiles>>> = ({ signal }) => profilesListProfiles(params, { signal, ...requestOptions });
 
       
 
@@ -349,7 +334,7 @@ export function useProfilesListProfiles<TData = Awaited<ReturnType<typeof profil
           TError,
           Awaited<ReturnType<typeof profilesListProfiles>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesListProfiles<TData = Awaited<ReturnType<typeof profilesListProfiles>>, TError = HTTPValidationError>(
@@ -359,11 +344,11 @@ export function useProfilesListProfiles<TData = Awaited<ReturnType<typeof profil
           TError,
           Awaited<ReturnType<typeof profilesListProfiles>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesListProfiles<TData = Awaited<ReturnType<typeof profilesListProfiles>>, TError = HTTPValidationError>(
- params?: ProfilesListProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesListProfiles>>, TError, TData>>, fetch?: RequestInit}
+ params?: ProfilesListProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesListProfiles>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -371,7 +356,7 @@ export function useProfilesListProfiles<TData = Awaited<ReturnType<typeof profil
  */
 
 export function useProfilesListProfiles<TData = Awaited<ReturnType<typeof profilesListProfiles>>, TError = HTTPValidationError>(
- params?: ProfilesListProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesListProfiles>>, TError, TData>>, fetch?: RequestInit}
+ params?: ProfilesListProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesListProfiles>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -420,25 +405,19 @@ export const getProfilesGetAllWorkloadsUrl = (params?: ProfilesGetAllWorkloadsPa
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/profiles/workloads?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/profiles/workloads`
+  return stringifiedParams.length > 0 ? `/api/v1/profiles/workloads?${stringifiedParams}` : `/api/v1/profiles/workloads`
 }
 
 export const profilesGetAllWorkloads = async (params?: ProfilesGetAllWorkloadsParams, options?: RequestInit): Promise<profilesGetAllWorkloadsResponse> => {
   
-  const res = await fetch(getProfilesGetAllWorkloadsUrl(params),
+  return customFetch<profilesGetAllWorkloadsResponse>(getProfilesGetAllWorkloadsUrl(params),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesGetAllWorkloadsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesGetAllWorkloadsResponse
-}
+);}
 
 
 
@@ -446,21 +425,21 @@ export const profilesGetAllWorkloads = async (params?: ProfilesGetAllWorkloadsPa
 
 export const getProfilesGetAllWorkloadsQueryKey = (params?: ProfilesGetAllWorkloadsParams,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/profiles/workloads`, ...(params ? [params] : [])
+    `/api/v1/profiles/workloads`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getProfilesGetAllWorkloadsQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError = HTTPValidationError>(params?: ProfilesGetAllWorkloadsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError, TData>>, fetch?: RequestInit}
+export const getProfilesGetAllWorkloadsQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError = HTTPValidationError>(params?: ProfilesGetAllWorkloadsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProfilesGetAllWorkloadsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetAllWorkloads>>> = ({ signal }) => profilesGetAllWorkloads(params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetAllWorkloads>>> = ({ signal }) => profilesGetAllWorkloads(params, { signal, ...requestOptions });
 
       
 
@@ -480,7 +459,7 @@ export function useProfilesGetAllWorkloads<TData = Awaited<ReturnType<typeof pro
           TError,
           Awaited<ReturnType<typeof profilesGetAllWorkloads>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetAllWorkloads<TData = Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError = HTTPValidationError>(
@@ -490,11 +469,11 @@ export function useProfilesGetAllWorkloads<TData = Awaited<ReturnType<typeof pro
           TError,
           Awaited<ReturnType<typeof profilesGetAllWorkloads>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetAllWorkloads<TData = Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError = HTTPValidationError>(
- params?: ProfilesGetAllWorkloadsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError, TData>>, fetch?: RequestInit}
+ params?: ProfilesGetAllWorkloadsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -502,7 +481,7 @@ export function useProfilesGetAllWorkloads<TData = Awaited<ReturnType<typeof pro
  */
 
 export function useProfilesGetAllWorkloads<TData = Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError = HTTPValidationError>(
- params?: ProfilesGetAllWorkloadsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError, TData>>, fetch?: RequestInit}
+ params?: ProfilesGetAllWorkloadsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetAllWorkloads>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -544,25 +523,19 @@ export const getProfilesGetProfileByJiraUrl = (jiraAccountId: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/by-jira/${jiraAccountId}`
+  return `/api/v1/profiles/by-jira/${jiraAccountId}`
 }
 
 export const profilesGetProfileByJira = async (jiraAccountId: string, options?: RequestInit): Promise<profilesGetProfileByJiraResponse> => {
   
-  const res = await fetch(getProfilesGetProfileByJiraUrl(jiraAccountId),
+  return customFetch<profilesGetProfileByJiraResponse>(getProfilesGetProfileByJiraUrl(jiraAccountId),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesGetProfileByJiraResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesGetProfileByJiraResponse
-}
+);}
 
 
 
@@ -570,21 +543,21 @@ export const profilesGetProfileByJira = async (jiraAccountId: string, options?: 
 
 export const getProfilesGetProfileByJiraQueryKey = (jiraAccountId: string,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/profiles/by-jira/${jiraAccountId}`
+    `/api/v1/profiles/by-jira/${jiraAccountId}`
     ] as const;
     }
 
     
-export const getProfilesGetProfileByJiraQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError = HTTPValidationError>(jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError, TData>>, fetch?: RequestInit}
+export const getProfilesGetProfileByJiraQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError = HTTPValidationError>(jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProfilesGetProfileByJiraQueryKey(jiraAccountId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetProfileByJira>>> = ({ signal }) => profilesGetProfileByJira(jiraAccountId, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetProfileByJira>>> = ({ signal }) => profilesGetProfileByJira(jiraAccountId, { signal, ...requestOptions });
 
       
 
@@ -604,7 +577,7 @@ export function useProfilesGetProfileByJira<TData = Awaited<ReturnType<typeof pr
           TError,
           Awaited<ReturnType<typeof profilesGetProfileByJira>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetProfileByJira<TData = Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError = HTTPValidationError>(
@@ -614,11 +587,11 @@ export function useProfilesGetProfileByJira<TData = Awaited<ReturnType<typeof pr
           TError,
           Awaited<ReturnType<typeof profilesGetProfileByJira>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetProfileByJira<TData = Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError = HTTPValidationError>(
- jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError, TData>>, fetch?: RequestInit}
+ jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -626,7 +599,7 @@ export function useProfilesGetProfileByJira<TData = Awaited<ReturnType<typeof pr
  */
 
 export function useProfilesGetProfileByJira<TData = Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError = HTTPValidationError>(
- jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError, TData>>, fetch?: RequestInit}
+ jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByJira>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -668,25 +641,19 @@ export const getProfilesGetProfileByGithubUrl = (githubLogin: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/by-github/${githubLogin}`
+  return `/api/v1/profiles/by-github/${githubLogin}`
 }
 
 export const profilesGetProfileByGithub = async (githubLogin: string, options?: RequestInit): Promise<profilesGetProfileByGithubResponse> => {
   
-  const res = await fetch(getProfilesGetProfileByGithubUrl(githubLogin),
+  return customFetch<profilesGetProfileByGithubResponse>(getProfilesGetProfileByGithubUrl(githubLogin),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesGetProfileByGithubResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesGetProfileByGithubResponse
-}
+);}
 
 
 
@@ -694,21 +661,21 @@ export const profilesGetProfileByGithub = async (githubLogin: string, options?: 
 
 export const getProfilesGetProfileByGithubQueryKey = (githubLogin: string,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/profiles/by-github/${githubLogin}`
+    `/api/v1/profiles/by-github/${githubLogin}`
     ] as const;
     }
 
     
-export const getProfilesGetProfileByGithubQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError = HTTPValidationError>(githubLogin: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError, TData>>, fetch?: RequestInit}
+export const getProfilesGetProfileByGithubQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError = HTTPValidationError>(githubLogin: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProfilesGetProfileByGithubQueryKey(githubLogin);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetProfileByGithub>>> = ({ signal }) => profilesGetProfileByGithub(githubLogin, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetProfileByGithub>>> = ({ signal }) => profilesGetProfileByGithub(githubLogin, { signal, ...requestOptions });
 
       
 
@@ -728,7 +695,7 @@ export function useProfilesGetProfileByGithub<TData = Awaited<ReturnType<typeof 
           TError,
           Awaited<ReturnType<typeof profilesGetProfileByGithub>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetProfileByGithub<TData = Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError = HTTPValidationError>(
@@ -738,11 +705,11 @@ export function useProfilesGetProfileByGithub<TData = Awaited<ReturnType<typeof 
           TError,
           Awaited<ReturnType<typeof profilesGetProfileByGithub>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetProfileByGithub<TData = Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError = HTTPValidationError>(
- githubLogin: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError, TData>>, fetch?: RequestInit}
+ githubLogin: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -750,7 +717,7 @@ export function useProfilesGetProfileByGithub<TData = Awaited<ReturnType<typeof 
  */
 
 export function useProfilesGetProfileByGithub<TData = Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError = HTTPValidationError>(
- githubLogin: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError, TData>>, fetch?: RequestInit}
+ githubLogin: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfileByGithub>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -792,12 +759,12 @@ export const getProfilesConnectJiraUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/me/connect/jira`
+  return `/api/v1/profiles/me/connect/jira`
 }
 
 export const profilesConnectJira = async (jiraConnectionRequest: JiraConnectionRequest, options?: RequestInit): Promise<profilesConnectJiraResponse> => {
   
-  const res = await fetch(getProfilesConnectJiraUrl(),
+  return customFetch<profilesConnectJiraResponse>(getProfilesConnectJiraUrl(),
   {      
     ...options,
     method: 'POST',
@@ -805,27 +772,21 @@ export const profilesConnectJira = async (jiraConnectionRequest: JiraConnectionR
     body: JSON.stringify(
       jiraConnectionRequest,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesConnectJiraResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesConnectJiraResponse
-}
+);}
 
 
 
 
 export const getProfilesConnectJiraMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectJira>>, TError,{data: JiraConnectionRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectJira>>, TError,{data: JiraConnectionRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof profilesConnectJira>>, TError,{data: JiraConnectionRequest}, TContext> => {
 
 const mutationKey = ['profilesConnectJira'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -833,7 +794,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof profilesConnectJira>>, {data: JiraConnectionRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  profilesConnectJira(data,fetchOptions)
+          return  profilesConnectJira(data,requestOptions)
         }
 
 
@@ -851,7 +812,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Connect Jira
  */
 export const useProfilesConnectJira = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectJira>>, TError,{data: JiraConnectionRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectJira>>, TError,{data: JiraConnectionRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profilesConnectJira>>,
         TError,
@@ -888,12 +849,12 @@ export const getProfilesConnectGithubUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/me/connect/github`
+  return `/api/v1/profiles/me/connect/github`
 }
 
 export const profilesConnectGithub = async (gitHubConnectionRequest: GitHubConnectionRequest, options?: RequestInit): Promise<profilesConnectGithubResponse> => {
   
-  const res = await fetch(getProfilesConnectGithubUrl(),
+  return customFetch<profilesConnectGithubResponse>(getProfilesConnectGithubUrl(),
   {      
     ...options,
     method: 'POST',
@@ -901,27 +862,21 @@ export const profilesConnectGithub = async (gitHubConnectionRequest: GitHubConne
     body: JSON.stringify(
       gitHubConnectionRequest,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesConnectGithubResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesConnectGithubResponse
-}
+);}
 
 
 
 
 export const getProfilesConnectGithubMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectGithub>>, TError,{data: GitHubConnectionRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectGithub>>, TError,{data: GitHubConnectionRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof profilesConnectGithub>>, TError,{data: GitHubConnectionRequest}, TContext> => {
 
 const mutationKey = ['profilesConnectGithub'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -929,7 +884,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof profilesConnectGithub>>, {data: GitHubConnectionRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  profilesConnectGithub(data,fetchOptions)
+          return  profilesConnectGithub(data,requestOptions)
         }
 
 
@@ -947,7 +902,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Connect Github
  */
 export const useProfilesConnectGithub = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectGithub>>, TError,{data: GitHubConnectionRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesConnectGithub>>, TError,{data: GitHubConnectionRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profilesConnectGithub>>,
         TError,
@@ -977,39 +932,33 @@ export const getProfilesDisconnectJiraUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/me/disconnect/jira`
+  return `/api/v1/profiles/me/disconnect/jira`
 }
 
 export const profilesDisconnectJira = async ( options?: RequestInit): Promise<profilesDisconnectJiraResponse> => {
   
-  const res = await fetch(getProfilesDisconnectJiraUrl(),
+  return customFetch<profilesDisconnectJiraResponse>(getProfilesDisconnectJiraUrl(),
   {      
     ...options,
     method: 'DELETE'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesDisconnectJiraResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesDisconnectJiraResponse
-}
+);}
 
 
 
 
 export const getProfilesDisconnectJiraMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectJira>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectJira>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectJira>>, TError,void, TContext> => {
 
 const mutationKey = ['profilesDisconnectJira'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -1017,7 +966,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof profilesDisconnectJira>>, void> = () => {
           
 
-          return  profilesDisconnectJira(fetchOptions)
+          return  profilesDisconnectJira(requestOptions)
         }
 
 
@@ -1035,7 +984,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Disconnect Jira
  */
 export const useProfilesDisconnectJira = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectJira>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectJira>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profilesDisconnectJira>>,
         TError,
@@ -1065,39 +1014,33 @@ export const getProfilesDisconnectGithubUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/me/disconnect/github`
+  return `/api/v1/profiles/me/disconnect/github`
 }
 
 export const profilesDisconnectGithub = async ( options?: RequestInit): Promise<profilesDisconnectGithubResponse> => {
   
-  const res = await fetch(getProfilesDisconnectGithubUrl(),
+  return customFetch<profilesDisconnectGithubResponse>(getProfilesDisconnectGithubUrl(),
   {      
     ...options,
     method: 'DELETE'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesDisconnectGithubResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesDisconnectGithubResponse
-}
+);}
 
 
 
 
 export const getProfilesDisconnectGithubMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectGithub>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectGithub>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectGithub>>, TError,void, TContext> => {
 
 const mutationKey = ['profilesDisconnectGithub'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -1105,7 +1048,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof profilesDisconnectGithub>>, void> = () => {
           
 
-          return  profilesDisconnectGithub(fetchOptions)
+          return  profilesDisconnectGithub(requestOptions)
         }
 
 
@@ -1123,7 +1066,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Disconnect Github
  */
 export const useProfilesDisconnectGithub = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectGithub>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesDisconnectGithub>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profilesDisconnectGithub>>,
         TError,
@@ -1160,12 +1103,12 @@ export const getProfilesUpdateSkillsUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/me/skills`
+  return `/api/v1/profiles/me/skills`
 }
 
 export const profilesUpdateSkills = async (updateSkillsRequest: UpdateSkillsRequest, options?: RequestInit): Promise<profilesUpdateSkillsResponse> => {
   
-  const res = await fetch(getProfilesUpdateSkillsUrl(),
+  return customFetch<profilesUpdateSkillsResponse>(getProfilesUpdateSkillsUrl(),
   {      
     ...options,
     method: 'PUT',
@@ -1173,27 +1116,21 @@ export const profilesUpdateSkills = async (updateSkillsRequest: UpdateSkillsRequ
     body: JSON.stringify(
       updateSkillsRequest,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesUpdateSkillsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesUpdateSkillsResponse
-}
+);}
 
 
 
 
 export const getProfilesUpdateSkillsMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesUpdateSkills>>, TError,{data: UpdateSkillsRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesUpdateSkills>>, TError,{data: UpdateSkillsRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof profilesUpdateSkills>>, TError,{data: UpdateSkillsRequest}, TContext> => {
 
 const mutationKey = ['profilesUpdateSkills'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -1201,7 +1138,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof profilesUpdateSkills>>, {data: UpdateSkillsRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  profilesUpdateSkills(data,fetchOptions)
+          return  profilesUpdateSkills(data,requestOptions)
         }
 
 
@@ -1219,7 +1156,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Update Skills
  */
 export const useProfilesUpdateSkills = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesUpdateSkills>>, TError,{data: UpdateSkillsRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof profilesUpdateSkills>>, TError,{data: UpdateSkillsRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof profilesUpdateSkills>>,
         TError,
@@ -1263,25 +1200,19 @@ export const getProfilesMatchJiraGithubProfilesUrl = (params?: ProfilesMatchJira
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/profiles/match-jira-github?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/profiles/match-jira-github`
+  return stringifiedParams.length > 0 ? `/api/v1/profiles/match-jira-github?${stringifiedParams}` : `/api/v1/profiles/match-jira-github`
 }
 
 export const profilesMatchJiraGithubProfiles = async (params?: ProfilesMatchJiraGithubProfilesParams, options?: RequestInit): Promise<profilesMatchJiraGithubProfilesResponse> => {
   
-  const res = await fetch(getProfilesMatchJiraGithubProfilesUrl(params),
+  return customFetch<profilesMatchJiraGithubProfilesResponse>(getProfilesMatchJiraGithubProfilesUrl(params),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesMatchJiraGithubProfilesResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesMatchJiraGithubProfilesResponse
-}
+);}
 
 
 
@@ -1289,21 +1220,21 @@ export const profilesMatchJiraGithubProfiles = async (params?: ProfilesMatchJira
 
 export const getProfilesMatchJiraGithubProfilesQueryKey = (params?: ProfilesMatchJiraGithubProfilesParams,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/profiles/match-jira-github`, ...(params ? [params] : [])
+    `/api/v1/profiles/match-jira-github`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getProfilesMatchJiraGithubProfilesQueryOptions = <TData = Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError = HTTPValidationError>(params?: ProfilesMatchJiraGithubProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError, TData>>, fetch?: RequestInit}
+export const getProfilesMatchJiraGithubProfilesQueryOptions = <TData = Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError = HTTPValidationError>(params?: ProfilesMatchJiraGithubProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProfilesMatchJiraGithubProfilesQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>> = ({ signal }) => profilesMatchJiraGithubProfiles(params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>> = ({ signal }) => profilesMatchJiraGithubProfiles(params, { signal, ...requestOptions });
 
       
 
@@ -1323,7 +1254,7 @@ export function useProfilesMatchJiraGithubProfiles<TData = Awaited<ReturnType<ty
           TError,
           Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesMatchJiraGithubProfiles<TData = Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError = HTTPValidationError>(
@@ -1333,11 +1264,11 @@ export function useProfilesMatchJiraGithubProfiles<TData = Awaited<ReturnType<ty
           TError,
           Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesMatchJiraGithubProfiles<TData = Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError = HTTPValidationError>(
- params?: ProfilesMatchJiraGithubProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError, TData>>, fetch?: RequestInit}
+ params?: ProfilesMatchJiraGithubProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1345,7 +1276,7 @@ export function useProfilesMatchJiraGithubProfiles<TData = Awaited<ReturnType<ty
  */
 
 export function useProfilesMatchJiraGithubProfiles<TData = Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError = HTTPValidationError>(
- params?: ProfilesMatchJiraGithubProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError, TData>>, fetch?: RequestInit}
+ params?: ProfilesMatchJiraGithubProfilesParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesMatchJiraGithubProfiles>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1387,25 +1318,19 @@ export const getProfilesGetProfileUrl = (userId: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/profiles/${userId}`
+  return `/api/v1/profiles/${userId}`
 }
 
 export const profilesGetProfile = async (userId: string, options?: RequestInit): Promise<profilesGetProfileResponse> => {
   
-  const res = await fetch(getProfilesGetProfileUrl(userId),
+  return customFetch<profilesGetProfileResponse>(getProfilesGetProfileUrl(userId),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: profilesGetProfileResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as profilesGetProfileResponse
-}
+);}
 
 
 
@@ -1413,21 +1338,21 @@ export const profilesGetProfile = async (userId: string, options?: RequestInit):
 
 export const getProfilesGetProfileQueryKey = (userId: string,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/profiles/${userId}`
+    `/api/v1/profiles/${userId}`
     ] as const;
     }
 
     
-export const getProfilesGetProfileQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetProfile>>, TError = HTTPValidationError>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfile>>, TError, TData>>, fetch?: RequestInit}
+export const getProfilesGetProfileQueryOptions = <TData = Awaited<ReturnType<typeof profilesGetProfile>>, TError = HTTPValidationError>(userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getProfilesGetProfileQueryKey(userId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetProfile>>> = ({ signal }) => profilesGetProfile(userId, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof profilesGetProfile>>> = ({ signal }) => profilesGetProfile(userId, { signal, ...requestOptions });
 
       
 
@@ -1447,7 +1372,7 @@ export function useProfilesGetProfile<TData = Awaited<ReturnType<typeof profiles
           TError,
           Awaited<ReturnType<typeof profilesGetProfile>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetProfile<TData = Awaited<ReturnType<typeof profilesGetProfile>>, TError = HTTPValidationError>(
@@ -1457,11 +1382,11 @@ export function useProfilesGetProfile<TData = Awaited<ReturnType<typeof profiles
           TError,
           Awaited<ReturnType<typeof profilesGetProfile>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useProfilesGetProfile<TData = Awaited<ReturnType<typeof profilesGetProfile>>, TError = HTTPValidationError>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfile>>, TError, TData>>, fetch?: RequestInit}
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1469,7 +1394,7 @@ export function useProfilesGetProfile<TData = Awaited<ReturnType<typeof profiles
  */
 
 export function useProfilesGetProfile<TData = Awaited<ReturnType<typeof profilesGetProfile>>, TError = HTTPValidationError>(
- userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfile>>, TError, TData>>, fetch?: RequestInit}
+ userId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof profilesGetProfile>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

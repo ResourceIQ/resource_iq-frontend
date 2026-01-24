@@ -26,7 +26,10 @@ import type {
   VectorEmbeddingsSyncAuthorVectorsParams
 } from '../../model';
 
+import { customFetch } from '../../../lib/custom-fetch';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -65,39 +68,33 @@ export const getVectorEmbeddingsSyncAuthorVectorsUrl = (params: VectorEmbeddings
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/vectors/sync/author?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/vectors/sync/author`
+  return stringifiedParams.length > 0 ? `/api/v1/vectors/sync/author?${stringifiedParams}` : `/api/v1/vectors/sync/author`
 }
 
 export const vectorEmbeddingsSyncAuthorVectors = async (params: VectorEmbeddingsSyncAuthorVectorsParams, options?: RequestInit): Promise<vectorEmbeddingsSyncAuthorVectorsResponse> => {
   
-  const res = await fetch(getVectorEmbeddingsSyncAuthorVectorsUrl(params),
+  return customFetch<vectorEmbeddingsSyncAuthorVectorsResponse>(getVectorEmbeddingsSyncAuthorVectorsUrl(params),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: vectorEmbeddingsSyncAuthorVectorsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as vectorEmbeddingsSyncAuthorVectorsResponse
-}
+);}
 
 
 
 
 export const getVectorEmbeddingsSyncAuthorVectorsMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAuthorVectors>>, TError,{params: VectorEmbeddingsSyncAuthorVectorsParams}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAuthorVectors>>, TError,{params: VectorEmbeddingsSyncAuthorVectorsParams}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAuthorVectors>>, TError,{params: VectorEmbeddingsSyncAuthorVectorsParams}, TContext> => {
 
 const mutationKey = ['vectorEmbeddingsSyncAuthorVectors'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -105,7 +102,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof vectorEmbeddingsSyncAuthorVectors>>, {params: VectorEmbeddingsSyncAuthorVectorsParams}> = (props) => {
           const {params} = props ?? {};
 
-          return  vectorEmbeddingsSyncAuthorVectors(params,fetchOptions)
+          return  vectorEmbeddingsSyncAuthorVectors(params,requestOptions)
         }
 
 
@@ -123,7 +120,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Sync Author Vectors
  */
 export const useVectorEmbeddingsSyncAuthorVectors = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAuthorVectors>>, TError,{params: VectorEmbeddingsSyncAuthorVectorsParams}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAuthorVectors>>, TError,{params: VectorEmbeddingsSyncAuthorVectorsParams}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof vectorEmbeddingsSyncAuthorVectors>>,
         TError,
@@ -182,12 +179,12 @@ export const getVectorEmbeddingsSyncAllVectorsUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/vectors/sync/all`
+  return `/api/v1/vectors/sync/all`
 }
 
 export const vectorEmbeddingsSyncAllVectors = async (syncAllRequestNull: SyncAllRequest | null, options?: RequestInit): Promise<vectorEmbeddingsSyncAllVectorsResponse> => {
   
-  const res = await fetch(getVectorEmbeddingsSyncAllVectorsUrl(),
+  return customFetch<vectorEmbeddingsSyncAllVectorsResponse>(getVectorEmbeddingsSyncAllVectorsUrl(),
   {      
     ...options,
     method: 'POST',
@@ -195,27 +192,21 @@ export const vectorEmbeddingsSyncAllVectors = async (syncAllRequestNull: SyncAll
     body: JSON.stringify(
       syncAllRequestNull,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: vectorEmbeddingsSyncAllVectorsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as vectorEmbeddingsSyncAllVectorsResponse
-}
+);}
 
 
 
 
 export const getVectorEmbeddingsSyncAllVectorsMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAllVectors>>, TError,{data: SyncAllRequest | null}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAllVectors>>, TError,{data: SyncAllRequest | null}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAllVectors>>, TError,{data: SyncAllRequest | null}, TContext> => {
 
 const mutationKey = ['vectorEmbeddingsSyncAllVectors'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -223,7 +214,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof vectorEmbeddingsSyncAllVectors>>, {data: SyncAllRequest | null}> = (props) => {
           const {data} = props ?? {};
 
-          return  vectorEmbeddingsSyncAllVectors(data,fetchOptions)
+          return  vectorEmbeddingsSyncAllVectors(data,requestOptions)
         }
 
 
@@ -241,7 +232,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Sync All Vectors
  */
 export const useVectorEmbeddingsSyncAllVectors = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAllVectors>>, TError,{data: SyncAllRequest | null}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSyncAllVectors>>, TError,{data: SyncAllRequest | null}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof vectorEmbeddingsSyncAllVectors>>,
         TError,
@@ -285,39 +276,33 @@ export const getVectorEmbeddingsSearchSimilarPrsUrl = (params: VectorEmbeddingsS
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/vectors/search?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/vectors/search`
+  return stringifiedParams.length > 0 ? `/api/v1/vectors/search?${stringifiedParams}` : `/api/v1/vectors/search`
 }
 
 export const vectorEmbeddingsSearchSimilarPrs = async (params: VectorEmbeddingsSearchSimilarPrsParams, options?: RequestInit): Promise<vectorEmbeddingsSearchSimilarPrsResponse> => {
   
-  const res = await fetch(getVectorEmbeddingsSearchSimilarPrsUrl(params),
+  return customFetch<vectorEmbeddingsSearchSimilarPrsResponse>(getVectorEmbeddingsSearchSimilarPrsUrl(params),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: vectorEmbeddingsSearchSimilarPrsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as vectorEmbeddingsSearchSimilarPrsResponse
-}
+);}
 
 
 
 
 export const getVectorEmbeddingsSearchSimilarPrsMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext> => {
 
 const mutationKey = ['vectorEmbeddingsSearchSimilarPrs'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -325,7 +310,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, {params: VectorEmbeddingsSearchSimilarPrsParams}> = (props) => {
           const {params} = props ?? {};
 
-          return  vectorEmbeddingsSearchSimilarPrs(params,fetchOptions)
+          return  vectorEmbeddingsSearchSimilarPrs(params,requestOptions)
         }
 
 
@@ -343,7 +328,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Search Similar Prs
  */
 export const useVectorEmbeddingsSearchSimilarPrs = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>,
         TError,
@@ -392,12 +377,12 @@ export const getVectorEmbeddingsUnifiedSearchUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/vectors/search/unified`
+  return `/api/v1/vectors/search/unified`
 }
 
 export const vectorEmbeddingsUnifiedSearch = async (unifiedSearchRequest: UnifiedSearchRequest, options?: RequestInit): Promise<vectorEmbeddingsUnifiedSearchResponse> => {
   
-  const res = await fetch(getVectorEmbeddingsUnifiedSearchUrl(),
+  return customFetch<vectorEmbeddingsUnifiedSearchResponse>(getVectorEmbeddingsUnifiedSearchUrl(),
   {      
     ...options,
     method: 'POST',
@@ -405,27 +390,21 @@ export const vectorEmbeddingsUnifiedSearch = async (unifiedSearchRequest: Unifie
     body: JSON.stringify(
       unifiedSearchRequest,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: vectorEmbeddingsUnifiedSearchResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as vectorEmbeddingsUnifiedSearchResponse
-}
+);}
 
 
 
 
 export const getVectorEmbeddingsUnifiedSearchMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext> => {
 
 const mutationKey = ['vectorEmbeddingsUnifiedSearch'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -433,7 +412,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, {data: UnifiedSearchRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  vectorEmbeddingsUnifiedSearch(data,fetchOptions)
+          return  vectorEmbeddingsUnifiedSearch(data,requestOptions)
         }
 
 
@@ -451,7 +430,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Unified Search
  */
 export const useVectorEmbeddingsUnifiedSearch = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>,
         TError,

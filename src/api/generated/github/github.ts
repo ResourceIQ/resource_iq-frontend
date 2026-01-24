@@ -31,7 +31,10 @@ import type {
   PullRequestContent
 } from '../../model';
 
+import { customFetch } from '../../../lib/custom-fetch';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -55,39 +58,33 @@ export const getGithubGithubWebhookUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/github/webhook`
+  return `/api/v1/github/webhook`
 }
 
 export const githubGithubWebhook = async ( options?: RequestInit): Promise<githubGithubWebhookResponse> => {
   
-  const res = await fetch(getGithubGithubWebhookUrl(),
+  return customFetch<githubGithubWebhookResponse>(getGithubGithubWebhookUrl(),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: githubGithubWebhookResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as githubGithubWebhookResponse
-}
+);}
 
 
 
 
 export const getGithubGithubWebhookMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGithubWebhook>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGithubWebhook>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof githubGithubWebhook>>, TError,void, TContext> => {
 
 const mutationKey = ['githubGithubWebhook'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -95,7 +92,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof githubGithubWebhook>>, void> = () => {
           
 
-          return  githubGithubWebhook(fetchOptions)
+          return  githubGithubWebhook(requestOptions)
         }
 
 
@@ -113,7 +110,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Github Webhook
  */
 export const useGithubGithubWebhook = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGithubWebhook>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGithubWebhook>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof githubGithubWebhook>>,
         TError,
@@ -142,25 +139,19 @@ export const getGithubGetDevelopersUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/github/get_developers`
+  return `/api/v1/github/get_developers`
 }
 
 export const githubGetDevelopers = async ( options?: RequestInit): Promise<githubGetDevelopersResponse> => {
   
-  const res = await fetch(getGithubGetDevelopersUrl(),
+  return customFetch<githubGetDevelopersResponse>(getGithubGetDevelopersUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: githubGetDevelopersResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as githubGetDevelopersResponse
-}
+);}
 
 
 
@@ -168,21 +159,21 @@ export const githubGetDevelopers = async ( options?: RequestInit): Promise<githu
 
 export const getGithubGetDevelopersQueryKey = () => {
     return [
-    `http://127.0.0.1:8000/api/v1/github/get_developers`
+    `/api/v1/github/get_developers`
     ] as const;
     }
 
     
-export const getGithubGetDevelopersQueryOptions = <TData = Awaited<ReturnType<typeof githubGetDevelopers>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetDevelopers>>, TError, TData>>, fetch?: RequestInit}
+export const getGithubGetDevelopersQueryOptions = <TData = Awaited<ReturnType<typeof githubGetDevelopers>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetDevelopers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGithubGetDevelopersQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof githubGetDevelopers>>> = ({ signal }) => githubGetDevelopers({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof githubGetDevelopers>>> = ({ signal }) => githubGetDevelopers({ signal, ...requestOptions });
 
       
 
@@ -202,7 +193,7 @@ export function useGithubGetDevelopers<TData = Awaited<ReturnType<typeof githubG
           TError,
           Awaited<ReturnType<typeof githubGetDevelopers>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGithubGetDevelopers<TData = Awaited<ReturnType<typeof githubGetDevelopers>>, TError = unknown>(
@@ -212,11 +203,11 @@ export function useGithubGetDevelopers<TData = Awaited<ReturnType<typeof githubG
           TError,
           Awaited<ReturnType<typeof githubGetDevelopers>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGithubGetDevelopers<TData = Awaited<ReturnType<typeof githubGetDevelopers>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetDevelopers>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetDevelopers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -224,7 +215,7 @@ export function useGithubGetDevelopers<TData = Awaited<ReturnType<typeof githubG
  */
 
 export function useGithubGetDevelopers<TData = Awaited<ReturnType<typeof githubGetDevelopers>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetDevelopers>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetDevelopers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -265,12 +256,12 @@ export const getGithubGetClosedPrsContextPerAuthorUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/github/get_closed_prs_context_per_author`
+  return `/api/v1/github/get_closed_prs_context_per_author`
 }
 
 export const githubGetClosedPrsContextPerAuthor = async (gitHubUser: GitHubUser, options?: RequestInit): Promise<githubGetClosedPrsContextPerAuthorResponse> => {
   
-  const res = await fetch(getGithubGetClosedPrsContextPerAuthorUrl(),
+  return customFetch<githubGetClosedPrsContextPerAuthorResponse>(getGithubGetClosedPrsContextPerAuthorUrl(),
   {      
     ...options,
     method: 'POST',
@@ -278,27 +269,21 @@ export const githubGetClosedPrsContextPerAuthor = async (gitHubUser: GitHubUser,
     body: JSON.stringify(
       gitHubUser,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: githubGetClosedPrsContextPerAuthorResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as githubGetClosedPrsContextPerAuthorResponse
-}
+);}
 
 
 
 
 export const getGithubGetClosedPrsContextPerAuthorMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextPerAuthor>>, TError,{data: GitHubUser}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextPerAuthor>>, TError,{data: GitHubUser}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextPerAuthor>>, TError,{data: GitHubUser}, TContext> => {
 
 const mutationKey = ['githubGetClosedPrsContextPerAuthor'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -306,7 +291,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof githubGetClosedPrsContextPerAuthor>>, {data: GitHubUser}> = (props) => {
           const {data} = props ?? {};
 
-          return  githubGetClosedPrsContextPerAuthor(data,fetchOptions)
+          return  githubGetClosedPrsContextPerAuthor(data,requestOptions)
         }
 
 
@@ -324,7 +309,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Get Closed Prs Context Per Author
  */
 export const useGithubGetClosedPrsContextPerAuthor = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextPerAuthor>>, TError,{data: GitHubUser}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextPerAuthor>>, TError,{data: GitHubUser}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof githubGetClosedPrsContextPerAuthor>>,
         TError,
@@ -353,25 +338,19 @@ export const getGithubGetClosedPrsContextAllAuthorsUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/github/get_closed_prs_context_all_authors`
+  return `/api/v1/github/get_closed_prs_context_all_authors`
 }
 
 export const githubGetClosedPrsContextAllAuthors = async ( options?: RequestInit): Promise<githubGetClosedPrsContextAllAuthorsResponse> => {
   
-  const res = await fetch(getGithubGetClosedPrsContextAllAuthorsUrl(),
+  return customFetch<githubGetClosedPrsContextAllAuthorsResponse>(getGithubGetClosedPrsContextAllAuthorsUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: githubGetClosedPrsContextAllAuthorsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as githubGetClosedPrsContextAllAuthorsResponse
-}
+);}
 
 
 
@@ -379,21 +358,21 @@ export const githubGetClosedPrsContextAllAuthors = async ( options?: RequestInit
 
 export const getGithubGetClosedPrsContextAllAuthorsQueryKey = () => {
     return [
-    `http://127.0.0.1:8000/api/v1/github/get_closed_prs_context_all_authors`
+    `/api/v1/github/get_closed_prs_context_all_authors`
     ] as const;
     }
 
     
-export const getGithubGetClosedPrsContextAllAuthorsQueryOptions = <TData = Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError, TData>>, fetch?: RequestInit}
+export const getGithubGetClosedPrsContextAllAuthorsQueryOptions = <TData = Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getGithubGetClosedPrsContextAllAuthorsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>> = ({ signal }) => githubGetClosedPrsContextAllAuthors({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>> = ({ signal }) => githubGetClosedPrsContextAllAuthors({ signal, ...requestOptions });
 
       
 
@@ -413,7 +392,7 @@ export function useGithubGetClosedPrsContextAllAuthors<TData = Awaited<ReturnTyp
           TError,
           Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGithubGetClosedPrsContextAllAuthors<TData = Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError = unknown>(
@@ -423,11 +402,11 @@ export function useGithubGetClosedPrsContextAllAuthors<TData = Awaited<ReturnTyp
           TError,
           Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useGithubGetClosedPrsContextAllAuthors<TData = Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -435,7 +414,7 @@ export function useGithubGetClosedPrsContextAllAuthors<TData = Awaited<ReturnTyp
  */
 
 export function useGithubGetClosedPrsContextAllAuthors<TData = Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof githubGetClosedPrsContextAllAuthors>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

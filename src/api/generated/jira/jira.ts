@@ -47,7 +47,10 @@ import type {
   JiraUser
 } from '../../model';
 
+import { customFetch } from '../../../lib/custom-fetch';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -72,25 +75,19 @@ export const getJiraConnectJiraUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/auth/connect`
+  return `/api/v1/jira/auth/connect`
 }
 
 export const jiraConnectJira = async ( options?: RequestInit): Promise<jiraConnectJiraResponse> => {
   
-  const res = await fetch(getJiraConnectJiraUrl(),
+  return customFetch<jiraConnectJiraResponse>(getJiraConnectJiraUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraConnectJiraResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraConnectJiraResponse
-}
+);}
 
 
 
@@ -98,21 +95,21 @@ export const jiraConnectJira = async ( options?: RequestInit): Promise<jiraConne
 
 export const getJiraConnectJiraQueryKey = () => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/auth/connect`
+    `/api/v1/jira/auth/connect`
     ] as const;
     }
 
     
-export const getJiraConnectJiraQueryOptions = <TData = Awaited<ReturnType<typeof jiraConnectJira>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraConnectJira>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraConnectJiraQueryOptions = <TData = Awaited<ReturnType<typeof jiraConnectJira>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraConnectJira>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraConnectJiraQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraConnectJira>>> = ({ signal }) => jiraConnectJira({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraConnectJira>>> = ({ signal }) => jiraConnectJira({ signal, ...requestOptions });
 
       
 
@@ -132,7 +129,7 @@ export function useJiraConnectJira<TData = Awaited<ReturnType<typeof jiraConnect
           TError,
           Awaited<ReturnType<typeof jiraConnectJira>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraConnectJira<TData = Awaited<ReturnType<typeof jiraConnectJira>>, TError = unknown>(
@@ -142,11 +139,11 @@ export function useJiraConnectJira<TData = Awaited<ReturnType<typeof jiraConnect
           TError,
           Awaited<ReturnType<typeof jiraConnectJira>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraConnectJira<TData = Awaited<ReturnType<typeof jiraConnectJira>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraConnectJira>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraConnectJira>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -154,7 +151,7 @@ export function useJiraConnectJira<TData = Awaited<ReturnType<typeof jiraConnect
  */
 
 export function useJiraConnectJira<TData = Awaited<ReturnType<typeof jiraConnectJira>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraConnectJira>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraConnectJira>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -203,25 +200,19 @@ export const getJiraJiraOauthCallbackUrl = (params: JiraJiraOauthCallbackParams,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/jira/auth/callback?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/jira/auth/callback`
+  return stringifiedParams.length > 0 ? `/api/v1/jira/auth/callback?${stringifiedParams}` : `/api/v1/jira/auth/callback`
 }
 
 export const jiraJiraOauthCallback = async (params: JiraJiraOauthCallbackParams, options?: RequestInit): Promise<jiraJiraOauthCallbackResponse> => {
   
-  const res = await fetch(getJiraJiraOauthCallbackUrl(params),
+  return customFetch<jiraJiraOauthCallbackResponse>(getJiraJiraOauthCallbackUrl(params),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraJiraOauthCallbackResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraJiraOauthCallbackResponse
-}
+);}
 
 
 
@@ -229,21 +220,21 @@ export const jiraJiraOauthCallback = async (params: JiraJiraOauthCallbackParams,
 
 export const getJiraJiraOauthCallbackQueryKey = (params?: JiraJiraOauthCallbackParams,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/auth/callback`, ...(params ? [params] : [])
+    `/api/v1/jira/auth/callback`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getJiraJiraOauthCallbackQueryOptions = <TData = Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError = HTTPValidationError>(params: JiraJiraOauthCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraJiraOauthCallbackQueryOptions = <TData = Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError = HTTPValidationError>(params: JiraJiraOauthCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraJiraOauthCallbackQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraJiraOauthCallback>>> = ({ signal }) => jiraJiraOauthCallback(params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraJiraOauthCallback>>> = ({ signal }) => jiraJiraOauthCallback(params, { signal, ...requestOptions });
 
       
 
@@ -263,7 +254,7 @@ export function useJiraJiraOauthCallback<TData = Awaited<ReturnType<typeof jiraJ
           TError,
           Awaited<ReturnType<typeof jiraJiraOauthCallback>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraJiraOauthCallback<TData = Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError = HTTPValidationError>(
@@ -273,11 +264,11 @@ export function useJiraJiraOauthCallback<TData = Awaited<ReturnType<typeof jiraJ
           TError,
           Awaited<ReturnType<typeof jiraJiraOauthCallback>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraJiraOauthCallback<TData = Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError = HTTPValidationError>(
- params: JiraJiraOauthCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError, TData>>, fetch?: RequestInit}
+ params: JiraJiraOauthCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -285,7 +276,7 @@ export function useJiraJiraOauthCallback<TData = Awaited<ReturnType<typeof jiraJ
  */
 
 export function useJiraJiraOauthCallback<TData = Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError = HTTPValidationError>(
- params: JiraJiraOauthCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError, TData>>, fetch?: RequestInit}
+ params: JiraJiraOauthCallbackParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraJiraOauthCallback>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -320,25 +311,19 @@ export const getJiraGetProjectsUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/projects`
+  return `/api/v1/jira/projects`
 }
 
 export const jiraGetProjects = async ( options?: RequestInit): Promise<jiraGetProjectsResponse> => {
   
-  const res = await fetch(getJiraGetProjectsUrl(),
+  return customFetch<jiraGetProjectsResponse>(getJiraGetProjectsUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetProjectsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetProjectsResponse
-}
+);}
 
 
 
@@ -346,21 +331,21 @@ export const jiraGetProjects = async ( options?: RequestInit): Promise<jiraGetPr
 
 export const getJiraGetProjectsQueryKey = () => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/projects`
+    `/api/v1/jira/projects`
     ] as const;
     }
 
     
-export const getJiraGetProjectsQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetProjects>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjects>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetProjectsQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetProjects>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjects>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetProjectsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetProjects>>> = ({ signal }) => jiraGetProjects({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetProjects>>> = ({ signal }) => jiraGetProjects({ signal, ...requestOptions });
 
       
 
@@ -380,7 +365,7 @@ export function useJiraGetProjects<TData = Awaited<ReturnType<typeof jiraGetProj
           TError,
           Awaited<ReturnType<typeof jiraGetProjects>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetProjects<TData = Awaited<ReturnType<typeof jiraGetProjects>>, TError = unknown>(
@@ -390,11 +375,11 @@ export function useJiraGetProjects<TData = Awaited<ReturnType<typeof jiraGetProj
           TError,
           Awaited<ReturnType<typeof jiraGetProjects>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetProjects<TData = Awaited<ReturnType<typeof jiraGetProjects>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjects>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjects>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -402,7 +387,7 @@ export function useJiraGetProjects<TData = Awaited<ReturnType<typeof jiraGetProj
  */
 
 export function useJiraGetProjects<TData = Awaited<ReturnType<typeof jiraGetProjects>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjects>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjects>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -452,25 +437,19 @@ export const getJiraGetAllJiraUsersUrl = (params?: JiraGetAllJiraUsersParams,) =
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/jira/users?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/jira/users`
+  return stringifiedParams.length > 0 ? `/api/v1/jira/users?${stringifiedParams}` : `/api/v1/jira/users`
 }
 
 export const jiraGetAllJiraUsers = async (params?: JiraGetAllJiraUsersParams, options?: RequestInit): Promise<jiraGetAllJiraUsersResponse> => {
   
-  const res = await fetch(getJiraGetAllJiraUsersUrl(params),
+  return customFetch<jiraGetAllJiraUsersResponse>(getJiraGetAllJiraUsersUrl(params),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetAllJiraUsersResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetAllJiraUsersResponse
-}
+);}
 
 
 
@@ -478,21 +457,21 @@ export const jiraGetAllJiraUsers = async (params?: JiraGetAllJiraUsersParams, op
 
 export const getJiraGetAllJiraUsersQueryKey = (params?: JiraGetAllJiraUsersParams,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/users`, ...(params ? [params] : [])
+    `/api/v1/jira/users`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getJiraGetAllJiraUsersQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError = HTTPValidationError>(params?: JiraGetAllJiraUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetAllJiraUsersQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError = HTTPValidationError>(params?: JiraGetAllJiraUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetAllJiraUsersQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>> = ({ signal }) => jiraGetAllJiraUsers(params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>> = ({ signal }) => jiraGetAllJiraUsers(params, { signal, ...requestOptions });
 
       
 
@@ -512,7 +491,7 @@ export function useJiraGetAllJiraUsers<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetAllJiraUsers>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetAllJiraUsers<TData = Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError = HTTPValidationError>(
@@ -522,11 +501,11 @@ export function useJiraGetAllJiraUsers<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetAllJiraUsers>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetAllJiraUsers<TData = Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError = HTTPValidationError>(
- params?: JiraGetAllJiraUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError, TData>>, fetch?: RequestInit}
+ params?: JiraGetAllJiraUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -534,7 +513,7 @@ export function useJiraGetAllJiraUsers<TData = Awaited<ReturnType<typeof jiraGet
  */
 
 export function useJiraGetAllJiraUsers<TData = Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError = HTTPValidationError>(
- params?: JiraGetAllJiraUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError, TData>>, fetch?: RequestInit}
+ params?: JiraGetAllJiraUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllJiraUsers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -584,26 +563,20 @@ export const getJiraGetProjectUsersUrl = (projectKey: string,
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/jira/projects/${projectKey}/users?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/jira/projects/${projectKey}/users`
+  return stringifiedParams.length > 0 ? `/api/v1/jira/projects/${projectKey}/users?${stringifiedParams}` : `/api/v1/jira/projects/${projectKey}/users`
 }
 
 export const jiraGetProjectUsers = async (projectKey: string,
     params?: JiraGetProjectUsersParams, options?: RequestInit): Promise<jiraGetProjectUsersResponse> => {
   
-  const res = await fetch(getJiraGetProjectUsersUrl(projectKey,params),
+  return customFetch<jiraGetProjectUsersResponse>(getJiraGetProjectUsersUrl(projectKey,params),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetProjectUsersResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetProjectUsersResponse
-}
+);}
 
 
 
@@ -612,22 +585,22 @@ export const jiraGetProjectUsers = async (projectKey: string,
 export const getJiraGetProjectUsersQueryKey = (projectKey: string,
     params?: JiraGetProjectUsersParams,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/projects/${projectKey}/users`, ...(params ? [params] : [])
+    `/api/v1/jira/projects/${projectKey}/users`, ...(params ? [params] : [])
     ] as const;
     }
 
     
 export const getJiraGetProjectUsersQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError = HTTPValidationError>(projectKey: string,
-    params?: JiraGetProjectUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError, TData>>, fetch?: RequestInit}
+    params?: JiraGetProjectUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetProjectUsersQueryKey(projectKey,params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetProjectUsers>>> = ({ signal }) => jiraGetProjectUsers(projectKey,params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetProjectUsers>>> = ({ signal }) => jiraGetProjectUsers(projectKey,params, { signal, ...requestOptions });
 
       
 
@@ -648,7 +621,7 @@ export function useJiraGetProjectUsers<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetProjectUsers>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetProjectUsers<TData = Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError = HTTPValidationError>(
@@ -659,12 +632,12 @@ export function useJiraGetProjectUsers<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetProjectUsers>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetProjectUsers<TData = Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError = HTTPValidationError>(
  projectKey: string,
-    params?: JiraGetProjectUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError, TData>>, fetch?: RequestInit}
+    params?: JiraGetProjectUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -673,7 +646,7 @@ export function useJiraGetProjectUsers<TData = Awaited<ReturnType<typeof jiraGet
 
 export function useJiraGetProjectUsers<TData = Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError = HTTPValidationError>(
  projectKey: string,
-    params?: JiraGetProjectUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError, TData>>, fetch?: RequestInit}
+    params?: JiraGetProjectUsersParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetProjectUsers>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -715,25 +688,19 @@ export const getJiraGetUserByAccountIdUrl = (accountId: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/users/${accountId}`
+  return `/api/v1/jira/users/${accountId}`
 }
 
 export const jiraGetUserByAccountId = async (accountId: string, options?: RequestInit): Promise<jiraGetUserByAccountIdResponse> => {
   
-  const res = await fetch(getJiraGetUserByAccountIdUrl(accountId),
+  return customFetch<jiraGetUserByAccountIdResponse>(getJiraGetUserByAccountIdUrl(accountId),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetUserByAccountIdResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetUserByAccountIdResponse
-}
+);}
 
 
 
@@ -741,21 +708,21 @@ export const jiraGetUserByAccountId = async (accountId: string, options?: Reques
 
 export const getJiraGetUserByAccountIdQueryKey = (accountId: string,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/users/${accountId}`
+    `/api/v1/jira/users/${accountId}`
     ] as const;
     }
 
     
-export const getJiraGetUserByAccountIdQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError = HTTPValidationError>(accountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetUserByAccountIdQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError = HTTPValidationError>(accountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetUserByAccountIdQueryKey(accountId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetUserByAccountId>>> = ({ signal }) => jiraGetUserByAccountId(accountId, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetUserByAccountId>>> = ({ signal }) => jiraGetUserByAccountId(accountId, { signal, ...requestOptions });
 
       
 
@@ -775,7 +742,7 @@ export function useJiraGetUserByAccountId<TData = Awaited<ReturnType<typeof jira
           TError,
           Awaited<ReturnType<typeof jiraGetUserByAccountId>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetUserByAccountId<TData = Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError = HTTPValidationError>(
@@ -785,11 +752,11 @@ export function useJiraGetUserByAccountId<TData = Awaited<ReturnType<typeof jira
           TError,
           Awaited<ReturnType<typeof jiraGetUserByAccountId>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetUserByAccountId<TData = Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError = HTTPValidationError>(
- accountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError, TData>>, fetch?: RequestInit}
+ accountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -797,7 +764,7 @@ export function useJiraGetUserByAccountId<TData = Awaited<ReturnType<typeof jira
  */
 
 export function useJiraGetUserByAccountId<TData = Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError = HTTPValidationError>(
- accountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError, TData>>, fetch?: RequestInit}
+ accountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetUserByAccountId>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -841,12 +808,12 @@ export const getJiraSyncIssuesUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/sync`
+  return `/api/v1/jira/sync`
 }
 
 export const jiraSyncIssues = async (jiraSyncRequest: JiraSyncRequest, options?: RequestInit): Promise<jiraSyncIssuesResponse> => {
   
-  const res = await fetch(getJiraSyncIssuesUrl(),
+  return customFetch<jiraSyncIssuesResponse>(getJiraSyncIssuesUrl(),
   {      
     ...options,
     method: 'POST',
@@ -854,27 +821,21 @@ export const jiraSyncIssues = async (jiraSyncRequest: JiraSyncRequest, options?:
     body: JSON.stringify(
       jiraSyncRequest,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraSyncIssuesResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraSyncIssuesResponse
-}
+);}
 
 
 
 
 export const getJiraSyncIssuesMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSyncIssues>>, TError,{data: JiraSyncRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSyncIssues>>, TError,{data: JiraSyncRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof jiraSyncIssues>>, TError,{data: JiraSyncRequest}, TContext> => {
 
 const mutationKey = ['jiraSyncIssues'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -882,7 +843,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof jiraSyncIssues>>, {data: JiraSyncRequest}> = (props) => {
           const {data} = props ?? {};
 
-          return  jiraSyncIssues(data,fetchOptions)
+          return  jiraSyncIssues(data,requestOptions)
         }
 
 
@@ -900,7 +861,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Sync Issues
  */
 export const useJiraSyncIssues = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSyncIssues>>, TError,{data: JiraSyncRequest}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSyncIssues>>, TError,{data: JiraSyncRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof jiraSyncIssues>>,
         TError,
@@ -945,25 +906,19 @@ export const getJiraGetIssueVectorsUrl = (params?: JiraGetIssueVectorsParams,) =
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/jira/vectors?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/jira/vectors`
+  return stringifiedParams.length > 0 ? `/api/v1/jira/vectors?${stringifiedParams}` : `/api/v1/jira/vectors`
 }
 
 export const jiraGetIssueVectors = async (params?: JiraGetIssueVectorsParams, options?: RequestInit): Promise<jiraGetIssueVectorsResponse> => {
   
-  const res = await fetch(getJiraGetIssueVectorsUrl(params),
+  return customFetch<jiraGetIssueVectorsResponse>(getJiraGetIssueVectorsUrl(params),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetIssueVectorsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetIssueVectorsResponse
-}
+);}
 
 
 
@@ -971,21 +926,21 @@ export const jiraGetIssueVectors = async (params?: JiraGetIssueVectorsParams, op
 
 export const getJiraGetIssueVectorsQueryKey = (params?: JiraGetIssueVectorsParams,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/vectors`, ...(params ? [params] : [])
+    `/api/v1/jira/vectors`, ...(params ? [params] : [])
     ] as const;
     }
 
     
-export const getJiraGetIssueVectorsQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError = HTTPValidationError>(params?: JiraGetIssueVectorsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetIssueVectorsQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError = HTTPValidationError>(params?: JiraGetIssueVectorsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetIssueVectorsQueryKey(params);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetIssueVectors>>> = ({ signal }) => jiraGetIssueVectors(params, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetIssueVectors>>> = ({ signal }) => jiraGetIssueVectors(params, { signal, ...requestOptions });
 
       
 
@@ -1005,7 +960,7 @@ export function useJiraGetIssueVectors<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetIssueVectors>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetIssueVectors<TData = Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError = HTTPValidationError>(
@@ -1015,11 +970,11 @@ export function useJiraGetIssueVectors<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetIssueVectors>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetIssueVectors<TData = Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError = HTTPValidationError>(
- params?: JiraGetIssueVectorsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError, TData>>, fetch?: RequestInit}
+ params?: JiraGetIssueVectorsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1027,7 +982,7 @@ export function useJiraGetIssueVectors<TData = Awaited<ReturnType<typeof jiraGet
  */
 
 export function useJiraGetIssueVectors<TData = Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError = HTTPValidationError>(
- params?: JiraGetIssueVectorsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError, TData>>, fetch?: RequestInit}
+ params?: JiraGetIssueVectorsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVectors>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1069,25 +1024,19 @@ export const getJiraGetIssueVectorUrl = (issueKey: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/vectors/${issueKey}`
+  return `/api/v1/jira/vectors/${issueKey}`
 }
 
 export const jiraGetIssueVector = async (issueKey: string, options?: RequestInit): Promise<jiraGetIssueVectorResponse> => {
   
-  const res = await fetch(getJiraGetIssueVectorUrl(issueKey),
+  return customFetch<jiraGetIssueVectorResponse>(getJiraGetIssueVectorUrl(issueKey),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetIssueVectorResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetIssueVectorResponse
-}
+);}
 
 
 
@@ -1095,21 +1044,21 @@ export const jiraGetIssueVector = async (issueKey: string, options?: RequestInit
 
 export const getJiraGetIssueVectorQueryKey = (issueKey: string,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/vectors/${issueKey}`
+    `/api/v1/jira/vectors/${issueKey}`
     ] as const;
     }
 
     
-export const getJiraGetIssueVectorQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetIssueVector>>, TError = HTTPValidationError>(issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVector>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetIssueVectorQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetIssueVector>>, TError = HTTPValidationError>(issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVector>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetIssueVectorQueryKey(issueKey);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetIssueVector>>> = ({ signal }) => jiraGetIssueVector(issueKey, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetIssueVector>>> = ({ signal }) => jiraGetIssueVector(issueKey, { signal, ...requestOptions });
 
       
 
@@ -1129,7 +1078,7 @@ export function useJiraGetIssueVector<TData = Awaited<ReturnType<typeof jiraGetI
           TError,
           Awaited<ReturnType<typeof jiraGetIssueVector>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetIssueVector<TData = Awaited<ReturnType<typeof jiraGetIssueVector>>, TError = HTTPValidationError>(
@@ -1139,11 +1088,11 @@ export function useJiraGetIssueVector<TData = Awaited<ReturnType<typeof jiraGetI
           TError,
           Awaited<ReturnType<typeof jiraGetIssueVector>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetIssueVector<TData = Awaited<ReturnType<typeof jiraGetIssueVector>>, TError = HTTPValidationError>(
- issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVector>>, TError, TData>>, fetch?: RequestInit}
+ issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVector>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1151,7 +1100,7 @@ export function useJiraGetIssueVector<TData = Awaited<ReturnType<typeof jiraGetI
  */
 
 export function useJiraGetIssueVector<TData = Awaited<ReturnType<typeof jiraGetIssueVector>>, TError = HTTPValidationError>(
- issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVector>>, TError, TData>>, fetch?: RequestInit}
+ issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueVector>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1194,25 +1143,19 @@ export const getJiraGetWorkloadByAccountUrl = (jiraAccountId: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/workload/${jiraAccountId}`
+  return `/api/v1/jira/workload/${jiraAccountId}`
 }
 
 export const jiraGetWorkloadByAccount = async (jiraAccountId: string, options?: RequestInit): Promise<jiraGetWorkloadByAccountResponse> => {
   
-  const res = await fetch(getJiraGetWorkloadByAccountUrl(jiraAccountId),
+  return customFetch<jiraGetWorkloadByAccountResponse>(getJiraGetWorkloadByAccountUrl(jiraAccountId),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetWorkloadByAccountResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetWorkloadByAccountResponse
-}
+);}
 
 
 
@@ -1220,21 +1163,21 @@ export const jiraGetWorkloadByAccount = async (jiraAccountId: string, options?: 
 
 export const getJiraGetWorkloadByAccountQueryKey = (jiraAccountId: string,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/workload/${jiraAccountId}`
+    `/api/v1/jira/workload/${jiraAccountId}`
     ] as const;
     }
 
     
-export const getJiraGetWorkloadByAccountQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError = HTTPValidationError>(jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetWorkloadByAccountQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError = HTTPValidationError>(jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetWorkloadByAccountQueryKey(jiraAccountId);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>> = ({ signal }) => jiraGetWorkloadByAccount(jiraAccountId, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>> = ({ signal }) => jiraGetWorkloadByAccount(jiraAccountId, { signal, ...requestOptions });
 
       
 
@@ -1254,7 +1197,7 @@ export function useJiraGetWorkloadByAccount<TData = Awaited<ReturnType<typeof ji
           TError,
           Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetWorkloadByAccount<TData = Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError = HTTPValidationError>(
@@ -1264,11 +1207,11 @@ export function useJiraGetWorkloadByAccount<TData = Awaited<ReturnType<typeof ji
           TError,
           Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetWorkloadByAccount<TData = Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError = HTTPValidationError>(
- jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError, TData>>, fetch?: RequestInit}
+ jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1276,7 +1219,7 @@ export function useJiraGetWorkloadByAccount<TData = Awaited<ReturnType<typeof ji
  */
 
 export function useJiraGetWorkloadByAccount<TData = Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError = HTTPValidationError>(
- jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError, TData>>, fetch?: RequestInit}
+ jiraAccountId: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetWorkloadByAccount>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1312,25 +1255,19 @@ export const getJiraGetAllWorkloadsUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/workloads`
+  return `/api/v1/jira/workloads`
 }
 
 export const jiraGetAllWorkloads = async ( options?: RequestInit): Promise<jiraGetAllWorkloadsResponse> => {
   
-  const res = await fetch(getJiraGetAllWorkloadsUrl(),
+  return customFetch<jiraGetAllWorkloadsResponse>(getJiraGetAllWorkloadsUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetAllWorkloadsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetAllWorkloadsResponse
-}
+);}
 
 
 
@@ -1338,21 +1275,21 @@ export const jiraGetAllWorkloads = async ( options?: RequestInit): Promise<jiraG
 
 export const getJiraGetAllWorkloadsQueryKey = () => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/workloads`
+    `/api/v1/jira/workloads`
     ] as const;
     }
 
     
-export const getJiraGetAllWorkloadsQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetAllWorkloadsQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetAllWorkloadsQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetAllWorkloads>>> = ({ signal }) => jiraGetAllWorkloads({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetAllWorkloads>>> = ({ signal }) => jiraGetAllWorkloads({ signal, ...requestOptions });
 
       
 
@@ -1372,7 +1309,7 @@ export function useJiraGetAllWorkloads<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetAllWorkloads>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetAllWorkloads<TData = Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError = unknown>(
@@ -1382,11 +1319,11 @@ export function useJiraGetAllWorkloads<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetAllWorkloads>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetAllWorkloads<TData = Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1394,7 +1331,7 @@ export function useJiraGetAllWorkloads<TData = Awaited<ReturnType<typeof jiraGet
  */
 
 export function useJiraGetAllWorkloads<TData = Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetAllWorkloads>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1445,39 +1382,33 @@ export const getJiraSearchSimilarIssuesUrl = (params: JiraSearchSimilarIssuesPar
 
   const stringifiedParams = normalizedParams.toString();
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/jira/search/similar?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/jira/search/similar`
+  return stringifiedParams.length > 0 ? `/api/v1/jira/search/similar?${stringifiedParams}` : `/api/v1/jira/search/similar`
 }
 
 export const jiraSearchSimilarIssues = async (params: JiraSearchSimilarIssuesParams, options?: RequestInit): Promise<jiraSearchSimilarIssuesResponse> => {
   
-  const res = await fetch(getJiraSearchSimilarIssuesUrl(params),
+  return customFetch<jiraSearchSimilarIssuesResponse>(getJiraSearchSimilarIssuesUrl(params),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraSearchSimilarIssuesResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraSearchSimilarIssuesResponse
-}
+);}
 
 
 
 
 export const getJiraSearchSimilarIssuesMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSearchSimilarIssues>>, TError,{params: JiraSearchSimilarIssuesParams}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSearchSimilarIssues>>, TError,{params: JiraSearchSimilarIssuesParams}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof jiraSearchSimilarIssues>>, TError,{params: JiraSearchSimilarIssuesParams}, TContext> => {
 
 const mutationKey = ['jiraSearchSimilarIssues'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -1485,7 +1416,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof jiraSearchSimilarIssues>>, {params: JiraSearchSimilarIssuesParams}> = (props) => {
           const {params} = props ?? {};
 
-          return  jiraSearchSimilarIssues(params,fetchOptions)
+          return  jiraSearchSimilarIssues(params,requestOptions)
         }
 
 
@@ -1503,7 +1434,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Search Similar Issues
  */
 export const useJiraSearchSimilarIssues = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSearchSimilarIssues>>, TError,{params: JiraSearchSimilarIssuesParams}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraSearchSimilarIssues>>, TError,{params: JiraSearchSimilarIssuesParams}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof jiraSearchSimilarIssues>>,
         TError,
@@ -1541,25 +1472,19 @@ export const getJiraGetIssueContextUrl = (issueKey: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/issues/${issueKey}/context`
+  return `/api/v1/jira/issues/${issueKey}/context`
 }
 
 export const jiraGetIssueContext = async (issueKey: string, options?: RequestInit): Promise<jiraGetIssueContextResponse> => {
   
-  const res = await fetch(getJiraGetIssueContextUrl(issueKey),
+  return customFetch<jiraGetIssueContextResponse>(getJiraGetIssueContextUrl(issueKey),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraGetIssueContextResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraGetIssueContextResponse
-}
+);}
 
 
 
@@ -1567,21 +1492,21 @@ export const jiraGetIssueContext = async (issueKey: string, options?: RequestIni
 
 export const getJiraGetIssueContextQueryKey = (issueKey: string,) => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/issues/${issueKey}/context`
+    `/api/v1/jira/issues/${issueKey}/context`
     ] as const;
     }
 
     
-export const getJiraGetIssueContextQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetIssueContext>>, TError = HTTPValidationError>(issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueContext>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraGetIssueContextQueryOptions = <TData = Awaited<ReturnType<typeof jiraGetIssueContext>>, TError = HTTPValidationError>(issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueContext>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraGetIssueContextQueryKey(issueKey);
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetIssueContext>>> = ({ signal }) => jiraGetIssueContext(issueKey, { signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraGetIssueContext>>> = ({ signal }) => jiraGetIssueContext(issueKey, { signal, ...requestOptions });
 
       
 
@@ -1601,7 +1526,7 @@ export function useJiraGetIssueContext<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetIssueContext>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetIssueContext<TData = Awaited<ReturnType<typeof jiraGetIssueContext>>, TError = HTTPValidationError>(
@@ -1611,11 +1536,11 @@ export function useJiraGetIssueContext<TData = Awaited<ReturnType<typeof jiraGet
           TError,
           Awaited<ReturnType<typeof jiraGetIssueContext>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraGetIssueContext<TData = Awaited<ReturnType<typeof jiraGetIssueContext>>, TError = HTTPValidationError>(
- issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueContext>>, TError, TData>>, fetch?: RequestInit}
+ issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueContext>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1623,7 +1548,7 @@ export function useJiraGetIssueContext<TData = Awaited<ReturnType<typeof jiraGet
  */
 
 export function useJiraGetIssueContext<TData = Awaited<ReturnType<typeof jiraGetIssueContext>>, TError = HTTPValidationError>(
- issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueContext>>, TError, TData>>, fetch?: RequestInit}
+ issueKey: string, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraGetIssueContext>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
@@ -1678,39 +1603,33 @@ export const getJiraJiraWebhookUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/webhook`
+  return `/api/v1/jira/webhook`
 }
 
 export const jiraJiraWebhook = async ( options?: RequestInit): Promise<jiraJiraWebhookResponse> => {
   
-  const res = await fetch(getJiraJiraWebhookUrl(),
+  return customFetch<jiraJiraWebhookResponse>(getJiraJiraWebhookUrl(),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraJiraWebhookResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraJiraWebhookResponse
-}
+);}
 
 
 
 
 export const getJiraJiraWebhookMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraJiraWebhook>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraJiraWebhook>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof jiraJiraWebhook>>, TError,void, TContext> => {
 
 const mutationKey = ['jiraJiraWebhook'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -1718,7 +1637,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof jiraJiraWebhook>>, void> = () => {
           
 
-          return  jiraJiraWebhook(fetchOptions)
+          return  jiraJiraWebhook(requestOptions)
         }
 
 
@@ -1736,7 +1655,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Jira Webhook
  */
 export const useJiraJiraWebhook = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraJiraWebhook>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof jiraJiraWebhook>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof jiraJiraWebhook>>,
         TError,
@@ -1767,25 +1686,19 @@ export const getJiraTestWebhookEndpointUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/jira/webhook/test`
+  return `/api/v1/jira/webhook/test`
 }
 
 export const jiraTestWebhookEndpoint = async ( options?: RequestInit): Promise<jiraTestWebhookEndpointResponse> => {
   
-  const res = await fetch(getJiraTestWebhookEndpointUrl(),
+  return customFetch<jiraTestWebhookEndpointResponse>(getJiraTestWebhookEndpointUrl(),
   {      
     ...options,
     method: 'GET'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: jiraTestWebhookEndpointResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as jiraTestWebhookEndpointResponse
-}
+);}
 
 
 
@@ -1793,21 +1706,21 @@ export const jiraTestWebhookEndpoint = async ( options?: RequestInit): Promise<j
 
 export const getJiraTestWebhookEndpointQueryKey = () => {
     return [
-    `http://127.0.0.1:8000/api/v1/jira/webhook/test`
+    `/api/v1/jira/webhook/test`
     ] as const;
     }
 
     
-export const getJiraTestWebhookEndpointQueryOptions = <TData = Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError, TData>>, fetch?: RequestInit}
+export const getJiraTestWebhookEndpointQueryOptions = <TData = Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
   const queryKey =  queryOptions?.queryKey ?? getJiraTestWebhookEndpointQueryKey();
 
   
 
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>> = ({ signal }) => jiraTestWebhookEndpoint({ signal, ...fetchOptions });
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>> = ({ signal }) => jiraTestWebhookEndpoint({ signal, ...requestOptions });
 
       
 
@@ -1827,7 +1740,7 @@ export function useJiraTestWebhookEndpoint<TData = Awaited<ReturnType<typeof jir
           TError,
           Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraTestWebhookEndpoint<TData = Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError = unknown>(
@@ -1837,11 +1750,11 @@ export function useJiraTestWebhookEndpoint<TData = Awaited<ReturnType<typeof jir
           TError,
           Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>
         > , 'initialData'
-      >, fetch?: RequestInit}
+      >, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useJiraTestWebhookEndpoint<TData = Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient
   ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
@@ -1849,7 +1762,7 @@ export function useJiraTestWebhookEndpoint<TData = Awaited<ReturnType<typeof jir
  */
 
 export function useJiraTestWebhookEndpoint<TData = Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError = unknown>(
-  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError, TData>>, fetch?: RequestInit}
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof jiraTestWebhookEndpoint>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient 
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 

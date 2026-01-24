@@ -5,6 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './bestFitInput';
 export * from './bodyLoginLoginAccessToken';
 export * from './developerWorkload';
 export * from './gitHubConnectionRequest';
@@ -45,7 +46,6 @@ export * from './pullRequestContent';
 export * from './resourceProfileCreate';
 export * from './resourceProfileResponse';
 export * from './role';
-export * from './scoreGetBestFitsParams';
 export * from './scoreProfile';
 export * from './searchResult';
 export * from './syncAllRequest';

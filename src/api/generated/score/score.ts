@@ -5,27 +5,25 @@
  * OpenAPI spec version: 0.1.0
  */
 import {
-  useQuery
+  useMutation
 } from '@tanstack/react-query';
 import type {
-  DataTag,
-  DefinedInitialDataOptions,
-  DefinedUseQueryResult,
+  MutationFunction,
   QueryClient,
-  QueryFunction,
-  QueryKey,
-  UndefinedInitialDataOptions,
-  UseQueryOptions,
-  UseQueryResult
+  UseMutationOptions,
+  UseMutationResult
 } from '@tanstack/react-query';
 
 import type {
+  BestFitInput,
   HTTPValidationError,
-  ScoreGetBestFitsParams,
   ScoreProfile
 } from '../../model';
 
+import { customFetch } from '../../../lib/custom-fetch';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -59,111 +57,71 @@ export type scoreGetBestFitsResponseError = (scoreGetBestFitsResponse422) & {
 
 export type scoreGetBestFitsResponse = (scoreGetBestFitsResponseSuccess | scoreGetBestFitsResponseError)
 
-export const getScoreGetBestFitsUrl = (params: ScoreGetBestFitsParams,) => {
-  const normalizedParams = new URLSearchParams();
+export const getScoreGetBestFitsUrl = () => {
 
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
 
-  const stringifiedParams = normalizedParams.toString();
+  
 
-  return stringifiedParams.length > 0 ? `http://127.0.0.1:8000/api/v1/score/best-fits?${stringifiedParams}` : `http://127.0.0.1:8000/api/v1/score/best-fits`
+  return `/api/v1/score/best-fits`
 }
 
-export const scoreGetBestFits = async (params: ScoreGetBestFitsParams, options?: RequestInit): Promise<scoreGetBestFitsResponse> => {
+export const scoreGetBestFits = async (bestFitInput: BestFitInput, options?: RequestInit): Promise<scoreGetBestFitsResponse> => {
   
-  const res = await fetch(getScoreGetBestFitsUrl(params),
+  return customFetch<scoreGetBestFitsResponse>(getScoreGetBestFitsUrl(),
   {      
     ...options,
-    method: 'GET'
-    
-    
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', ...options?.headers },
+    body: JSON.stringify(
+      bestFitInput,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: scoreGetBestFitsResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as scoreGetBestFitsResponse
-}
+);}
 
 
 
 
+export const getScoreGetBestFitsMutationOptions = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError,{data: BestFitInput}, TContext>, request?: SecondParameter<typeof customFetch>}
+): UseMutationOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError,{data: BestFitInput}, TContext> => {
 
-export const getScoreGetBestFitsQueryKey = (params?: ScoreGetBestFitsParams,) => {
-    return [
-    `http://127.0.0.1:8000/api/v1/score/best-fits`, ...(params ? [params] : [])
-    ] as const;
-    }
-
-    
-export const getScoreGetBestFitsQueryOptions = <TData = Awaited<ReturnType<typeof scoreGetBestFits>>, TError = HTTPValidationError>(params: ScoreGetBestFitsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError, TData>>, fetch?: RequestInit}
-) => {
-
-const {query: queryOptions, fetch: fetchOptions} = options ?? {};
-
-  const queryKey =  queryOptions?.queryKey ?? getScoreGetBestFitsQueryKey(params);
-
-  
-
-    const queryFn: QueryFunction<Awaited<ReturnType<typeof scoreGetBestFits>>> = ({ signal }) => scoreGetBestFits(params, { signal, ...fetchOptions });
+const mutationKey = ['scoreGetBestFits'];
+const {mutation: mutationOptions, request: requestOptions} = options ?
+      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
+      options
+      : {...options, mutation: {...options.mutation, mutationKey}}
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
-      
 
-   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
-}
+      const mutationFn: MutationFunction<Awaited<ReturnType<typeof scoreGetBestFits>>, {data: BestFitInput}> = (props) => {
+          const {data} = props ?? {};
 
-export type ScoreGetBestFitsQueryResult = NonNullable<Awaited<ReturnType<typeof scoreGetBestFits>>>
-export type ScoreGetBestFitsQueryError = HTTPValidationError
+          return  scoreGetBestFits(data,requestOptions)
+        }
 
 
-export function useScoreGetBestFits<TData = Awaited<ReturnType<typeof scoreGetBestFits>>, TError = HTTPValidationError>(
- params: ScoreGetBestFitsParams, options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError, TData>> & Pick<
-        DefinedInitialDataOptions<
-          Awaited<ReturnType<typeof scoreGetBestFits>>,
-          TError,
-          Awaited<ReturnType<typeof scoreGetBestFits>>
-        > , 'initialData'
-      >, fetch?: RequestInit}
- , queryClient?: QueryClient
-  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useScoreGetBestFits<TData = Awaited<ReturnType<typeof scoreGetBestFits>>, TError = HTTPValidationError>(
- params: ScoreGetBestFitsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError, TData>> & Pick<
-        UndefinedInitialDataOptions<
-          Awaited<ReturnType<typeof scoreGetBestFits>>,
-          TError,
-          Awaited<ReturnType<typeof scoreGetBestFits>>
-        > , 'initialData'
-      >, fetch?: RequestInit}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-export function useScoreGetBestFits<TData = Awaited<ReturnType<typeof scoreGetBestFits>>, TError = HTTPValidationError>(
- params: ScoreGetBestFitsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError, TData>>, fetch?: RequestInit}
- , queryClient?: QueryClient
-  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
-/**
+
+        
+
+
+  return  { mutationFn, ...mutationOptions }}
+
+    export type ScoreGetBestFitsMutationResult = NonNullable<Awaited<ReturnType<typeof scoreGetBestFits>>>
+    export type ScoreGetBestFitsMutationBody = BestFitInput
+    export type ScoreGetBestFitsMutationError = HTTPValidationError
+
+    /**
  * @summary Get Best Fits
  */
-
-export function useScoreGetBestFits<TData = Awaited<ReturnType<typeof scoreGetBestFits>>, TError = HTTPValidationError>(
- params: ScoreGetBestFitsParams, options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError, TData>>, fetch?: RequestInit}
- , queryClient?: QueryClient 
- ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
-
-  const queryOptions = getScoreGetBestFitsQueryOptions(params,options)
-
-  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
-
-  return { ...query, queryKey: queryOptions.queryKey };
-}
-
-
-
-
+export const useScoreGetBestFits = <TError = HTTPValidationError,
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof scoreGetBestFits>>, TError,{data: BestFitInput}, TContext>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient): UseMutationResult<
+        Awaited<ReturnType<typeof scoreGetBestFits>>,
+        TError,
+        {data: BestFitInput},
+        TContext
+      > => {
+      return useMutation(getScoreGetBestFitsMutationOptions(options), queryClient);
+    }
+    

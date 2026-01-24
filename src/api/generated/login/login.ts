@@ -23,7 +23,10 @@ import type {
   UserPublic
 } from '../../model';
 
+import { customFetch } from '../../../lib/custom-fetch';
 
+
+type SecondParameter<T extends (...args: never) => unknown> = Parameters<T>[1];
 
 
 
@@ -55,7 +58,7 @@ export const getLoginLoginAccessTokenUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/login/access-token`
+  return `/api/v1/login/access-token`
 }
 
 export const loginLoginAccessToken = async (bodyLoginLoginAccessToken: BodyLoginLoginAccessToken, options?: RequestInit): Promise<loginLoginAccessTokenResponse> => {
@@ -75,7 +78,7 @@ if(bodyLoginLoginAccessToken.client_secret !== undefined && bodyLoginLoginAccess
  formUrlEncoded.append(`client_secret`, bodyLoginLoginAccessToken.client_secret);
  }
 
-  const res = await fetch(getLoginLoginAccessTokenUrl(),
+  return customFetch<loginLoginAccessTokenResponse>(getLoginLoginAccessTokenUrl(),
   {      
     ...options,
     method: 'POST',
@@ -83,27 +86,21 @@ if(bodyLoginLoginAccessToken.client_secret !== undefined && bodyLoginLoginAccess
     body: 
       formUrlEncoded,
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: loginLoginAccessTokenResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as loginLoginAccessTokenResponse
-}
+);}
 
 
 
 
 export const getLoginLoginAccessTokenMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginAccessToken>>, TError,{data: BodyLoginLoginAccessToken}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginAccessToken>>, TError,{data: BodyLoginLoginAccessToken}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof loginLoginAccessToken>>, TError,{data: BodyLoginLoginAccessToken}, TContext> => {
 
 const mutationKey = ['loginLoginAccessToken'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -111,7 +108,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginLoginAccessToken>>, {data: BodyLoginLoginAccessToken}> = (props) => {
           const {data} = props ?? {};
 
-          return  loginLoginAccessToken(data,fetchOptions)
+          return  loginLoginAccessToken(data,requestOptions)
         }
 
 
@@ -129,7 +126,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Login Access Token
  */
 export const useLoginLoginAccessToken = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginAccessToken>>, TError,{data: BodyLoginLoginAccessToken}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginLoginAccessToken>>, TError,{data: BodyLoginLoginAccessToken}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof loginLoginAccessToken>>,
         TError,
@@ -159,39 +156,33 @@ export const getLoginTestTokenUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/login/test-token`
+  return `/api/v1/login/test-token`
 }
 
 export const loginTestToken = async ( options?: RequestInit): Promise<loginTestTokenResponse> => {
   
-  const res = await fetch(getLoginTestTokenUrl(),
+  return customFetch<loginTestTokenResponse>(getLoginTestTokenUrl(),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: loginTestTokenResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as loginTestTokenResponse
-}
+);}
 
 
 
 
 export const getLoginTestTokenMutationOptions = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginTestToken>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginTestToken>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof loginTestToken>>, TError,void, TContext> => {
 
 const mutationKey = ['loginTestToken'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -199,7 +190,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginTestToken>>, void> = () => {
           
 
-          return  loginTestToken(fetchOptions)
+          return  loginTestToken(requestOptions)
         }
 
 
@@ -217,7 +208,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Test Token
  */
 export const useLoginTestToken = <TError = unknown,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginTestToken>>, TError,void, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginTestToken>>, TError,void, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof loginTestToken>>,
         TError,
@@ -254,39 +245,33 @@ export const getLoginRecoverPasswordUrl = (email: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/password-recovery/${email}`
+  return `/api/v1/password-recovery/${email}`
 }
 
 export const loginRecoverPassword = async (email: string, options?: RequestInit): Promise<loginRecoverPasswordResponse> => {
   
-  const res = await fetch(getLoginRecoverPasswordUrl(email),
+  return customFetch<loginRecoverPasswordResponse>(getLoginRecoverPasswordUrl(email),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: loginRecoverPasswordResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as loginRecoverPasswordResponse
-}
+);}
 
 
 
 
 export const getLoginRecoverPasswordMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPassword>>, TError,{email: string}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPassword>>, TError,{email: string}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPassword>>, TError,{email: string}, TContext> => {
 
 const mutationKey = ['loginRecoverPassword'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -294,7 +279,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginRecoverPassword>>, {email: string}> = (props) => {
           const {email} = props ?? {};
 
-          return  loginRecoverPassword(email,fetchOptions)
+          return  loginRecoverPassword(email,requestOptions)
         }
 
 
@@ -312,7 +297,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Recover Password
  */
 export const useLoginRecoverPassword = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPassword>>, TError,{email: string}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPassword>>, TError,{email: string}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof loginRecoverPassword>>,
         TError,
@@ -349,12 +334,12 @@ export const getLoginResetPasswordUrl = () => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/reset-password/`
+  return `/api/v1/reset-password/`
 }
 
 export const loginResetPassword = async (newPassword: NewPassword, options?: RequestInit): Promise<loginResetPasswordResponse> => {
   
-  const res = await fetch(getLoginResetPasswordUrl(),
+  return customFetch<loginResetPasswordResponse>(getLoginResetPasswordUrl(),
   {      
     ...options,
     method: 'POST',
@@ -362,27 +347,21 @@ export const loginResetPassword = async (newPassword: NewPassword, options?: Req
     body: JSON.stringify(
       newPassword,)
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: loginResetPasswordResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as loginResetPasswordResponse
-}
+);}
 
 
 
 
 export const getLoginResetPasswordMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginResetPassword>>, TError,{data: NewPassword}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginResetPassword>>, TError,{data: NewPassword}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof loginResetPassword>>, TError,{data: NewPassword}, TContext> => {
 
 const mutationKey = ['loginResetPassword'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -390,7 +369,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginResetPassword>>, {data: NewPassword}> = (props) => {
           const {data} = props ?? {};
 
-          return  loginResetPassword(data,fetchOptions)
+          return  loginResetPassword(data,requestOptions)
         }
 
 
@@ -408,7 +387,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Reset Password
  */
 export const useLoginResetPassword = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginResetPassword>>, TError,{data: NewPassword}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginResetPassword>>, TError,{data: NewPassword}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof loginResetPassword>>,
         TError,
@@ -445,39 +424,33 @@ export const getLoginRecoverPasswordHtmlContentUrl = (email: string,) => {
 
   
 
-  return `http://127.0.0.1:8000/api/v1/password-recovery-html-content/${email}`
+  return `/api/v1/password-recovery-html-content/${email}`
 }
 
 export const loginRecoverPasswordHtmlContent = async (email: string, options?: RequestInit): Promise<loginRecoverPasswordHtmlContentResponse> => {
   
-  const res = await fetch(getLoginRecoverPasswordHtmlContentUrl(email),
+  return customFetch<loginRecoverPasswordHtmlContentResponse>(getLoginRecoverPasswordHtmlContentUrl(email),
   {      
     ...options,
     method: 'POST'
     
     
   }
-)
-
-  const body = [204, 205, 304].includes(res.status) ? null : await res.text();
-  
-  const data: loginRecoverPasswordHtmlContentResponse['data'] = body ? JSON.parse(body) : {}
-  return { data, status: res.status, headers: res.headers } as loginRecoverPasswordHtmlContentResponse
-}
+);}
 
 
 
 
 export const getLoginRecoverPasswordHtmlContentMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPasswordHtmlContent>>, TError,{email: string}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPasswordHtmlContent>>, TError,{email: string}, TContext>, request?: SecondParameter<typeof customFetch>}
 ): UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPasswordHtmlContent>>, TError,{email: string}, TContext> => {
 
 const mutationKey = ['loginRecoverPasswordHtmlContent'];
-const {mutation: mutationOptions, fetch: fetchOptions} = options ?
+const {mutation: mutationOptions, request: requestOptions} = options ?
       options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
       options
       : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, fetch: undefined};
+      : {mutation: { mutationKey, }, request: undefined};
 
       
 
@@ -485,7 +458,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
       const mutationFn: MutationFunction<Awaited<ReturnType<typeof loginRecoverPasswordHtmlContent>>, {email: string}> = (props) => {
           const {email} = props ?? {};
 
-          return  loginRecoverPasswordHtmlContent(email,fetchOptions)
+          return  loginRecoverPasswordHtmlContent(email,requestOptions)
         }
 
 
@@ -503,7 +476,7 @@ const {mutation: mutationOptions, fetch: fetchOptions} = options ?
  * @summary Recover Password Html Content
  */
 export const useLoginRecoverPasswordHtmlContent = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPasswordHtmlContent>>, TError,{email: string}, TContext>, fetch?: RequestInit}
+    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof loginRecoverPasswordHtmlContent>>, TError,{email: string}, TContext>, request?: SecondParameter<typeof customFetch>}
  , queryClient?: QueryClient): UseMutationResult<
         Awaited<ReturnType<typeof loginRecoverPasswordHtmlContent>>,
         TError,
