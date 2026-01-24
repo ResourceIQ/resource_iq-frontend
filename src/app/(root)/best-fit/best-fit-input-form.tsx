@@ -10,7 +10,7 @@ import {
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 
-export function NewTaskForm() {
+export function BestFitForm() {
   return (
     <div className="w-full flex justify-center">
       <form className="w-full">

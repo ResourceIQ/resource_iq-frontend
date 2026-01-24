@@ -12,7 +12,7 @@ import {
     CardTitle,
 } from "@/components/ui/card"
 
-import { NewTaskForm } from "@/components/new-task"
+import { BestFitForm } from "@/app/(root)/best-fit/best-fit-input-form"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import { Field, FieldDescription, FieldLabel, FieldLegend } from "@/components/ui/field"
@@ -93,7 +93,7 @@ export default function BestFitPage() {
                         <CardTitle>Find Your Best Fit</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        <NewTaskForm />
+                        <BestFitForm />
                     </CardContent>
                 </Card>
             </div>
