@@ -18,8 +18,6 @@ import type {
   HTTPValidationError,
   SyncAllRequest,
   SyncAllResponse,
-  UnifiedSearchRequest,
-  UnifiedSearchResponse,
   VectorEmbeddingsSyncAuthorVectors200,
   VectorEmbeddingsSyncAuthorVectorsParams
 } from '../../model';
@@ -238,107 +236,5 @@ export const useVectorEmbeddingsSyncAllVectors = <TError = HTTPValidationError,
         TContext
       > => {
       return useMutation(getVectorEmbeddingsSyncAllVectorsMutationOptions(options), queryClient);
-    }
-    /**
- * Unified semantic search across GitHub PRs and Jira issues.
-
-This endpoint searches both GitHub and Jira vectors and returns
-combined results sorted by relevance.
-
-**Request body:**
-- `query`: Search query text (required)
-- `n_results`: Max results to return (default: 10)
-- `search_github`: Include GitHub PRs (default: true)
-- `search_jira`: Include Jira issues (default: true)
-- `github_author_login`: Filter by GitHub author (optional)
-- `jira_project_key`: Filter by Jira project (optional)
-- `jira_assignee_id`: Filter by Jira assignee (optional)
- * @summary Unified Search
- */
-export type vectorEmbeddingsUnifiedSearchResponse200 = {
-  data: UnifiedSearchResponse
-  status: 200
-}
-
-export type vectorEmbeddingsUnifiedSearchResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type vectorEmbeddingsUnifiedSearchResponseSuccess = (vectorEmbeddingsUnifiedSearchResponse200) & {
-  headers: Headers;
-};
-export type vectorEmbeddingsUnifiedSearchResponseError = (vectorEmbeddingsUnifiedSearchResponse422) & {
-  headers: Headers;
-};
-
-export type vectorEmbeddingsUnifiedSearchResponse = (vectorEmbeddingsUnifiedSearchResponseSuccess | vectorEmbeddingsUnifiedSearchResponseError)
-
-export const getVectorEmbeddingsUnifiedSearchUrl = () => {
-
-
-  
-
-  return `/api/v1/vectors/search/unified`
-}
-
-export const vectorEmbeddingsUnifiedSearch = async (unifiedSearchRequest: UnifiedSearchRequest, options?: RequestInit): Promise<vectorEmbeddingsUnifiedSearchResponse> => {
-  
-  return customFetch<vectorEmbeddingsUnifiedSearchResponse>(getVectorEmbeddingsUnifiedSearchUrl(),
-  {      
-    ...options,
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', ...options?.headers },
-    body: JSON.stringify(
-      unifiedSearchRequest,)
-  }
-);}
-
-
-
-
-export const getVectorEmbeddingsUnifiedSearchMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext> => {
-
-const mutationKey = ['vectorEmbeddingsUnifiedSearch'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, {data: UnifiedSearchRequest}> = (props) => {
-          const {data} = props ?? {};
-
-          return  vectorEmbeddingsUnifiedSearch(data,requestOptions)
-        }
-
-
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type VectorEmbeddingsUnifiedSearchMutationResult = NonNullable<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>>
-    export type VectorEmbeddingsUnifiedSearchMutationBody = UnifiedSearchRequest
-    export type VectorEmbeddingsUnifiedSearchMutationError = HTTPValidationError
-
-    /**
- * @summary Unified Search
- */
-export const useVectorEmbeddingsUnifiedSearch = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>, TError,{data: UnifiedSearchRequest}, TContext>, request?: SecondParameter<typeof customFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof vectorEmbeddingsUnifiedSearch>>,
-        TError,
-        {data: UnifiedSearchRequest},
-        TContext
-      > => {
-      return useMutation(getVectorEmbeddingsUnifiedSearchMutationOptions(options), queryClient);
     }
     
