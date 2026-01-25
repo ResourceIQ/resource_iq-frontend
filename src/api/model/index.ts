@@ -65,7 +65,5 @@ export * from './usersReadUsersParams';
 export * from './userUpdate';
 export * from './userUpdateMe';
 export * from './validationError';
-export * from './vectorEmbeddingsSearchSimilarPrs200';
-export * from './vectorEmbeddingsSearchSimilarPrsParams';
 export * from './vectorEmbeddingsSyncAuthorVectors200';
 export * from './vectorEmbeddingsSyncAuthorVectorsParams';

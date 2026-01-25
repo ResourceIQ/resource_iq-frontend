@@ -8,7 +8,8 @@ import type { PrScoreInfo } from './prScoreInfo';
 
 export interface ScoreProfile {
   user_id: string;
-  user_name?: string;
+  user_name?: string | null;
+  position?: string | null;
   github_pr_score?: number;
   jira_issue_score?: number;
   pr_info?: PrScoreInfo[];

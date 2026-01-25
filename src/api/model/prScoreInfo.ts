@@ -6,7 +6,9 @@
  */
 
 export interface PrScoreInfo {
+  pr_id: number;
   pr_title?: string;
+  pr_description?: string;
   pr_url?: string;
   match_percentage?: number;
 }

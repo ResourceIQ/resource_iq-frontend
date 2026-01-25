@@ -10,6 +10,7 @@ export interface PullRequestContent {
   id: number;
   number: number;
   title: string;
+  body?: string | null;
   context?: string | null;
   /**
    * @minLength 1

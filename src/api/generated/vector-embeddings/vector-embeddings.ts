@@ -20,8 +20,6 @@ import type {
   SyncAllResponse,
   UnifiedSearchRequest,
   UnifiedSearchResponse,
-  VectorEmbeddingsSearchSimilarPrs200,
-  VectorEmbeddingsSearchSimilarPrsParams,
   VectorEmbeddingsSyncAuthorVectors200,
   VectorEmbeddingsSyncAuthorVectorsParams
 } from '../../model';
@@ -240,102 +238,6 @@ export const useVectorEmbeddingsSyncAllVectors = <TError = HTTPValidationError,
         TContext
       > => {
       return useMutation(getVectorEmbeddingsSyncAllVectorsMutationOptions(options), queryClient);
-    }
-    /**
- * Search for similar PR contexts (GitHub only).
- * @summary Search Similar Prs
- */
-export type vectorEmbeddingsSearchSimilarPrsResponse200 = {
-  data: VectorEmbeddingsSearchSimilarPrs200
-  status: 200
-}
-
-export type vectorEmbeddingsSearchSimilarPrsResponse422 = {
-  data: HTTPValidationError
-  status: 422
-}
-    
-export type vectorEmbeddingsSearchSimilarPrsResponseSuccess = (vectorEmbeddingsSearchSimilarPrsResponse200) & {
-  headers: Headers;
-};
-export type vectorEmbeddingsSearchSimilarPrsResponseError = (vectorEmbeddingsSearchSimilarPrsResponse422) & {
-  headers: Headers;
-};
-
-export type vectorEmbeddingsSearchSimilarPrsResponse = (vectorEmbeddingsSearchSimilarPrsResponseSuccess | vectorEmbeddingsSearchSimilarPrsResponseError)
-
-export const getVectorEmbeddingsSearchSimilarPrsUrl = (params: VectorEmbeddingsSearchSimilarPrsParams,) => {
-  const normalizedParams = new URLSearchParams();
-
-  Object.entries(params || {}).forEach(([key, value]) => {
-    
-    if (value !== undefined) {
-      normalizedParams.append(key, value === null ? 'null' : value.toString())
-    }
-  });
-
-  const stringifiedParams = normalizedParams.toString();
-
-  return stringifiedParams.length > 0 ? `/api/v1/vectors/search?${stringifiedParams}` : `/api/v1/vectors/search`
-}
-
-export const vectorEmbeddingsSearchSimilarPrs = async (params: VectorEmbeddingsSearchSimilarPrsParams, options?: RequestInit): Promise<vectorEmbeddingsSearchSimilarPrsResponse> => {
-  
-  return customFetch<vectorEmbeddingsSearchSimilarPrsResponse>(getVectorEmbeddingsSearchSimilarPrsUrl(params),
-  {      
-    ...options,
-    method: 'POST'
-    
-    
-  }
-);}
-
-
-
-
-export const getVectorEmbeddingsSearchSimilarPrsMutationOptions = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext>, request?: SecondParameter<typeof customFetch>}
-): UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext> => {
-
-const mutationKey = ['vectorEmbeddingsSearchSimilarPrs'];
-const {mutation: mutationOptions, request: requestOptions} = options ?
-      options.mutation && 'mutationKey' in options.mutation && options.mutation.mutationKey ?
-      options
-      : {...options, mutation: {...options.mutation, mutationKey}}
-      : {mutation: { mutationKey, }, request: undefined};
-
-      
-
-
-      const mutationFn: MutationFunction<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, {params: VectorEmbeddingsSearchSimilarPrsParams}> = (props) => {
-          const {params} = props ?? {};
-
-          return  vectorEmbeddingsSearchSimilarPrs(params,requestOptions)
-        }
-
-
-
-        
-
-
-  return  { mutationFn, ...mutationOptions }}
-
-    export type VectorEmbeddingsSearchSimilarPrsMutationResult = NonNullable<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>>
-    
-    export type VectorEmbeddingsSearchSimilarPrsMutationError = HTTPValidationError
-
-    /**
- * @summary Search Similar Prs
- */
-export const useVectorEmbeddingsSearchSimilarPrs = <TError = HTTPValidationError,
-    TContext = unknown>(options?: { mutation?:UseMutationOptions<Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>, TError,{params: VectorEmbeddingsSearchSimilarPrsParams}, TContext>, request?: SecondParameter<typeof customFetch>}
- , queryClient?: QueryClient): UseMutationResult<
-        Awaited<ReturnType<typeof vectorEmbeddingsSearchSimilarPrs>>,
-        TError,
-        {params: VectorEmbeddingsSearchSimilarPrsParams},
-        TContext
-      > => {
-      return useMutation(getVectorEmbeddingsSearchSimilarPrsMutationOptions(options), queryClient);
     }
     /**
  * Unified semantic search across GitHub PRs and Jira issues.

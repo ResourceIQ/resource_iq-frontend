@@ -1,8 +1,6 @@
-
 'use client'
 
-import { useEffect, useState, useRef } from 'react'
-import LoadingBar, { LoadingBarRef } from 'react-top-loading-bar'
+import { useEffect, useState } from 'react'
 import {
     Card,
     CardAction,
@@ -22,6 +20,9 @@ import { ScrollArea } from '@/components/ui/scroll-area'
 import { useScoreGetBestFits } from '@/api/generated/score/score'
 import { ScoreProfile } from '@/api/model/scoreProfile'
 import { useHeaderLoader } from '@/hooks/use-header-loader'
+import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
+import { ChevronRightIcon } from 'lucide-react'
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 
 
 export default function BestFitPage() {
@@ -98,14 +99,44 @@ export default function BestFitPage() {
                     {selectedFit ? (
                         <Card className="rounded-3xl shadow-[-3px_3px_3px_rgba(45,212,191,0.3),3px_-3px_3px_rgba(168,85,247,0.4)]">
                             <CardHeader>
-                                <CardTitle className="text-3xl">{selectedFit.user_name}</CardTitle>
-                                <CardDescription className="text-xl">{selectedFit.user_name}</CardDescription>
+                                    <CardTitle className="text-3xl">{selectedFit.user_name}</CardTitle>
+                                    <CardDescription className="text-xl">{selectedFit.position}</CardDescription>
                                 <CardAction className="text-3xl">
                                     {parseFloat(selectedFit.total_score.toFixed(2))}
                                 </CardAction>
                             </CardHeader>
                             <CardContent>
-                                <p>Card Content</p>
+                                <Tabs defaultValue="github">
+                                    <TabsList>
+                                        <TabsTrigger value="github">GitHub</TabsTrigger>
+                                        <TabsTrigger value="jira">Jira</TabsTrigger>
+                                    </TabsList>
+                                    <TabsContent value="github">
+                                        <Card>
+                                            <CardHeader>
+                                                <CardTitle>GitHub</CardTitle>
+                                                <CardDescription>{selectedFit.user_name}'s GitHub most relevant activities</CardDescription>
+                                            </CardHeader>
+                                            <CardContent>
+                                                {selectedFit.pr_info?.map((pr) => (
+                                                    <Item key={pr.pr_id} variant={'outline'} size={'sm'} asChild>
+                                                        <a href={pr.pr_url} target="_blank" rel="noopener noreferrer">
+                                                            <ItemContent>
+                                                                <ItemTitle>{pr.pr_title}</ItemTitle>
+                                                                <ItemDescription>
+                                                                    {pr.pr_description}
+                                                                </ItemDescription>
+                                                            </ItemContent>
+                                                            <ItemActions>
+                                                                <ChevronRightIcon className="size-4" />
+                                                            </ItemActions>
+                                                        </a>
+                                                    </Item>
+                                                ))}
+                                            </CardContent>
+                                        </Card>
+                                    </TabsContent>
+                                </Tabs>
                             </CardContent>
                             <CardFooter>
                                 <Button className="w-full">
@@ -143,7 +174,7 @@ export default function BestFitPage() {
                                                         id={`row-${fit.user_name}-checkbox`}
                                                         name={`row-${fit.user_name}-checkbox`}
                                                         checked={selectedFit?.user_name === fit.user_name}
-                                                        onCheckedChange={() => handleFitChange(fit)}
+                                                        aria-hidden="true"
                                                     />
                                                 </div>
                                             </div>

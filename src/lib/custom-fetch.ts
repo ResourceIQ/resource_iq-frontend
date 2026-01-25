@@ -4,15 +4,14 @@ export const customFetch = async <T>(
     url: string,
     options: RequestInit = {}
 ): Promise<T> => {
-
     const token = typeof window !== 'undefined' ? localStorage.getItem('token') : null;
 
-    const headers = {
+    const headers: HeadersInit = {
+        ...(!(options.body instanceof FormData) && { 'Content-Type': 'application/json' }),
         ...(options.headers || {}),
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
 
-    // Construct full URL: only prepend base URL for relative paths
     const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
 
     const response = await fetch(fullUrl, {
@@ -27,8 +26,17 @@ export const customFetch = async <T>(
                 window.location.href = '/sign-in';
             }
         }
-        const error = await response.json().catch(() => ({ detail: 'An error occurred' }));
-        throw error;
+
+        const errorText = await response.text();
+        try {
+            throw JSON.parse(errorText);
+        } catch (e) {
+            throw { detail: errorText || `HTTP Error ${response.status}`, status: response.status };
+        }
+    }
+
+    if (response.status === 204) {
+        return {} as T;
     }
 
     return response.json();
