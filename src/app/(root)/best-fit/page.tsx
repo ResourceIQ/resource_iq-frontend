@@ -23,6 +23,8 @@ import { useHeaderLoader } from '@/hooks/use-header-loader'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { ChevronRightIcon } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { JiraIcon } from '@atlaskit/logo';
+import { SiGithub } from '@icons-pack/react-simple-icons';
 
 
 export default function BestFitPage() {
@@ -108,18 +110,17 @@ export default function BestFitPage() {
                             <CardContent>
                                 <Tabs defaultValue="github">
                                     <TabsList>
-                                        <TabsTrigger value="github">GitHub</TabsTrigger>
-                                        <TabsTrigger value="jira">Jira</TabsTrigger>
+                                        <TabsTrigger value="github"><SiGithub className="size-4" />GitHub</TabsTrigger>
+                                        <TabsTrigger value="jira"><JiraIcon appearance="inverse" size="medium" />Jira</TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="github">
                                         <Card>
                                             <CardHeader>
-                                                <CardTitle>GitHub</CardTitle>
-                                                <CardDescription>{selectedFit.user_name}'s GitHub most relevant activities</CardDescription>
+                                                <CardDescription>{selectedFit.user_name}'s most relevant GitHub activities</CardDescription>
                                             </CardHeader>
                                             <CardContent>
                                                 {selectedFit.pr_info?.map((pr) => (
-                                                    <Item key={pr.pr_id} variant={'outline'} size={'sm'} asChild>
+                                                    <Item key={pr.pr_id} className="m-1" variant={'outline'} size={'sm'} asChild>
                                                         <a href={pr.pr_url} target="_blank" rel="noopener noreferrer">
                                                             <ItemContent>
                                                                 <ItemTitle>{pr.pr_title}</ItemTitle>
