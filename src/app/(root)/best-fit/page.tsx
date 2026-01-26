@@ -23,6 +23,8 @@ import { useHeaderLoader } from '@/hooks/use-header-loader'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
 import { ChevronRightIcon } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
+import { JiraIcon } from '@atlaskit/logo';
+import { SiGithub } from '@icons-pack/react-simple-icons';
 
 
 export default function BestFitPage() {
@@ -108,8 +110,8 @@ export default function BestFitPage() {
                             <CardContent>
                                 <Tabs defaultValue="github">
                                     <TabsList>
-                                        <TabsTrigger value="github">GitHub</TabsTrigger>
-                                        <TabsTrigger value="jira">Jira</TabsTrigger>
+                                        <TabsTrigger value="github"><SiGithub className="size-4" />GitHub</TabsTrigger>
+                                        <TabsTrigger value="jira"><JiraIcon appearance="inverse" size="medium" />Jira</TabsTrigger>
                                     </TabsList>
                                     <TabsContent value="github">
                                         <Card>
