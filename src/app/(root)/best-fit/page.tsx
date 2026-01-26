@@ -116,12 +116,11 @@ export default function BestFitPage() {
                                     <TabsContent value="github">
                                         <Card>
                                             <CardHeader>
-                                                <CardTitle>GitHub</CardTitle>
-                                                <CardDescription>{selectedFit.user_name}'s GitHub most relevant activities</CardDescription>
+                                                <CardDescription>{selectedFit.user_name}'s most relevant GitHub activities</CardDescription>
                                             </CardHeader>
                                             <CardContent>
                                                 {selectedFit.pr_info?.map((pr) => (
-                                                    <Item key={pr.pr_id} variant={'outline'} size={'sm'} asChild>
+                                                    <Item key={pr.pr_id} className="m-1" variant={'outline'} size={'sm'} asChild>
                                                         <a href={pr.pr_url} target="_blank" rel="noopener noreferrer">
                                                             <ItemContent>
                                                                 <ItemTitle>{pr.pr_title}</ItemTitle>
