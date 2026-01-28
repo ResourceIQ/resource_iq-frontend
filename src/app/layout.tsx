@@ -4,7 +4,6 @@ import { Albert_Sans } from "next/font/google";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import "./globals.css";
 
-
 const geistSans = Geist({
   variable: "--font-geist-sans",
   subsets: ["latin"],
