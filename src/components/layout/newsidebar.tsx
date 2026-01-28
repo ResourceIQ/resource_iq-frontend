@@ -65,10 +65,12 @@ import {
   FrameIcon,
   MapIcon
 } from "lucide-react"
+import { useTheme } from "next-themes"
 
 export function AppSidebar() {
   const router = useRouter()
   const pathname = usePathname()
+  const { setTheme } = useTheme()
 
   const data = {
     user: {
@@ -141,7 +143,7 @@ export function AppSidebar() {
                   size="lg"
                   className="data-open:bg-sidebar-accent data-open:text-sidebar-accent-foreground"
                 >
-                  
+
                   <div className="flex aspect-square size-8 items-center justify-center rounded-lg text-primary-foreground">
                     <Image src="/Logo.png" alt="ResourceIQ Logo" width={28} height={28} />
                   </div>
@@ -245,7 +247,7 @@ export function AppSidebar() {
           </SidebarMenu>
         </SidebarGroup>
       </SidebarContent>
-      
+
       <SidebarFooter>
         <SidebarMenu>
           <SidebarMenuItem>
@@ -295,6 +297,17 @@ export function AppSidebar() {
                 <DropdownMenuGroup>
                   <DropdownMenuItem>Account</DropdownMenuItem>
                   <DropdownMenuItem>Settings</DropdownMenuItem>
+                  <DropdownMenuSeparator />
+                  <DropdownMenuLabel>Theme</DropdownMenuLabel>
+                  <DropdownMenuItem onClick={() => setTheme("light")}>
+                    Light
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("dark")}>
+                    Dark
+                  </DropdownMenuItem>
+                  <DropdownMenuItem onClick={() => setTheme("system")}>
+                    System
+                  </DropdownMenuItem>
                 </DropdownMenuGroup>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem
