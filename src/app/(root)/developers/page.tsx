@@ -24,16 +24,18 @@ export type Developer = {
 }
 
 const developers: Developer[] =[
-    {id: "1", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: ""},
-    {id: "2", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: ""},
-    {id: "3", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: ""}
+    {id: "1", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: "RPA Developer"},
+    {id: "2", name: "Diluka Lahiru", jiraEmail: "lahiru@gmail.com", githubEmail: "lahiru@gmail.com", role: "RPA Developer"},
+    {id: "3", name: "Senuja Imeth", jiraEmail: "senuja@gmail.com", githubEmail: "senuja@gmail.com", role: "Full Stack Developer"},
+    {id: "4", name: "Hirusha Lakshan", jiraEmail: "hirusha@gmail.com", githubEmail: "hirusha@gmail.com", role: "IOT Developer"},
+    {id: "5", name: "Nirodha Adikari", jiraEmail: "nirodha@gmail.com", githubEmail: "nirodha@gmail.com", role: "Full Stack Developer"},
+    {id: "6", name: "Supuni Liyanage", jiraEmail: "supuni@gmail.com", githubEmail: "supuni@gmail.com", role: "Front-End Developer"}
 ]
 
 export default function DevelopersPage() {
     return (
-        <div className="p-1 space-y-2">
+        <div className="p-1 space-y-6">
             <h1 className="text-4xl font-bold font-heading">Developers</h1>
-                <p className="text-muted-foreground">Manage your engineering team members and their assignments.</p>
             <Card className="shadow-sm-border-muted/40">
                 <CardHeader className="flex flex-row items-center  justify-between space-y-0 pb-4">
                     <div className="flex items-center w-full max-w-sm gap-2">
