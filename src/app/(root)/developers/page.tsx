@@ -82,6 +82,14 @@ export default function DevelopersPage() {
                             </TableBody>
                         </Table>
                     </div>
+                    <div className="flex items-center justify-start space-x-2 py-4">
+                        <Button variant="outline" size="sm" disabled>
+                            Previous
+                        </Button>
+                        <Button variant="outline" size="sm">
+                            Next
+                        </Button>
+                    </div>
                 </CardContent>
             </Card>
         </div>
