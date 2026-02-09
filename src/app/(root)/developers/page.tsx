@@ -14,6 +14,7 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import { MoreHorizontal, ArrowUpDown, ChevronDown } from "lucide-react"
+import {useState} from "react"
 
 export type Developer = {
     id: string
@@ -33,6 +34,9 @@ const developers: Developer[] =[
 ]
 
 export default function DevelopersPage() {
+
+    const [searchQuery, setSearchQuery] = useState("")  // State for the search text
+    
     return (
         <div className="p-1 space-y-6">
             <h1 className="text-4xl font-bold font-heading">Developers</h1>
