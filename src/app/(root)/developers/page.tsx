@@ -1,6 +1,7 @@
-"use client "
+"use client"
 
-import * as React from "react"
+//import * as React from "react"
+import React, { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import {
@@ -14,7 +15,6 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import { MoreHorizontal, ArrowUpDown, ChevronDown } from "lucide-react"
-import {useState} from "react"
 
 export type Developer = {
     id: string
@@ -49,7 +49,7 @@ export default function DevelopersPage() {
             <Card className="shadow-sm-border-muted/40">
                 <CardHeader className="flex flex-row items-center  justify-between space-y-0 pb-4">
                     <div className="flex items-center w-full max-w-sm gap-2">
-                        <input placeholder="Filter name/emails...." className="h-9"/>
+                        <input placeholder="Filter name/emails...." className="h-9" value={searchQuery} onChange={(e)=>setSearchQuery(e.target.value)}/>
                     </div>
 
                     <Button variant="outline" size="sm" className="ml-auto h-9">
@@ -74,9 +74,10 @@ export default function DevelopersPage() {
                             </TableHeader>
                             <TableBody>
                                 {
-                                    developers.map((dev)=>(
-                                        <TableRow key = {dev.id} className="hover:bg-muted/30">
-                                            <TableCell>
+                                    filteredDevelopers.length > 0 ? (
+                                        filteredDevelopers.map((dev)=>(
+                                            <TableRow key={dev.id}>
+                                                <TableCell>
                                                 <input type="checkbox" />
                                             </TableCell>
                                             <TableCell className="font-medium">{dev.name}</TableCell>
@@ -88,8 +89,16 @@ export default function DevelopersPage() {
                                                     <MoreHorizontal className="h-4 w-4"/>
                                                 </Button>
                                             </TableCell>
+                                            </TableRow>
+                                        ))
+                                    ):(
+                                        <TableRow>
+                                            <TableCell colSpan={6} className="h-24 text-center text-muted-foreground">
+                                                No developers found
+                                            </TableCell>
                                         </TableRow>
-                                    ))
+                                    )
+                                        
                                 }
                             </TableBody>
                         </Table>
