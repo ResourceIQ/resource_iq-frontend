@@ -1,6 +1,7 @@
 import { StatCard } from "@/components/StatCard"
 import { Users ,Clock,TrendingUp,CircleCheckBig} from 'lucide-react';
-
+import { WorkloadChart } from "@/components/WorkloadChart";
+import {ChartPieDonutText} from "@/components/chart-pie-donut"
 
 export default function DashboardPage() {
     return (
@@ -16,16 +17,12 @@ export default function DashboardPage() {
             <div className="grid grid-cols-3 gap-6">
                 
                 <div className="col-span-2 border border-black p-6 rounded-xl min-h-[400px]">
-                    <h3 className="font-bold">Team Workload Distribution</h3>
-                    <p className="text-sm text-gray-500">Current capacity usage by developer</p>
+                    <WorkloadChart />   
                 </div>
-
-                <div className="col-span-1 border border-black p-6 rounded-xl">
-                    <h3 className="font-bold">Utilization Status</h3>
-                    <p className="text-sm text-gray-500">Team distribution</p>
-                </div>
-
+                <ChartPieDonutText />
             </div>
+
+            
             
         </div>
     )
