@@ -2,6 +2,7 @@ import { StatCard } from "@/components/StatCard"
 import { Users ,Clock,TrendingUp,CircleCheckBig} from 'lucide-react';
 import { WorkloadChart } from "@/components/WorkloadChart";
 import {ChartPieDonutText} from "@/components/chart-pie-donut"
+import { ChartBarLabel} from "@/components/chart-bar"
 
 export default function DashboardPage() {
     return (
@@ -14,13 +15,17 @@ export default function DashboardPage() {
                 <StatCard title="Pending Assignments" value="5" massage="Needs attention"Iconname={Clock}/>
             </div>
 
-            <div className="grid grid-cols-3 gap-6">
+            <div className="grid grid-cols-3 gap-4">
                 
-                <div className="col-span-2 border border-black p-6 rounded-xl min-h-[400px]">
-                    <WorkloadChart />   
+                <div className="col-span-2 h-full">
+                    <ChartBarLabel/>   
                 </div>
+                
                 <ChartPieDonutText />
+        
             </div>
+
+            
 
             
             
