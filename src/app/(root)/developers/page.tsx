@@ -15,6 +15,7 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import { MoreHorizontal, ArrowUpDown, ChevronDown } from "lucide-react"
+import { Item } from "@radix-ui/react-dropdown-menu"
 
 export type Developer = {
     id: string
@@ -37,12 +38,21 @@ export default function DevelopersPage() {
 
     const [searchQuery, setSearchQuery] = useState("")  // State for the search text
 
+    const[selectIds, setSelectIds] = useState<string[]>([])   // State for the chexbox selected developers
+
     const filteredDevelopers = developers.filter((dev) =>{   // Logic for filtering developers based on the search query
         const search = searchQuery.toLowerCase()
         return(
-            dev.name.toLowerCase().includes(search) || dev.jiraEmail.toLowerCase().includes(search) || dev.githubEmail.toLowerCase().includes(search)
+            dev.name.toLowerCase().includes(search) || dev.jiraEmail.toLowerCase().includes(search) || dev.githubEmail.toLowerCase().includes(search) || dev.role.toLowerCase().includes(search)
         )
     })
+
+    const selectRow = (id: string)=>{
+        setSelectIds((prev)=>prev.includes(id) ? prev.filter((item)=> item !== id) : [...prev, id]
+        
+    )
+    }
+
     return (
         <div className="p-1 space-y-6">
             <h1 className="text-4xl font-bold font-heading">Developers</h1>
