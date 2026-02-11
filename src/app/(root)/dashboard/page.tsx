@@ -13,6 +13,19 @@ export default function DashboardPage() {
                 <StatCard title="Pending Assignments" value="5" massage="Needs attention"Iconname={Clock}/>
             </div>
 
+            <div className="grid grid-cols-3 gap-6">
+                
+                <div className="col-span-2 border border-black p-6 rounded-xl min-h-[400px]">
+                    <h3 className="font-bold">Team Workload Distribution</h3>
+                    <p className="text-sm text-gray-500">Current capacity usage by developer</p>
+                </div>
+
+                <div className="col-span-1 border border-black p-6 rounded-xl">
+                    <h3 className="font-bold">Utilization Status</h3>
+                    <p className="text-sm text-gray-500">Team distribution</p>
+                </div>
+
+            </div>
             
         </div>
     )
