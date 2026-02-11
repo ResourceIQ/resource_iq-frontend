@@ -22,9 +22,9 @@ import {
 export const description = "A donut chart showing resource utilization distribution"
 
 const chartData = [
-  { status: "Underutilized", value: 2, fill: "var(--chart-1)" },
-  { status: "Optimal", value: 20, fill: "var(--chart-2)" },
-  { status: "Overloaded", value: 19, fill: "var(--chart-3)" },
+  { status: "Underutilized", value: 2, fill: "#915ecc7e" },  // Soft coral/peach
+  { status: "Optimal", value: 20, fill: "#925ECC" },       // Purple (your specified color)
+  { status: "Overloaded", value: 19, fill: "#cc5e5e" },    // Bright red
 ]
 
 const chartConfig = {

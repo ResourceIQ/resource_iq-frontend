@@ -1,6 +1,5 @@
 import { StatCard } from "@/components/StatCard"
 import { Users ,Clock,TrendingUp,CircleCheckBig} from 'lucide-react';
-import { WorkloadChart } from "@/components/WorkloadChart";
 import {ChartPieDonutText} from "@/components/chart-pie-donut"
 import { ChartBarLabel} from "@/components/chart-bar"
 

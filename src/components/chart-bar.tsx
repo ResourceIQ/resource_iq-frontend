@@ -18,20 +18,20 @@ import {
   type ChartConfig,
 } from "@/components/ui/chart"
 
-export const description = "A bar chart with a label"
+export const description = "A bar chart showing resource allocation by team"
 
 const chartData = [
-  { month: "January", desktop: 186 },
-  { month: "February", desktop: 305 },
-  { month: "March", desktop: 237 },
-  { month: "April", desktop: 73 },
-  { month: "May", desktop: 209 },
-  { month: "June", desktop: 214 },
+  { team: "Engineering", resources: 186 },
+  { team: "Product", resources: 105 },
+  { team: "Design", resources: 87 },
+  { team: "Marketing", resources: 73 },
+  { team: "Sales", resources: 109 },
+  { team: "Support", resources: 64 },
 ]
 
 const chartConfig = {
-  desktop: {
-    label: "Desktop",
+  resources: {
+    label: "Resources",
     color: "var(--chart-1)",
   },
 } satisfies ChartConfig
@@ -40,8 +40,8 @@ export function ChartBarLabel() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Bar Chart - Label</CardTitle>
-        <CardDescription>January - June 2024</CardDescription>
+        <CardTitle>Resource Allocation by Team</CardTitle>
+        <CardDescription>Current headcount distribution</CardDescription>
       </CardHeader>
       <CardContent>
         <ChartContainer config={chartConfig}>
@@ -54,7 +54,7 @@ export function ChartBarLabel() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="month"
+              dataKey="team"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -64,7 +64,7 @@ export function ChartBarLabel() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="desktop" fill="var(--color-desktop)" radius={8}>
+            <Bar dataKey="resources" fill="#925ECC" radius={8}>
               <LabelList
                 position="top"
                 offset={12}
@@ -77,10 +77,13 @@ export function ChartBarLabel() {
       </CardContent>
       <CardFooter className="flex-col items-start gap-2 text-sm">
         <div className="flex gap-2 leading-none font-medium">
-          Trending up by 5.2% this month <TrendingUp className="h-4 w-4" />
+          <span className="text-emerald-600">↑ 8.3%</span> team growth this quarter <TrendingUp className="h-4 w-4 text-emerald-600" />
         </div>
         <div className="text-muted-foreground leading-none">
-          Showing total visitors for the last 6 months
+          Engineering has the largest allocation with {chartData[0].resources} resources
+        </div>
+        <div className="text-muted-foreground leading-none text-xs">
+          Total resources: {chartData.reduce((acc, curr) => acc + curr.resources, 0)}
         </div>
       </CardFooter>
     </Card>
