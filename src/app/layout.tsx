@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
+import { Albert_Sans } from "next/font/google";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { ThemeProvider } from "@/components/theme-provider"
 import "./globals.css";
 import Providers from "./providers";
-
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -14,6 +14,11 @@ const geistSans = Geist({
 const geistMono = Geist_Mono({
   variable: "--font-geist-mono",
   subsets: ["latin"],
+});
+const albertSans = Albert_Sans({
+  variable: "--font-albert-sans",
+  subsets: ["latin"],
+  //weight: ["400", "700"],
 });
 
 
@@ -47,7 +52,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+        className={`${geistSans.variable} ${geistMono.variable} ${albertSans.variable} antialiased`}
       >
         <ThemeProvider
           attribute="class"
