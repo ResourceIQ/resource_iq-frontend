@@ -53,6 +53,15 @@ export default function DevelopersPage() {
     )
     }
 
+    const selectAllRow =()=>{
+        if (selectIds.length === filteredDevelopers.length){
+            setSelectIds([])
+        }
+        else{
+            setSelectIds(filteredDevelopers.map((dev) => dev.id))
+        }
+    }
+
     return (
         <div className="p-1 space-y-6">
             <h1 className="text-4xl font-bold font-heading">Developers</h1>
