@@ -4,6 +4,7 @@
 import React, { useState } from "react"
 import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
+import { Checkbox } from "@/components/ui/checkbox"
 import {
     Table,
     TableBody,
@@ -15,7 +16,6 @@ import {
 
 import { Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import { MoreHorizontal, ArrowUpDown, ChevronDown } from "lucide-react"
-import { Item } from "@radix-ui/react-dropdown-menu"
 
 export type Developer = {
     id: string
@@ -81,7 +81,7 @@ export default function DevelopersPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-muted/50">
-                                <TableHead className="w-[50px]"><input type="checkbox" />
+                                <TableHead className="w-[50px]"><Checkbox checked={selectIds.length === filteredDevelopers.length && filteredDevelopers.length>0}onCheckedChange={selectAllRow} />
                                 </TableHead>
                                 <TableHead>Name</TableHead>
                                 <TableHead className="cursor-pointer hover:text-primary">Jira <ArrowUpDown className="inline ml-2 h-3 w-3"/>
@@ -95,9 +95,13 @@ export default function DevelopersPage() {
                                 {
                                     filteredDevelopers.length > 0 ? (
                                         filteredDevelopers.map((dev)=>(
-                                            <TableRow key={dev.id}>
+                                            <TableRow key={dev.id}
+                                                className={selectIds.includes(dev.id)? "bg-muted/50" : ""}
+                                            >
                                                 <TableCell>
-                                                <input type="checkbox" />
+                                                <Checkbox checked={selectIds.includes(dev.id)}
+                                                    onCheckedChange={()=> selectRow(dev.id)}
+                                                />
                                             </TableCell>
                                             <TableCell className="font-medium">{dev.name}</TableCell>
                                             <TableCell>{dev.jiraEmail}</TableCell>
