@@ -57,13 +57,20 @@ export default function DevelopersPage() {
         async function fetchProfiles(){
             try{
                 setIsLoading(true)
-                const response = await fetch("http://127.0.0.1:8000/profiles/")
-                if(!response.ok) throw new Error("Failed to fetch")
+                const token = localStorage.getItem("access_token");
+                const response = await fetch("http://127.0.0.1:8000/api/v1/profiles",{
+                    method:"GET",
+                    headers:{
+                        "Authorization": `Bearer ${token}`,
+                        "Connect-Type":"application/json"
+                    }
+                });
+                if(!response.ok) throw new Error(`Error: ${response.status} ${response.statusText}`);
                 
                 const data = await response.json()
                 setProfiles(data)    
             }catch(error){
-                console.error("Eroor conecting to python backend: error")
+                console.error("Eroor conecting to python backend: ",error)
             }finally{
                 setIsLoading(false)
             }
