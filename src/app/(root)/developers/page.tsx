@@ -57,7 +57,7 @@ export default function DevelopersPage() {
         async function fetchProfiles(){
             try{
                 setIsLoading(true)
-                const response = await fetch("http:127.0.0.1:8000/profiles/")
+                const response = await fetch("http://127.0.0.1:8000/profiles/")
                 if(!response.ok) throw new Error("Failed to fetch")
                 
                 const data = await response.json()
