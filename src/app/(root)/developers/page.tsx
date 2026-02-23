@@ -1,8 +1,6 @@
 "use client"
 
-//import * as React from "react"
 import React, { useState,useEffect } from "react"
-import { Input } from "@/components/ui/input"
 import { Button } from "@/components/ui/button"
 import { Checkbox } from "@/components/ui/checkbox"
 import {
@@ -14,9 +12,8 @@ import {
     TableRow,
 } from "@/components/ui/table"
 
-import { Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
+import { Card, CardContent, CardHeader} from "@/components/ui/card"
 import { MoreHorizontal, ArrowUpDown, ChevronDown, Loader2 } from "lucide-react"
-import { error, profile } from "console"
 
 export type Developer = {
     id: string
@@ -37,14 +34,14 @@ interface ResourceProfile{
     total_workload: number
 }
 
-const developers: Developer[] =[
-    {id: "1", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: "RPA Developer"},
-    {id: "2", name: "Diluka Lahiru", jiraEmail: "lahiru@gmail.com", githubEmail: "lahiru@gmail.com", role: "RPA Developer"},
-    {id: "3", name: "Senuja Imeth", jiraEmail: "senuja@gmail.com", githubEmail: "senuja@gmail.com", role: "Full Stack Developer"},
-    {id: "4", name: "Hirusha Lakshan", jiraEmail: "hirusha@gmail.com", githubEmail: "hirusha@gmail.com", role: "IOT Developer"},
-    {id: "5", name: "Nirodha Adikari", jiraEmail: "nirodha@gmail.com", githubEmail: "nirodha@gmail.com", role: "Full Stack Developer"},
-    {id: "6", name: "Supuni Liyanage", jiraEmail: "supuni@gmail.com", githubEmail: "supuni@gmail.com", role: "Front-End Developer"}
-]
+// const developers: Developer[] =[
+//     {id: "1", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: "RPA Developer"},
+//     {id: "2", name: "Diluka Lahiru", jiraEmail: "lahiru@gmail.com", githubEmail: "lahiru@gmail.com", role: "RPA Developer"},
+//     {id: "3", name: "Senuja Imeth", jiraEmail: "senuja@gmail.com", githubEmail: "senuja@gmail.com", role: "Full Stack Developer"},
+//     {id: "4", name: "Hirusha Lakshan", jiraEmail: "hirusha@gmail.com", githubEmail: "hirusha@gmail.com", role: "IOT Developer"},
+//     {id: "5", name: "Nirodha Adikari", jiraEmail: "nirodha@gmail.com", githubEmail: "nirodha@gmail.com", role: "Full Stack Developer"},
+//     {id: "6", name: "Supuni Liyanage", jiraEmail: "supuni@gmail.com", githubEmail: "supuni@gmail.com", role: "Front-End Developer"}
+// ]
 
 export default function DevelopersPage() {
 
@@ -129,14 +126,14 @@ export default function DevelopersPage() {
                         <Table>
                             <TableHeader>
                                 <TableRow className="bg-muted/50">
-                                <TableHead className="w-[50px]"><Checkbox checked={selectIds.length === filteredProfiles.length && filteredProfiles.length>0}onCheckedChange={selectAllRow} />
+                                <TableHead className="w-50px"><Checkbox checked={selectIds.length === filteredProfiles.length && filteredProfiles.length>0}onCheckedChange={selectAllRow} />
                                 </TableHead>
                                 <TableHead>Name</TableHead>
                                 <TableHead className="cursor-pointer hover:text-primary">Jira <ArrowUpDown className="inline ml-2 h-3 w-3"/>
                                 </TableHead>
                                 <TableHead>GitHub</TableHead>
                                 <TableHead>Role</TableHead>
-                                <TableHead className="w-[50px]"></TableHead>
+                                <TableHead className="w-50px"></TableHead>
                                 </TableRow>
                             </TableHeader>
                             <TableBody>
