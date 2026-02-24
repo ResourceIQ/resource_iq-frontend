@@ -10,9 +10,10 @@ export default function DeveloperProfilePage(){
     return(
         <div className="p-0.1 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
-
+                {/*LEFT SIDE GRID */}
                 <div className="md:col-span-3 lg:col-span-3">
-                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
+                    {/*PROFILE CARD SECTION*/}
+                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden mb-4">
                         <CardContent className="pt-1 pb-1 px-6 flex flex-col items-center text-center">
                             <div className="relative mb-2">
                                 <Avatar className="h-32 w-32 border-4 border-white shadow-xl">
@@ -78,7 +79,7 @@ export default function DeveloperProfilePage(){
                                     "Python", "Node.js", "Laravel", "Photoshop", "Selenium", 
                                     "Appium", "Springboot", "FastAPI", "Oracle", "Github"
                                 ].map((skill) => (
-                                    <div key={skill} className="px-4 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-medium text-xs hover:border-purple-400 hover:text-purple-600 transition-all cursor-pointer bg-white">
+                                    <div key={skill} className="px-4 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-medium text-xs hover:border-card hover:text-purple-600 transition-all cursor-pointer bg-white hover:bg-card">
                                         {skill}
                                     </div>
                                  ))}
