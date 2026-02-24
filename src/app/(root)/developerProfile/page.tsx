@@ -12,7 +12,7 @@ export default function DeveloperProfilePage(){
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
 
                 <div className="md:col-span-3 lg:col-span-3">
-                    <Card className="overflow-hidden border-2 border-purple-500/20 rounded-1rem bg-card shadow-lg mb-4">
+                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
                         <CardContent className="pt-1 pb-1 px-6 flex flex-col items-center text-center">
                             <div className="relative mb-2">
                                 <Avatar className="h-32 w-32 border-4 border-white shadow-xl">
@@ -64,7 +64,7 @@ export default function DeveloperProfilePage(){
                         </CardContent>
                     </Card>
                     {/*SKILLS SECTION*/}
-                    <Card className="rounded-1rem border-2 border-purple-500/20 bg-card shadow-md">
+                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
                         <CardContent className="p-6">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-xl font-bold text-slate-700">Skills</h3>
@@ -89,7 +89,7 @@ export default function DeveloperProfilePage(){
 
                 <div className="md:col-span-7 lg:col-span-9 space-y-6">
                     {/*WORKLOAD SECTION*/}
-                    <Card className="rounded-1rem border-2 border-purple-500/20 bg-card shadow-md overflow-hidden">
+                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
                     <CardContent className="p-6">
                         <div className="flex justify-between items-center mb-6">
                             <h3 className="text-xl font-bold text-slate-700">My work Load</h3>
@@ -145,7 +145,7 @@ export default function DeveloperProfilePage(){
                                 { label: "Meeting hours", value: "12h", color: "bg-violet-100 text-violet-600" },
                                 { label: "Velocity Score", value: "85%", color: "bg-teal-100 text-teal-600" }
                             ].map((stat,index)=>(
-                                <Card key={index} className="border-none shadow-sm rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
+                                <Card key={index} className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
                                     <CardContent className="p-4 flex flex-col items-center justify-center text-center space-y-2">
                                         <div className={`w-12 h-12 ${stat.color} rounded-full flex items-center justify-center font-bold text-lg shadow-inner`}>
                                             {stat.value}
