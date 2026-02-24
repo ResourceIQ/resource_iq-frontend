@@ -127,6 +127,38 @@ export default function DeveloperProfilePage(){
                     </CardContent>
                     </Card>
 
+                    {/* WORK PLACE TRACK RECORD SECTION*/}
+                    <div className="mt-8 space-y-4">
+                        <h3 className="text-xl font-bold text-slate-700 ml-2"> Workplace Track Record</h3>
+                        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+                            {[
+                                {label:"Review PRs",value:"12",color:"bg-purple-100 text-purple-600"},
+                                {label:"Merged PRs",value:"08",color:"bg-emerald-100 text-emerald-600"},
+                                {label:"Coments for PRs",value:"24",color:"bg-blue-100 text-blue-600"},
+                                {label:"Tickets solved",value:"15",color:"bg-orange-100 text-orange-600"},
+                                { label: "Code smells", value: "02", color: "bg-red-100 text-red-600" },
+                                { label: "Bugs reported", value: "04", color: "bg-rose-100 text-rose-600"},
+                                { label: "Active days", value: "18", color: "bg-indigo-100 text-indigo-600" },
+                                { label: "Total Tasks", value: "30", color: "bg-slate-100 text-slate-600" },
+                                { label: "Assigned PRs", value: "05", color: "bg-cyan-100 text-cyan-600" },
+                                { label: "Reopened Tickets", value: "01", color: "bg-amber-100 text-amber-600" },
+                                { label: "Meeting hours", value: "12h", color: "bg-violet-100 text-violet-600" },
+                                { label: "Velocity Score", value: "85%", color: "bg-teal-100 text-teal-600" }
+                            ].map((stat,index)=>(
+                                <Card key={index} className="border-none shadow-sm rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
+                                    <CardContent className="p-4 flex flex-col items-center justify-center text-center space-y-2">
+                                        <div className={`w-12 h-12 ${stat.color} rounded-full flex items-center justify-center font-bold text-lg shadow-inner`}>
+                                            {stat.value}
+                                        </div>
+                                        <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
+                                            {stat.label}
+                                        </p>
+                                    </CardContent>
+                                </Card>
+                            ))}
+                        </div>
+                    </div>
+
                     
                     {/* <div className="p-12 border-2 border-dashed border-slate-200 rounded-xl text-center text-slate-400">
                         Workload & Track Record (Days 2 & 3 content will go here)
