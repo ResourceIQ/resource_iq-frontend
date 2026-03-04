@@ -1,12 +1,56 @@
 "use client"
 
-import React from "react"
+import React, {useEffect,useState} from "react"
 import {Card, CardContent} from "@/components/ui/card"
 import { Avatar,AvatarImage, AvatarFallback } from "@/components/ui/avatar"
 import { Button } from "@/components/ui/button"
-import {Github, Laptop2, LinkIcon, Mail, MapPin, Phone} from "lucide-react"
+import {Github, Laptop2, LinkIcon, Loader2, Mail, MapPin, Phone} from "lucide-react"
+import { useParams } from "next/navigation"
+
 
 export default function DeveloperProfilePage(){
+    const params = useParams()
+    const developerId = params.id
+
+    const [profile,setProfile] = useState<any>(null)
+    const [loading, setLoading] = useState(true)
+
+    useEffect(()=>{
+        async function fetchProfile(){
+            try{
+                setLoading(true)
+                const token = localStorage.getItem("access_token");
+                const response = await fetch(`http://127.0.01:8000/api/v1/profiles/${developerId}`,{
+                    method: "GET",
+                    headers: {
+                        "Authorization": `Bearer ${token}`,
+                        "Content-Type": "application/json"
+                    }
+                });
+                if(!response.ok) throw new Error("Failed to fetch profile");
+                const data = await response.json()
+                setProfile(data)
+            }catch(error){
+                console.error("Error: ",error)
+            }finally{
+                setLoading(false)
+            }
+        }
+        if(developerId) fetchProfile()
+    },[developerId])
+    if (loading){
+        return(
+            <div className="flex flex-col items-center justify-center h-screen gap-4">
+                <Loader2 className="h-10 w-10 animate-spin text-purple-600"/>
+                <p className="text-slate-500 font-medium">Fetching Developer Details...</p>
+            </div>
+        )
+    }
+    if(!profile){
+        return(
+            <div className="p-20 text-center text-red-500">Profile not found!</div>
+        )
+    }
     return(
         <div className="p-0.1 space-y-6">
             <div className="grid grid-cols-1 md:grid-cols-12 gap-4 items-start">
@@ -23,7 +67,7 @@ export default function DeveloperProfilePage(){
                             </div>
 
                             <div className="text-center">
-                                <h2 className="text-2xl font-bold text-slate-800"> Avishka Chasith</h2>
+                                <h2 className="text-2xl font-bold text-slate-800 "> Avishka Chasith</h2>
                                 <p className="text-slate-500 text-sm font-medium">RPA Developer</p>
                             </div>
 
@@ -69,9 +113,9 @@ export default function DeveloperProfilePage(){
                         <CardContent className="p-6">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-xl font-bold text-slate-700">Skills</h3>
-                                <Button variant="outline" className="border-2 border-purple-200 text-purple-600 font-bold rounded-full px-4 h-8 text-xs hover:bg-purple-50">
+                                {/* <Button variant="outline" className="border-2 border-purple-200 text-purple-600 font-bold rounded-full px-4 h-8 text-xs hover:bg-purple-50">
                                     Add Skill +
-                                </Button>
+                                </Button> */}
                             </div>
                             <div className="flex flex-wrap gap-2">
                                 {[
