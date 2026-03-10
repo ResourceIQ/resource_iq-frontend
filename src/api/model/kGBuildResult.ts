@@ -5,7 +5,8 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type UsersReadUsersParams = {
-skip?: number;
-limit?: number;
-};
+export interface KGBuildResult {
+  prs_processed: number;
+  profiles_updated: number;
+  errors: string[];
+}

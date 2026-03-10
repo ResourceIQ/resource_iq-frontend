@@ -5,7 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type UsersReadUsersParams = {
-skip?: number;
-limit?: number;
-};
+export interface TeamMembersCard {
+  total: number;
+  new_this_month: number;
+}

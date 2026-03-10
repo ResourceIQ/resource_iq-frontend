@@ -4,9 +4,8 @@
  * FastAPI Backend Project
  * OpenAPI spec version: 0.1.0
  */
+import type { TeamMembersCard } from './teamMembersCard';
 
-export interface ValidationError {
-  loc: (string | number)[];
-  msg: string;
-  type: string;
+export interface DashboardResponse {
+  team_members: TeamMembersCard;
 }

@@ -5,18 +5,15 @@
  * OpenAPI spec version: 0.1.0
  */
 
-export type JiraGetIssueVectorsParams = {
+export type JiraGetOpenIssuesParams = {
 /**
- * Filter by project key
+ * Filter by Jira project key (e.g. PROJ)
  */
 project_key?: string | null;
 /**
- * Filter by assignee
- */
-assignee_account_id?: string | null;
-/**
+ * Maximum number of issues to return
  * @minimum 1
  * @maximum 500
  */
-limit?: number;
+max_results?: number;
 };
