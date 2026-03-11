@@ -1,14 +1,18 @@
 "use client"
 
 import { StatCard } from "@/components/StatCard"
-import { Users, Clock, TrendingUp, CircleCheckBig } from "lucide-react"
+import { Users, Clock, TrendingUp, CircleCheckBig, Activity } from "lucide-react"
 import { ChartPieDonutText } from "@/components/chart-pie-donut"
 import { ChartBarLabel } from "@/components/chart-bar"
-import { useDashboardGetDashboard } from "@/api/generated/dashboard/dashboard"
+import { IntegrationsHealthCard } from "@/components/IntegrationsHealthCard"
+import { useDashboardGetDashboard, useDashboardGetIntegrationsHealth } from "@/api/generated/dashboard/dashboard"
 
 export default function DashboardPage() {
     const { data, isLoading } = useDashboardGetDashboard()
+    const { data: healthDataResponse, isLoading: isHealthLoading } = useDashboardGetIntegrationsHealth()
+    
     const dashboardData = (data as any)
+    const healthData = (healthDataResponse as any)
 
     // Live data from API
     const team = dashboardData?.team_members
@@ -48,14 +52,20 @@ export default function DashboardPage() {
                 />
             </div>
 
-            <div className="grid grid-cols-3 gap-4">
-
+            <div className="grid grid-cols-4 gap-4">
+                
                 <div className="col-span-2 h-full">
                     <ChartBarLabel data={allocation} />
                 </div>
-
+                
                 <ChartPieDonutText data={status} />
 
+                <div className="col-span-1 h-full">
+                    <IntegrationsHealthCard 
+                        data={healthData} 
+                        isLoading={isHealthLoading} 
+                    />
+                </div>
             </div>
 
         </div>

@@ -20,6 +20,7 @@ import type {
 } from '@tanstack/react-query';
 
 import type {
+  ConnectedIntegrationsCard,
   DashboardResponse
 } from '../../model';
 
@@ -132,6 +133,117 @@ export function useDashboardGetDashboard<TData = Awaited<ReturnType<typeof dashb
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getDashboardGetDashboardQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get connected integrations health status.
+ * @summary Get Integrations Health
+ */
+export type dashboardGetIntegrationsHealthResponse200 = {
+  data: ConnectedIntegrationsCard
+  status: 200
+}
+
+export type dashboardGetIntegrationsHealthResponseSuccess = (dashboardGetIntegrationsHealthResponse200) & {
+  headers: Headers;
+};
+;
+
+export type dashboardGetIntegrationsHealthResponse = (dashboardGetIntegrationsHealthResponseSuccess)
+
+export const getDashboardGetIntegrationsHealthUrl = () => {
+
+
+  
+
+  return `/api/v1/dashboard/integrations/health`
+}
+
+export const dashboardGetIntegrationsHealth = async ( options?: RequestInit): Promise<dashboardGetIntegrationsHealthResponse> => {
+  
+  return customFetch<dashboardGetIntegrationsHealthResponse>(getDashboardGetIntegrationsHealthUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getDashboardGetIntegrationsHealthQueryKey = () => {
+    return [
+    `/api/v1/dashboard/integrations/health`
+    ] as const;
+    }
+
+    
+export const getDashboardGetIntegrationsHealthQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getDashboardGetIntegrationsHealthQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>> = ({ signal }) => dashboardGetIntegrationsHealth({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DashboardGetIntegrationsHealthQueryResult = NonNullable<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>>
+export type DashboardGetIntegrationsHealthQueryError = unknown
+
+
+export function useDashboardGetIntegrationsHealth<TData = Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetIntegrationsHealth<TData = Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetIntegrationsHealth<TData = Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Integrations Health
+ */
+
+export function useDashboardGetIntegrationsHealth<TData = Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationsHealth>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getDashboardGetIntegrationsHealthQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

@@ -8,6 +8,7 @@
 export * from './activeTasksCard';
 export * from './bestFitInput';
 export * from './bodyLoginLoginAccessToken';
+export * from './connectedIntegrationsCard';
 export * from './dashboardResponse';
 export * from './developerWorkload';
 export * from './gitHubConnectionRequest';
