@@ -272,6 +272,14 @@ export interface JiraComment {
   updated: string | null;
 }
 
+export interface JiraIssueTypeStatus {
+  id: number;
+  issue_type_id: string;
+  issue_type_name: string;
+  available_statuses: string[];
+  selected_statuses: string[];
+}
+
 // Jira API Functions
 export const jiraApi = {
   // Auth endpoints
@@ -344,4 +352,20 @@ export const jiraApi = {
 
   getIssueContext: (issueKey: string): Promise<JiraIssueContent> =>
     apiFetch(`/jira/issues/${issueKey}/context`, { method: 'GET' }),
+
+  // Issue Type Status Configuration
+  syncIssueTypeStatuses: (): Promise<JiraIssueTypeStatus[]> =>
+    apiFetch('/jira/issue-type-statuses/sync', { method: 'POST' }),
+
+  getIssueTypeStatuses: (): Promise<JiraIssueTypeStatus[]> =>
+    apiFetch('/jira/issue-type-statuses', { method: 'GET' }),
+
+  updateIssueTypeSelectedStatuses: (
+    issueTypeId: string,
+    selectedStatuses: string[],
+  ): Promise<JiraIssueTypeStatus> =>
+    apiFetch(`/jira/issue-type-statuses/${issueTypeId}`, {
+      method: 'PUT',
+      body: JSON.stringify({ selected_statuses: selectedStatuses }),
+    }),
 };
