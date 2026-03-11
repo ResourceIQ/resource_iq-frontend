@@ -53,23 +53,19 @@ export const authApi = {
   },
 };
 
-// GitHub API Types
+// GitHub API Types (GitHub App-based)
 export interface GitHubConnectionStatus {
   connected: boolean;
   message: string | null;
-  github_username: string | null;
-  github_user_id: string | null;
-  avatar_url: string | null;
+  org_name: string | null;
+  installation_id: string | null;
+  install_url: string | null;
   repositories_count: number | null;
-  expires_at: string | null;
-  is_expired: boolean;
-  scope: string | null;
-  user_id: string | null;
 }
 
-export interface GitHubAuthConnectResponse {
-  auth_url: string;
-  state: string;
+export interface GitHubAppConnectResponse {
+  install_url: string;
+  app_slug: string | null;
 }
 
 export interface GitHubRepository {
@@ -83,11 +79,57 @@ export interface GitHubRepository {
   language: string | null;
   stargazers_count: number;
   forks_count: number;
+  open_issues_count: number;
+  created_at: string | null;
+  updated_at: string | null;
+  pushed_at: string | null;
+}
+
+export interface GitHubContributor {
+  login: string;
+  id: number;
+  avatar_url: string | null;
+  contributions: number;
+}
+
+export interface GitHubPullRequest {
+  id: number;
+  number: number;
+  title: string;
+  state: string;
+  html_url: string;
+  user: {
+    login: string;
+    id: number;
+    avatar_url: string | null;
+  };
+  created_at: string | null;
+  updated_at: string | null;
+  merged_at: string | null;
+  labels: string[];
+}
+
+export interface GitHubSyncRequest {
+  repo_names?: string[] | null;
+  max_prs_per_repo?: number;
+  include_open?: boolean;
+  generate_embeddings?: boolean;
+}
+
+export interface GitHubSyncResponse {
+  status: string;
+  repos_synced: string[];
+  prs_synced: number;
+  prs_created: number;
+  prs_updated: number;
+  embeddings_generated: number;
+  errors: string[];
+  sync_duration_seconds: number;
 }
 
 export const githubApi = {
-  // Auth endpoints
-  getAuthUrl: (): Promise<GitHubAuthConnectResponse> =>
+  // Connection endpoints (GitHub App)
+  getInstallUrl: (): Promise<GitHubAppConnectResponse> =>
     apiFetch('/github/auth/connect', { method: 'GET' }),
 
   getConnectionStatus: (): Promise<GitHubConnectionStatus> =>
@@ -100,7 +142,27 @@ export const githubApi = {
   getRepositories: (): Promise<GitHubRepository[]> =>
     apiFetch('/github/repositories', { method: 'GET' }),
 
-  // Existing endpoints
+  getRepoContributors: (repoName: string): Promise<GitHubContributor[]> =>
+    apiFetch(`/github/repositories/${repoName}/contributors`, { method: 'GET' }),
+
+  getRepoPullRequests: (
+    repoName: string,
+    state: string = 'closed',
+    perPage: number = 30,
+  ): Promise<GitHubPullRequest[]> =>
+    apiFetch(
+      `/github/repositories/${repoName}/pulls?state=${state}&per_page=${perPage}`,
+      { method: 'GET' },
+    ),
+
+  // Sync
+  syncRepos: (request: GitHubSyncRequest): Promise<GitHubSyncResponse> =>
+    apiFetch('/github/sync', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  // Org member endpoints
   getDevelopers: () => apiFetch('/github/get_developers', { method: 'GET' }),
   getClosedPrsAll: () => apiFetch('/github/get_closed_prs_context_all_authors', { method: 'GET' }),
   getPrsByAuthor: (author: string) => apiFetch('/github/get_closed_prs_context_per_author', {
