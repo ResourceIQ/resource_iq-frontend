@@ -22,7 +22,8 @@ import type {
 import type {
   ConnectedIntegrationsCard,
   DashboardResponse,
-  GitHubPRStatsCard
+  GitHubPRStatsCard,
+  JiraTaskStatsCard
 } from '../../model';
 
 import { customFetch } from '../../../lib/custom-fetch';
@@ -356,6 +357,117 @@ export function useDashboardGetGithubStats<TData = Awaited<ReturnType<typeof das
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getDashboardGetGithubStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get Jira task statistics for dashboard.
+ * @summary Get Jira Stats
+ */
+export type dashboardGetJiraStatsResponse200 = {
+  data: JiraTaskStatsCard
+  status: 200
+}
+
+export type dashboardGetJiraStatsResponseSuccess = (dashboardGetJiraStatsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type dashboardGetJiraStatsResponse = (dashboardGetJiraStatsResponseSuccess)
+
+export const getDashboardGetJiraStatsUrl = () => {
+
+
+  
+
+  return `/api/v1/dashboard/jira/tasks/stats`
+}
+
+export const dashboardGetJiraStats = async ( options?: RequestInit): Promise<dashboardGetJiraStatsResponse> => {
+  
+  return customFetch<dashboardGetJiraStatsResponse>(getDashboardGetJiraStatsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getDashboardGetJiraStatsQueryKey = () => {
+    return [
+    `/api/v1/dashboard/jira/tasks/stats`
+    ] as const;
+    }
+
+    
+export const getDashboardGetJiraStatsQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getDashboardGetJiraStatsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetJiraStats>>> = ({ signal }) => dashboardGetJiraStats({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DashboardGetJiraStatsQueryResult = NonNullable<Awaited<ReturnType<typeof dashboardGetJiraStats>>>
+export type DashboardGetJiraStatsQueryError = unknown
+
+
+export function useDashboardGetJiraStats<TData = Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetJiraStats>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetJiraStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetJiraStats<TData = Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetJiraStats>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetJiraStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetJiraStats<TData = Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Jira Stats
+ */
+
+export function useDashboardGetJiraStats<TData = Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetJiraStats>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getDashboardGetJiraStatsQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 

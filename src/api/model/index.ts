@@ -6,6 +6,7 @@
  */
 
 export * from './activeTasksCard';
+export * from './assigneeTaskCount';
 export * from './bestFitInput';
 export * from './bodyLoginLoginAccessToken';
 export * from './connectedIntegrationsCard';
@@ -39,6 +40,7 @@ export * from './jiraSearchSimilarIssues200Item';
 export * from './jiraSearchSimilarIssuesParams';
 export * from './jiraSyncRequest';
 export * from './jiraSyncResponse';
+export * from './jiraTaskStatsCard';
 export * from './jiraTestWebhookEndpoint200';
 export * from './jiraUser';
 export * from './kGBuildResult';
@@ -51,6 +53,7 @@ export * from './profilesGetAllWorkloadsParams';
 export * from './profilesListProfilesParams';
 export * from './profilesMatchJiraGithubProfilesParams';
 export * from './profileWorkload';
+export * from './projectTaskCount';
 export * from './prScoreInfo';
 export * from './pullRequestContent';
 export * from './repoPRCount';
