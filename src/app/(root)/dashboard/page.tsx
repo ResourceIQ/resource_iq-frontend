@@ -7,18 +7,27 @@ import { ChartBarLabel } from "@/components/chart-bar"
 import { IntegrationsHealthCard } from "@/components/IntegrationsHealthCard"
 import { GithubPrStatsCard } from "@/components/GithubPrStatsCard"
 import { JiraTasksStatsCard } from "@/components/JiraTasksStatsCard"
-import { useDashboardGetDashboard, useDashboardGetIntegrationsHealth, useDashboardGetGithubStats, useDashboardGetJiraStats } from "@/api/generated/dashboard/dashboard"
+import { ProfileIntegrationsCard } from "@/components/ProfileIntegrationsCard"
+import { 
+    useDashboardGetDashboard, 
+    useDashboardGetIntegrationsHealth, 
+    useDashboardGetGithubStats, 
+    useDashboardGetJiraStats,
+    useDashboardGetIntegrationAdoption 
+} from "@/api/generated/dashboard/dashboard"
 
 export default function DashboardPage() {
     const { data, isLoading } = useDashboardGetDashboard()
     const { data: healthDataResponse, isLoading: isHealthLoading } = useDashboardGetIntegrationsHealth()
     const { data: githubStatsResponse, isLoading: isGithubStatsLoading } = useDashboardGetGithubStats()
     const { data: jiraStatsResponse, isLoading: isJiraStatsLoading } = useDashboardGetJiraStats()
+    const { data: profileIntegrationsResponse, isLoading: isProfileIntegrationsLoading } = useDashboardGetIntegrationAdoption()
 
     const dashboardData = (data as any)
     const healthData = (healthDataResponse as any)
     const githubStats = (githubStatsResponse as any)
     const jiraStats = (jiraStatsResponse as any)
+    const profileIntegrations = (profileIntegrationsResponse as any)
 
     // Live data from API
     const team = dashboardData?.team_members
@@ -108,6 +117,13 @@ export default function DashboardPage() {
                 </div>
             </div>
 
+            <div className="animate-fade-in-up stagger-5 lg:col-span-4">
+                    <ProfileIntegrationsCard
+                        data={profileIntegrations}
+                        isLoading={isProfileIntegrationsLoading}
+                    />
+            </div>
+
             {/* Charts & Cards Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 
@@ -120,6 +136,8 @@ export default function DashboardPage() {
                 <div className="animate-fade-in-up stagger-5 lg:col-span-2">
                     <ChartBarLabel data={allocation} />
                 </div>
+                
+                
             </div>
 
         </div>

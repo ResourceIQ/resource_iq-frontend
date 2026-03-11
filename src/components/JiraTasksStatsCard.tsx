@@ -111,9 +111,9 @@ export function JiraTasksStatsCard({ data, isLoading }: JiraTasksStatsCardProps)
             </div>
             {data.top_assignees?.length > 0 ? (
               <ul className="space-y-1.5">
-                {data.top_assignees.slice(0, 5).map((assignee, idx) => (
+                {data.top_assignees.map((assignee, idx) => (
                   <li key={idx} className="flex justify-between items-center text-xs">
-                    <span className="truncate max-w-[200px] font-medium" title={assignee.assignee_account_id ?? undefined}>
+                    <span className="truncate max-w-[100px] font-medium" title={assignee.assignee_account_id ?? undefined}>
                       {(assignee.assignee_account_id ?? 'Unknown').split(':').pop()?.slice(0, 8)}...
                     </span>
                     <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold text-[11px]">
