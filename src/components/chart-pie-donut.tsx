@@ -21,34 +21,27 @@ import {
 
 export const description = "A donut chart showing resource utilization distribution"
 
-const chartData = [
-  { status: "Underutilized", value: 2, fill: "#915ecc7e" },  // Soft coral/peach
-  { status: "Optimal", value: 20, fill: "#925ECC" },       // Purple (your specified color)
-  { status: "Overloaded", value: 19, fill: "#cc5e5e" },    // Bright red
-]
-
 const chartConfig = {
   value: {
     label: "Resource Count",
   },
-  Underutilized: {
-    label: "Underutilized",
-    color: "var(--chart-1)",
+  Utilized: {
+    label: "Utilized",
+    color: "#925ECC",
   },
-  Optimal: {
-    label: "Optimal",
-    color: "var(--chart-2)",
-  },
-  Overloaded: {
-    label: "Overloaded",
-    color: "var(--chart-3)",
+  Available: {
+    label: "Available",
+    color: "#915ecc7e",
   },
 } satisfies ChartConfig
 
-export function ChartPieDonutText() {
-  const totalResources = React.useMemo(() => {
-    return chartData.reduce((acc, curr) => acc + curr.value, 0)
-  }, [])
+export function ChartPieDonutText({ data }: { data?: { total_resources: number; utilized: number; available: number } }) {
+  const chartData = React.useMemo(() => [
+    { status: "Utilized", value: data?.utilized ?? 0, fill: "#925ECC" },
+    { status: "Available", value: data?.available ?? 0, fill: "#915ecc7e" },
+  ], [data])
+
+  const totalResources = data?.total_resources ?? 0
 
   return (
     <Card className="flex flex-col">
@@ -111,7 +104,7 @@ export function ChartPieDonutText() {
           <span className="text-emerald-600">↑ 5.2%</span> optimal utilization this month <TrendingUp className="h-4 w-4 text-emerald-600" />
         </div>
         <div className="text-muted-foreground leading-none text-center">
-          {chartData[0].value} underutilized · {chartData[1].value} optimal · {chartData[2].value} overloaded resources
+          {data?.utilized ?? 0} utilized · {data?.available ?? 0} available resources
         </div>
         <div className="text-muted-foreground leading-none text-xs">
           Based on current workload vs. capacity
