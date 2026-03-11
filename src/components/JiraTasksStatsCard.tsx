@@ -78,9 +78,9 @@ export function JiraTasksStatsCard({ data, isLoading }: JiraTasksStatsCardProps)
           <span className="text-xs text-muted-foreground">Total Active Tasks</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-4">
+        <div className="grid grid-cols-4 gap-4">
           {/* Projects */}
-          <div className="space-y-2">
+          <div className="space-y-2 col-span-1">
             <div className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground mb-2 border-b pb-1">
               <LayoutList className="h-3.5 w-3.5" />
               By Project
@@ -104,7 +104,7 @@ export function JiraTasksStatsCard({ data, isLoading }: JiraTasksStatsCardProps)
           </div>
 
           {/* Top Assignees */}
-          <div className="space-y-2 border-l pl-4">
+          <div className="space-y-2 border-l pl-4 col-span-3">
             <div className="flex items-center gap-1.5 text-sm font-semibold text-muted-foreground mb-2 border-b pb-1">
               <Users className="h-3.5 w-3.5" />
               Top Assignees
@@ -113,8 +113,8 @@ export function JiraTasksStatsCard({ data, isLoading }: JiraTasksStatsCardProps)
               <ul className="space-y-1.5">
                 {data.top_assignees.map((assignee, idx) => (
                   <li key={idx} className="flex justify-between items-center text-xs">
-                    <span className="truncate max-w-[100px] font-medium" title={assignee.assignee_account_id ?? undefined}>
-                      {(assignee.assignee_account_id ?? 'Unknown').split(':').pop()?.slice(0, 8)}...
+                    <span className="truncate max-w-[300px] font-medium" title={assignee.assignee_account_id ?? undefined}>
+                      {(assignee.assignee_account_id ?? 'Unknown').split(':').pop()}
                     </span>
                     <span className="bg-primary/10 text-primary px-2 py-0.5 rounded-full font-bold text-[11px]">
                       {assignee.count}
