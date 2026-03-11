@@ -20,15 +20,6 @@ import {
 
 export const description = "A bar chart showing resource allocation by team"
 
-const chartData = [
-  { team: "Engineering", resources: 186 },
-  { team: "Product", resources: 105 },
-  { team: "Design", resources: 87 },
-  { team: "Marketing", resources: 73 },
-  { team: "Sales", resources: 109 },
-  { team: "Support", resources: 64 },
-]
-
 const chartConfig = {
   resources: {
     label: "Resources",
@@ -36,9 +27,11 @@ const chartConfig = {
   },
 } satisfies ChartConfig
 
-export function ChartBarLabel() {
+export function ChartBarLabel({ data }: { data?: { team_name: string; headcount: number }[] }) {
+  const chartData = data || []
+
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Resource Allocation by Team</CardTitle>
         <CardDescription>Current headcount distribution</CardDescription>
@@ -54,7 +47,7 @@ export function ChartBarLabel() {
           >
             <CartesianGrid vertical={false} />
             <XAxis
-              dataKey="team"
+              dataKey="team_name"
               tickLine={false}
               tickMargin={10}
               axisLine={false}
@@ -64,7 +57,7 @@ export function ChartBarLabel() {
               cursor={false}
               content={<ChartTooltipContent hideLabel />}
             />
-            <Bar dataKey="resources" fill="#925ECC" radius={8}>
+            <Bar dataKey="headcount" fill="#925ECC" radius={8}>
               <LabelList
                 position="top"
                 offset={12}
@@ -80,10 +73,10 @@ export function ChartBarLabel() {
           <span className="text-emerald-600">↑ 8.3%</span> team growth this quarter <TrendingUp className="h-4 w-4 text-emerald-600" />
         </div>
         <div className="text-muted-foreground leading-none">
-          Engineering has the largest allocation with {chartData[0].resources} resources
+          {chartData.length > 0 ? `${chartData[0].team_name} has the largest allocation with ${chartData[0].headcount} resources` : "No allocation data available"}
         </div>
         <div className="text-muted-foreground leading-none text-xs">
-          Total resources: {chartData.reduce((acc, curr) => acc + curr.resources, 0)}
+          Total resources: {chartData.reduce((acc, curr) => acc + curr.headcount, 0)}
         </div>
       </CardFooter>
     </Card>
