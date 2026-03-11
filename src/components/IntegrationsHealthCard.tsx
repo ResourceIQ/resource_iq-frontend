@@ -1,6 +1,7 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Activity, CheckCircle2, XCircle, AlertTriangle, Clock } from "lucide-react";
 import { ConnectedIntegrationsCard } from "@/api/model/connectedIntegrationsCard";
+import { Skeleton } from "@/components/ui/skeleton";
 
 interface IntegrationsHealthCardProps {
   data?: ConnectedIntegrationsCard;
@@ -10,15 +11,18 @@ interface IntegrationsHealthCardProps {
 export function IntegrationsHealthCard({ data, isLoading }: IntegrationsHealthCardProps) {
   if (isLoading) {
     return (
-      <Card className="w-full">
+      <Card className="w-full h-full">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
             <Activity className="h-4 w-4" />
             Integrations Health
           </CardTitle>
         </CardHeader>
-        <CardContent>
-          <div className="text-2xl font-bold">Loading...</div>
+        <CardContent className="space-y-3">
+          <Skeleton className="h-7 w-24" />
+          <Skeleton className="h-4 w-40" />
+          <Skeleton className="h-20 w-full rounded-md" />
+          <Skeleton className="h-16 w-full rounded-md" />
         </CardContent>
       </Card>
     );
@@ -26,7 +30,7 @@ export function IntegrationsHealthCard({ data, isLoading }: IntegrationsHealthCa
 
   if (!data) {
     return (
-      <Card className="w-full">
+      <Card className="w-full h-full">
         <CardHeader className="pb-2">
           <CardTitle className="text-sm font-medium flex items-center gap-2 text-muted-foreground">
             <Activity className="h-4 w-4" />
@@ -67,7 +71,7 @@ export function IntegrationsHealthCard({ data, isLoading }: IntegrationsHealthCa
   };
 
   return (
-    <Card className="w-full">
+    <Card className="w-full h-full">
       <CardHeader className="pb-2">
         <CardTitle className="text-sm font-medium flex items-center justify-between text-muted-foreground">
           <div className="flex items-center gap-2">
@@ -87,7 +91,7 @@ export function IntegrationsHealthCard({ data, isLoading }: IntegrationsHealthCa
         
         <div className="space-y-3">
           {/* Jira Integration Details */}
-          <div className="bg-secondary/20 p-3 rounded-md">
+          <div className={`bg-secondary/20 p-3 rounded-md border-l-2 ${data.jira_connected ? 'border-l-green-500' : 'border-l-red-400'}`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">Jira</span>
               {data.jira_connected ? (
@@ -118,7 +122,7 @@ export function IntegrationsHealthCard({ data, isLoading }: IntegrationsHealthCa
           </div>
           
           {/* GitHub Integration Details */}
-          <div className="bg-secondary/20 p-3 rounded-md">
+          <div className={`bg-secondary/20 p-3 rounded-md border-l-2 ${data.github_connected ? 'border-l-green-500' : 'border-l-red-400'}`}>
             <div className="flex items-center justify-between mb-2">
               <span className="text-sm font-medium">GitHub</span>
               {data.github_connected ? (

@@ -44,7 +44,7 @@ export function ChartPieDonutText({ data }: { data?: { total_resources: number; 
   const totalResources = data?.total_resources ?? 0
 
   return (
-    <Card className="flex flex-col">
+    <Card className="flex flex-col h-full">
       <CardHeader className="items-center pb-0">
         <CardTitle>Resource Utilization Status</CardTitle>
         <CardDescription>Current distribution across teams</CardDescription>
@@ -101,13 +101,19 @@ export function ChartPieDonutText({ data }: { data?: { total_resources: number; 
       </CardContent>
       <CardFooter className="flex-col gap-2 text-sm">
         <div className="flex items-center gap-2 leading-none font-medium">
-          <span className="text-emerald-600">↑ 5.2%</span> optimal utilization this month <TrendingUp className="h-4 w-4 text-emerald-600" />
+          {totalResources > 0 ? (
+            <>
+              <span className="text-primary font-semibold">
+                {Math.round(((data?.utilized ?? 0) / totalResources) * 100)}%
+              </span>
+              utilization rate
+            </>
+          ) : (
+            <span className="text-muted-foreground">No utilization data</span>
+          )}
         </div>
         <div className="text-muted-foreground leading-none text-center">
           {data?.utilized ?? 0} utilized · {data?.available ?? 0} available resources
-        </div>
-        <div className="text-muted-foreground leading-none text-xs">
-          Based on current workload vs. capacity
         </div>
       </CardFooter>
     </Card>

@@ -31,7 +31,7 @@ export function ChartBarLabel({ data }: { data?: { team_name: string; headcount:
   const chartData = data || []
 
   return (
-    <Card>
+    <Card className="h-full">
       <CardHeader>
         <CardTitle>Resource Allocation by Team</CardTitle>
         <CardDescription>Current headcount distribution</CardDescription>
