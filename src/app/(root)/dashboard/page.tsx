@@ -5,14 +5,17 @@ import { Users, Clock, TrendingUp, CircleCheckBig, Activity } from "lucide-react
 import { ChartPieDonutText } from "@/components/chart-pie-donut"
 import { ChartBarLabel } from "@/components/chart-bar"
 import { IntegrationsHealthCard } from "@/components/IntegrationsHealthCard"
-import { useDashboardGetDashboard, useDashboardGetIntegrationsHealth } from "@/api/generated/dashboard/dashboard"
+import { GithubPrStatsCard } from "@/components/GithubPrStatsCard"
+import { useDashboardGetDashboard, useDashboardGetIntegrationsHealth, useDashboardGetGithubStats } from "@/api/generated/dashboard/dashboard"
 
 export default function DashboardPage() {
     const { data, isLoading } = useDashboardGetDashboard()
     const { data: healthDataResponse, isLoading: isHealthLoading } = useDashboardGetIntegrationsHealth()
+    const { data: githubStatsResponse, isLoading: isGithubStatsLoading } = useDashboardGetGithubStats()
     
     const dashboardData = (data as any)
     const healthData = (healthDataResponse as any)
+    const githubStats = (githubStatsResponse as any)
 
     // Live data from API
     const team = dashboardData?.team_members
@@ -23,9 +26,9 @@ export default function DashboardPage() {
     const status = dashboardData?.resource_utilization
 
     return (
-        <div className="p-6">
+        <div className="p-4">
 
-            <div className="grid grid-cols-4 gap-4 mb-8">
+            <div className="grid grid-cols-5 gap-4 mb-8">
                 <StatCard
                     title="Team Members"
                     value={isLoading ? "..." : String(team?.total ?? 0)}
@@ -49,23 +52,37 @@ export default function DashboardPage() {
                     value={isLoading ? "..." : String(pending?.count ?? 0)}
                     massage={isLoading ? "Loading..." : (pending?.message ?? "N/A")}
                     Iconname={Clock}
-                />
+                /> 
             </div>
 
             <div className="grid grid-cols-4 gap-4">
+                
+                <IntegrationsHealthCard 
+                        data={healthData} 
+                        isLoading={isHealthLoading} 
+                        />
+
+                 <GithubPrStatsCard
+                        data={githubStats}
+                        isLoading={isGithubStatsLoading}
+                    />
+
+                <ChartPieDonutText data={status} />
+
+
+
+            </div>
+
+            <div className="grid grid-cols-8 gap-4">
+
+                
                 
                 <div className="col-span-2 h-full">
                     <ChartBarLabel data={allocation} />
                 </div>
                 
-                <ChartPieDonutText data={status} />
 
-                <div className="col-span-1 h-full">
-                    <IntegrationsHealthCard 
-                        data={healthData} 
-                        isLoading={isHealthLoading} 
-                    />
-                </div>
+                
             </div>
 
         </div>

@@ -21,7 +21,8 @@ import type {
 
 import type {
   ConnectedIntegrationsCard,
-  DashboardResponse
+  DashboardResponse,
+  GitHubPRStatsCard
 } from '../../model';
 
 import { customFetch } from '../../../lib/custom-fetch';
@@ -244,6 +245,117 @@ export function useDashboardGetIntegrationsHealth<TData = Awaited<ReturnType<typ
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getDashboardGetIntegrationsHealthQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get GitHub PR statistics for dashboard.
+ * @summary Get Github Stats
+ */
+export type dashboardGetGithubStatsResponse200 = {
+  data: GitHubPRStatsCard
+  status: 200
+}
+
+export type dashboardGetGithubStatsResponseSuccess = (dashboardGetGithubStatsResponse200) & {
+  headers: Headers;
+};
+;
+
+export type dashboardGetGithubStatsResponse = (dashboardGetGithubStatsResponseSuccess)
+
+export const getDashboardGetGithubStatsUrl = () => {
+
+
+  
+
+  return `/api/v1/dashboard/github/prs/stats`
+}
+
+export const dashboardGetGithubStats = async ( options?: RequestInit): Promise<dashboardGetGithubStatsResponse> => {
+  
+  return customFetch<dashboardGetGithubStatsResponse>(getDashboardGetGithubStatsUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getDashboardGetGithubStatsQueryKey = () => {
+    return [
+    `/api/v1/dashboard/github/prs/stats`
+    ] as const;
+    }
+
+    
+export const getDashboardGetGithubStatsQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getDashboardGetGithubStatsQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetGithubStats>>> = ({ signal }) => dashboardGetGithubStats({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DashboardGetGithubStatsQueryResult = NonNullable<Awaited<ReturnType<typeof dashboardGetGithubStats>>>
+export type DashboardGetGithubStatsQueryError = unknown
+
+
+export function useDashboardGetGithubStats<TData = Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetGithubStats>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetGithubStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetGithubStats<TData = Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetGithubStats>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetGithubStats>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetGithubStats<TData = Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Github Stats
+ */
+
+export function useDashboardGetGithubStats<TData = Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetGithubStats>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getDashboardGetGithubStatsQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
