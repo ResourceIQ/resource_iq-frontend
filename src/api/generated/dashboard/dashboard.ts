@@ -49,50 +49,49 @@ export type dashboardGetDashboardResponse = (dashboardGetDashboardResponseSucces
 export const getDashboardGetDashboardUrl = () => {
 
 
-
+  
 
   return `/api/v1/dashboard/`
 }
 
-export const dashboardGetDashboard = async (options?: RequestInit): Promise<dashboardGetDashboardResponse> => {
-
+export const dashboardGetDashboard = async ( options?: RequestInit): Promise<dashboardGetDashboardResponse> => {
+  
   return customFetch<dashboardGetDashboardResponse>(getDashboardGetDashboardUrl(),
-    {
-      ...options,
-      method: 'GET'
-
-
-    }
-  );
-}
-
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
 
 
 
 
 export const getDashboardGetDashboardQueryKey = () => {
-  return [
+    return [
     `/api/v1/dashboard/`
-  ] as const;
-}
+    ] as const;
+    }
 
-
-export const getDashboardGetDashboardQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetDashboard>>, TError = unknown>(options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>>, request?: SecondParameter<typeof customFetch> }
+    
+export const getDashboardGetDashboardQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetDashboard>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
 ) => {
 
-  const { query: queryOptions, request: requestOptions } = options ?? {};
+const {query: queryOptions, request: requestOptions} = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getDashboardGetDashboardQueryKey();
+  const queryKey =  queryOptions?.queryKey ?? getDashboardGetDashboardQueryKey();
 
+  
 
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetDashboard>>> = ({ signal }) => dashboardGetDashboard({ signal, ...requestOptions });
 
-  const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetDashboard>>> = ({ signal }) => dashboardGetDashboard({ signal, ...requestOptions });
+      
 
+      
 
-
-
-
-  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
 }
 
 export type DashboardGetDashboardQueryResult = NonNullable<Awaited<ReturnType<typeof dashboardGetDashboard>>>
@@ -100,45 +99,41 @@ export type DashboardGetDashboardQueryError = unknown
 
 
 export function useDashboardGetDashboard<TData = Awaited<ReturnType<typeof dashboardGetDashboard>>, TError = unknown>(
-  options: {
-    query: Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>> & Pick<
-      DefinedInitialDataOptions<
-        Awaited<ReturnType<typeof dashboardGetDashboard>>,
-        TError,
-        Awaited<ReturnType<typeof dashboardGetDashboard>>
-      >, 'initialData'
-    >, request?: SecondParameter<typeof customFetch>
-  }
-  , queryClient?: QueryClient
-): DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetDashboard>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetDashboard>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useDashboardGetDashboard<TData = Awaited<ReturnType<typeof dashboardGetDashboard>>, TError = unknown>(
-  options?: {
-    query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>> & Pick<
-      UndefinedInitialDataOptions<
-        Awaited<ReturnType<typeof dashboardGetDashboard>>,
-        TError,
-        Awaited<ReturnType<typeof dashboardGetDashboard>>
-      >, 'initialData'
-    >, request?: SecondParameter<typeof customFetch>
-  }
-  , queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetDashboard>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetDashboard>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 export function useDashboardGetDashboard<TData = Awaited<ReturnType<typeof dashboardGetDashboard>>, TError = unknown>(
-  options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>>, request?: SecondParameter<typeof customFetch> }
-  , queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
 /**
  * @summary Get Dashboard
  */
 
 export function useDashboardGetDashboard<TData = Awaited<ReturnType<typeof dashboardGetDashboard>>, TError = unknown>(
-  options?: { query?: Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>>, request?: SecondParameter<typeof customFetch> }
-  , queryClient?: QueryClient
-): UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetDashboard>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getDashboardGetDashboardQueryOptions(options)
 
-  const query = useQuery(queryOptions, queryClient) as UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
   return { ...query, queryKey: queryOptions.queryKey };
 }

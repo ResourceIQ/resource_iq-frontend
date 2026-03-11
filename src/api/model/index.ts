@@ -5,6 +5,7 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from './activeTasksCard';
 export * from './bestFitInput';
 export * from './bodyLoginLoginAccessToken';
 export * from './dashboardResponse';
@@ -41,6 +42,7 @@ export * from './kGBuildResult';
 export * from './knowledgeGraphBuildKnowledgeGraphParams';
 export * from './message';
 export * from './newPassword';
+export * from './pendingAssignmentsCard';
 export * from './profileMatchResponse';
 export * from './profilesGetAllWorkloadsParams';
 export * from './profilesListProfilesParams';
@@ -50,13 +52,16 @@ export * from './prScoreInfo';
 export * from './pullRequestContent';
 export * from './resourceProfileCreate';
 export * from './resourceProfileResponse';
+export * from './resourceUtilizationStatus';
 export * from './role';
 export * from './scoreProfile';
 export * from './syncAllRequest';
 export * from './syncAllResponse';
 export * from './syncAllResponseGithub';
 export * from './syncAllResponseJira';
+export * from './teamAllocation';
 export * from './teamMembersCard';
+export * from './teamUtilizationCard';
 export * from './token';
 export * from './updatePassword';
 export * from './updateSkillsRequest';
