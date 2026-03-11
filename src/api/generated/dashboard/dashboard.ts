@@ -23,7 +23,10 @@ import type {
   ConnectedIntegrationsCard,
   DashboardResponse,
   GitHubPRStatsCard,
-  JiraTaskStatsCard
+  JiraTaskStatsCard,
+  ProfileIntegrationsCard,
+  ProfileSkillsCard,
+  ProfileWorkloadCard
 } from '../../model';
 
 import { customFetch } from '../../../lib/custom-fetch';
@@ -468,6 +471,339 @@ export function useDashboardGetJiraStats<TData = Awaited<ReturnType<typeof dashb
  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
 
   const queryOptions = getDashboardGetJiraStatsQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get top skills and domains across all team members.
+ * @summary Get Skills Distribution
+ */
+export type dashboardGetSkillsDistributionResponse200 = {
+  data: ProfileSkillsCard
+  status: 200
+}
+
+export type dashboardGetSkillsDistributionResponseSuccess = (dashboardGetSkillsDistributionResponse200) & {
+  headers: Headers;
+};
+;
+
+export type dashboardGetSkillsDistributionResponse = (dashboardGetSkillsDistributionResponseSuccess)
+
+export const getDashboardGetSkillsDistributionUrl = () => {
+
+
+  
+
+  return `/api/v1/dashboard/profiles/skills`
+}
+
+export const dashboardGetSkillsDistribution = async ( options?: RequestInit): Promise<dashboardGetSkillsDistributionResponse> => {
+  
+  return customFetch<dashboardGetSkillsDistributionResponse>(getDashboardGetSkillsDistributionUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getDashboardGetSkillsDistributionQueryKey = () => {
+    return [
+    `/api/v1/dashboard/profiles/skills`
+    ] as const;
+    }
+
+    
+export const getDashboardGetSkillsDistributionQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getDashboardGetSkillsDistributionQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>> = ({ signal }) => dashboardGetSkillsDistribution({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DashboardGetSkillsDistributionQueryResult = NonNullable<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>>
+export type DashboardGetSkillsDistributionQueryError = unknown
+
+
+export function useDashboardGetSkillsDistribution<TData = Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetSkillsDistribution<TData = Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetSkillsDistribution<TData = Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Skills Distribution
+ */
+
+export function useDashboardGetSkillsDistribution<TData = Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetSkillsDistribution>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getDashboardGetSkillsDistributionQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get team workload split, overloaded, and idle members.
+ * @summary Get Workload Analysis
+ */
+export type dashboardGetWorkloadAnalysisResponse200 = {
+  data: ProfileWorkloadCard
+  status: 200
+}
+
+export type dashboardGetWorkloadAnalysisResponseSuccess = (dashboardGetWorkloadAnalysisResponse200) & {
+  headers: Headers;
+};
+;
+
+export type dashboardGetWorkloadAnalysisResponse = (dashboardGetWorkloadAnalysisResponseSuccess)
+
+export const getDashboardGetWorkloadAnalysisUrl = () => {
+
+
+  
+
+  return `/api/v1/dashboard/profiles/workload`
+}
+
+export const dashboardGetWorkloadAnalysis = async ( options?: RequestInit): Promise<dashboardGetWorkloadAnalysisResponse> => {
+  
+  return customFetch<dashboardGetWorkloadAnalysisResponse>(getDashboardGetWorkloadAnalysisUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getDashboardGetWorkloadAnalysisQueryKey = () => {
+    return [
+    `/api/v1/dashboard/profiles/workload`
+    ] as const;
+    }
+
+    
+export const getDashboardGetWorkloadAnalysisQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getDashboardGetWorkloadAnalysisQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>> = ({ signal }) => dashboardGetWorkloadAnalysis({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DashboardGetWorkloadAnalysisQueryResult = NonNullable<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>>
+export type DashboardGetWorkloadAnalysisQueryError = unknown
+
+
+export function useDashboardGetWorkloadAnalysis<TData = Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetWorkloadAnalysis<TData = Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetWorkloadAnalysis<TData = Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Workload Analysis
+ */
+
+export function useDashboardGetWorkloadAnalysis<TData = Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetWorkloadAnalysis>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getDashboardGetWorkloadAnalysisQueryOptions(options)
+
+  const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+
+
+
+/**
+ * Get count of users with connected integrations.
+ * @summary Get Integration Adoption
+ */
+export type dashboardGetIntegrationAdoptionResponse200 = {
+  data: ProfileIntegrationsCard
+  status: 200
+}
+
+export type dashboardGetIntegrationAdoptionResponseSuccess = (dashboardGetIntegrationAdoptionResponse200) & {
+  headers: Headers;
+};
+;
+
+export type dashboardGetIntegrationAdoptionResponse = (dashboardGetIntegrationAdoptionResponseSuccess)
+
+export const getDashboardGetIntegrationAdoptionUrl = () => {
+
+
+  
+
+  return `/api/v1/dashboard/profiles/integrations`
+}
+
+export const dashboardGetIntegrationAdoption = async ( options?: RequestInit): Promise<dashboardGetIntegrationAdoptionResponse> => {
+  
+  return customFetch<dashboardGetIntegrationAdoptionResponse>(getDashboardGetIntegrationAdoptionUrl(),
+  {      
+    ...options,
+    method: 'GET'
+    
+    
+  }
+);}
+  
+
+
+
+
+export const getDashboardGetIntegrationAdoptionQueryKey = () => {
+    return [
+    `/api/v1/dashboard/profiles/integrations`
+    ] as const;
+    }
+
+    
+export const getDashboardGetIntegrationAdoptionQueryOptions = <TData = Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError = unknown>( options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+) => {
+
+const {query: queryOptions, request: requestOptions} = options ?? {};
+
+  const queryKey =  queryOptions?.queryKey ?? getDashboardGetIntegrationAdoptionQueryKey();
+
+  
+
+    const queryFn: QueryFunction<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>> = ({ signal }) => dashboardGetIntegrationAdoption({ signal, ...requestOptions });
+
+      
+
+      
+
+   return  { queryKey, queryFn, ...queryOptions} as UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError, TData> & { queryKey: DataTag<QueryKey, TData, TError> }
+}
+
+export type DashboardGetIntegrationAdoptionQueryResult = NonNullable<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>>
+export type DashboardGetIntegrationAdoptionQueryError = unknown
+
+
+export function useDashboardGetIntegrationAdoption<TData = Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError = unknown>(
+  options: { query:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError, TData>> & Pick<
+        DefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  DefinedUseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetIntegrationAdoption<TData = Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError, TData>> & Pick<
+        UndefinedInitialDataOptions<
+          Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>,
+          TError,
+          Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>
+        > , 'initialData'
+      >, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+export function useDashboardGetIntegrationAdoption<TData = Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient
+  ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> }
+/**
+ * @summary Get Integration Adoption
+ */
+
+export function useDashboardGetIntegrationAdoption<TData = Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError = unknown>(
+  options?: { query?:Partial<UseQueryOptions<Awaited<ReturnType<typeof dashboardGetIntegrationAdoption>>, TError, TData>>, request?: SecondParameter<typeof customFetch>}
+ , queryClient?: QueryClient 
+ ):  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> } {
+
+  const queryOptions = getDashboardGetIntegrationAdoptionQueryOptions(options)
 
   const query = useQuery(queryOptions, queryClient) as  UseQueryResult<TData, TError> & { queryKey: DataTag<QueryKey, TData, TError> };
 
