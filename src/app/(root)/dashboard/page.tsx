@@ -59,16 +59,20 @@ export default function DashboardPage() {
 
             {/* Stat Cards Row */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="animate-fade-in-up stagger-1">
+                <div className="animate-fade-in-up stagger-1 h-full">
                     <StatCard
-                        title="Team Members"
+                        title="Total users"
                         value={isLoading ? "..." : String(team?.total ?? 0)}
                         message={isLoading ? "Loading..." : `+${team?.new_this_month ?? 0} this month`}
+                        filed1Name="Developers"
+                        filed1={isLoading ? "..." : String(team?.developers ?? 0)}
+                        filed2Name="Admins"
+                        filed2={isLoading ? "..." : String(team?.admins ?? 0)}
                         icon={Users}
                         isLoading={isLoading}
                     />
                 </div>
-                <div className="animate-fade-in-up stagger-2">
+                <div className="animate-fade-in-up stagger-2 h-full">
                     <StatCard
                         title="Team Utilization"
                         value={isLoading ? "..." : `${utilization?.percentage ?? 0}%`}
@@ -77,7 +81,7 @@ export default function DashboardPage() {
                         isLoading={isLoading}
                     />
                 </div>
-                <div className="animate-fade-in-up stagger-3">
+                <div className="animate-fade-in-up stagger-3 h-full">
                     <StatCard
                         title="Active Tasks"
                         value={isLoading ? "..." : String(tasks?.active_count ?? 0)}
@@ -86,7 +90,7 @@ export default function DashboardPage() {
                         isLoading={isLoading}
                     />
                 </div>
-                <div className="animate-fade-in-up stagger-4">
+                <div className="animate-fade-in-up stagger-4 h-full">
                     <StatCard
                         title="Pending Assignments"
                         value={isLoading ? "..." : String(pending?.count ?? 0)}
@@ -99,17 +103,17 @@ export default function DashboardPage() {
 
             {/* Charts & Cards Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
-                <div className="animate-fade-in-up stagger-5">
+                <div className="animate-fade-in-up stagger-5 h-full">
                     <IntegrationsHealthCard
                         data={healthData}
                         isLoading={isHealthLoading}
                     />
                 </div>
-                <div className="animate-fade-in-up stagger-7">
+                <div className="animate-fade-in-up stagger-7 h-full">
                     <ChartPieDonutText data={status} />
                 </div>
                 
-                <div className="animate-fade-in-up stagger-5 lg:col-span-2">
+                <div className="animate-fade-in-up stagger-5 lg:col-span-2 h-full">
                     <GithubPrStatsCard
                         data={githubStats}
                         isLoading={isGithubStatsLoading}
@@ -117,7 +121,7 @@ export default function DashboardPage() {
                 </div>
             </div>
 
-            <div className="animate-fade-in-up stagger-5 lg:col-span-4">
+            <div className="animate-fade-in-up stagger-5 lg:col-span-4 h-full">
                     <ProfileIntegrationsCard
                         data={profileIntegrations}
                         isLoading={isProfileIntegrationsLoading}
@@ -127,17 +131,15 @@ export default function DashboardPage() {
             {/* Charts & Cards Row */}
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4">
                 
-                <div className="animate-fade-in-up stagger-5 lg:col-span-2">
+                <div className="animate-fade-in-up stagger-5 lg:col-span-2 h-full">
                     <JiraTasksStatsCard
                         data={jiraStats}
                         isLoading={isJiraStatsLoading}
                     />
                 </div>
-                <div className="animate-fade-in-up stagger-5 lg:col-span-2">
+                <div className="animate-fade-in-up stagger-5 lg:col-span-2 h-full">
                     <ChartBarLabel data={allocation} />
                 </div>
-                
-                
             </div>
 
         </div>

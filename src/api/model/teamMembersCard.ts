@@ -8,4 +8,6 @@
 export interface TeamMembersCard {
   total: number;
   new_this_month: number;
+  developers: number;
+  admins: number;
 }
