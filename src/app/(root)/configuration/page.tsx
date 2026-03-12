@@ -5,6 +5,9 @@ import { useSearchParams, useRouter } from "next/navigation";
 import {
   jiraApi,
   JiraConnectionStatus,
+  JiraIssueTypeStatus,
+  JiraProject,
+  JiraSyncResponse,
   githubApi,
   GitHubConnectionStatus,
   GitHubRepository,
@@ -46,6 +49,19 @@ export default function ConfigurationPage() {
   const [isSyncing, setIsSyncing] = useState(false);
   const [syncResult, setSyncResult] = useState<GitHubSyncResponse | null>(null);
   const [selectedRepos, setSelectedRepos] = useState<Set<string>>(new Set());
+
+  // Jira project & sync state
+  const [jiraProjects, setJiraProjects] = useState<JiraProject[]>([]);
+  const [isJiraProjectsLoading, setIsJiraProjectsLoading] = useState(false);
+  const [selectedJiraProjects, setSelectedJiraProjects] = useState<Set<string>>(new Set());
+  const [isJiraSyncing, setIsJiraSyncing] = useState(false);
+  const [jiraSyncResult, setJiraSyncResult] = useState<JiraSyncResponse | null>(null);
+
+  // Jira issue type status state
+  const [issueTypeStatuses, setIssueTypeStatuses] = useState<JiraIssueTypeStatus[]>([]);
+  const [isIssueTypesLoading, setIsIssueTypesLoading] = useState(false);
+  const [isSyncingIssueTypes, setIsSyncingIssueTypes] = useState(false);
+  const [updatingTypeId, setUpdatingTypeId] = useState<string | null>(null);
 
   // Shared state
   const [error, setError] = useState<string | null>(null);
@@ -95,6 +111,118 @@ export default function ConfigurationPage() {
       setIsReposLoading(false);
     }
   }, []);
+
+  const fetchIssueTypeStatuses = useCallback(async () => {
+    try {
+      setIsIssueTypesLoading(true);
+      const statuses = await jiraApi.getIssueTypeStatuses();
+      setIssueTypeStatuses(statuses);
+    } catch {
+      setIssueTypeStatuses([]);
+    } finally {
+      setIsIssueTypesLoading(false);
+    }
+  }, []);
+
+  const fetchJiraProjects = useCallback(async () => {
+    try {
+      setIsJiraProjectsLoading(true);
+      const projects = await jiraApi.getProjects();
+      setJiraProjects(projects);
+    } catch {
+      setJiraProjects([]);
+    } finally {
+      setIsJiraProjectsLoading(false);
+    }
+  }, []);
+
+  const toggleJiraProjectSelection = (key: string) => {
+    setSelectedJiraProjects((prev) => {
+      const next = new Set(prev);
+      if (next.has(key)) {
+        next.delete(key);
+      } else {
+        next.add(key);
+      }
+      return next;
+    });
+  };
+
+  const selectAllJiraProjects = () => {
+    if (selectedJiraProjects.size === jiraProjects.length) {
+      setSelectedJiraProjects(new Set());
+    } else {
+      setSelectedJiraProjects(new Set(jiraProjects.map((p) => p.key)));
+    }
+  };
+
+  const handleSyncJira = async () => {
+    try {
+      setIsJiraSyncing(true);
+      setError(null);
+      setJiraSyncResult(null);
+      const projectKeys = selectedJiraProjects.size > 0 ? Array.from(selectedJiraProjects) : null;
+      const result = await jiraApi.syncIssues({
+        project_keys: projectKeys,
+        max_results: 100,
+        include_closed: true,
+        sync_comments: true,
+        generate_embeddings: true,
+      });
+      setJiraSyncResult(result);
+      setSuccessMessage(
+        `Jira sync complete: ${result.issues_synced} issues synced, ${result.embeddings_generated} embeddings generated.`
+      );
+      setTimeout(() => setSuccessMessage(null), 8000);
+    } catch {
+      setError("Jira sync failed. The server may be busy or unavailable — please try again.");
+    } finally {
+      setIsJiraSyncing(false);
+    }
+  };
+
+  const handleSyncIssueTypes = async () => {
+    try {
+      setIsSyncingIssueTypes(true);
+      setError(null);
+      const synced = await jiraApi.syncIssueTypeStatuses();
+      setIssueTypeStatuses(synced);
+      setSuccessMessage(
+        `Synced ${synced.length} issue type(s) with their workflow statuses.`
+      );
+      setTimeout(() => setSuccessMessage(null), 5000);
+    } catch {
+      setError(
+        "Failed to sync issue types from Jira. Please check your connection and try again."
+      );
+    } finally {
+      setIsSyncingIssueTypes(false);
+    }
+  };
+
+  const handleToggleStatus = async (
+    issueTypeId: string,
+    status: string,
+    currentSelected: string[]
+  ) => {
+    const next = currentSelected.includes(status)
+      ? currentSelected.filter((s) => s !== status)
+      : [...currentSelected, status];
+    try {
+      setUpdatingTypeId(issueTypeId);
+      setError(null);
+      const updated = await jiraApi.updateIssueTypeSelectedStatuses(issueTypeId, next);
+      setIssueTypeStatuses((prev) =>
+        prev.map((it) => (it.issue_type_id === issueTypeId ? updated : it))
+      );
+    } catch (err) {
+      setError(
+        err instanceof Error ? err.message : "Failed to update statuses."
+      );
+    } finally {
+      setUpdatingTypeId(null);
+    }
+  };
 
   const handleConnectGithub = async () => {
     try {
@@ -223,6 +351,13 @@ export default function ConfigurationPage() {
     }
   }, [githubStatus, fetchGithubRepos]);
 
+  useEffect(() => {
+    if (jiraStatus?.connected) {
+      fetchIssueTypeStatuses();
+      fetchJiraProjects();
+    }
+  }, [jiraStatus, fetchIssueTypeStatuses, fetchJiraProjects]);
+
   // Jira handlers
   const handleConnectJira = async () => {
     try {
@@ -257,7 +392,7 @@ export default function ConfigurationPage() {
   };
 
   return (
-    <div className="p-6 max-w-4xl mx-auto">
+    <div className="p-6">
       <h1 className="text-3xl font-bold mb-2">Configuration</h1>
       <p className="text-muted-foreground mb-8">
         Adjust your platform settings and connect your integrations.
@@ -348,9 +483,11 @@ export default function ConfigurationPage() {
                     </span>
                   )}
                 </CardTitle>
-                <CardDescription>
-                  Connect your Jira workspace to sync issues and track developer workloads.
-                </CardDescription>
+                {!jiraStatus?.connected && (
+                  <CardDescription>
+                    Connect your Jira workspace to sync issues and track developer workloads.
+                  </CardDescription>
+                )}
               </div>
             </div>
           </CardHeader>
@@ -419,6 +556,277 @@ export default function ConfigurationPage() {
                     </p>
                   </div>
                 )}
+
+                {/* Issue Type Status Configuration for Embeddings */}
+                <Collapsible className="border-t pt-4">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full group">
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="w-4 h-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-90"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                      <h4 className="font-semibold text-sm">Embedding Status Filters</h4>
+                      {issueTypeStatuses.length > 0 && (
+                        <span className="text-xs text-muted-foreground">
+                          ({issueTypeStatuses.length} types)
+                        </span>
+                      )}
+                    </div>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 space-y-3">
+                    <div className="flex items-center justify-between">
+                      <p className="text-xs text-muted-foreground max-w-md">
+                        For each issue type, select which statuses qualify an issue for
+                        embedding. Only issues matching a selected status will be used
+                        for similarity search and recommendations.
+                      </p>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={handleSyncIssueTypes}
+                        disabled={isSyncingIssueTypes}
+                      >
+                        {isSyncingIssueTypes ? (
+                          <>
+                            <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin mr-1" />
+                            Syncing...
+                          </>
+                        ) : (
+                          <>
+                            <svg
+                              className="w-3.5 h-3.5 mr-1"
+                              fill="none"
+                              viewBox="0 0 24 24"
+                              stroke="currentColor"
+                            >
+                              <path
+                                strokeLinecap="round"
+                                strokeLinejoin="round"
+                                strokeWidth={2}
+                                d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                              />
+                            </svg>
+                            {issueTypeStatuses.length > 0 ? "Re-sync" : "Sync Issue Types"}
+                          </>
+                        )}
+                      </Button>
+                    </div>
+
+                    {isIssueTypesLoading ? (
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                        <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        <span>Loading issue types...</span>
+                      </div>
+                    ) : issueTypeStatuses.length > 0 ? (
+                      <div className="space-y-3 max-h-96 overflow-y-auto pr-1">
+                        {issueTypeStatuses.map((it) => (
+                          <div
+                            key={it.issue_type_id}
+                            className="rounded-lg border border-border p-3 space-y-2"
+                          >
+                            <div className="flex items-center justify-between">
+                              <span className="font-medium text-sm">{it.issue_type_name}</span>
+                              <span className="text-xs text-muted-foreground">
+                                {it.selected_statuses.length}/{it.available_statuses.length} selected
+                              </span>
+                            </div>
+                            <div className="flex flex-wrap gap-2">
+                              {it.available_statuses.map((status) => {
+                                const isSelected = it.selected_statuses.includes(status);
+                                return (
+                                  <button
+                                    key={status}
+                                    type="button"
+                                    onClick={() =>
+                                      handleToggleStatus(
+                                        it.issue_type_id,
+                                        status,
+                                        it.selected_statuses
+                                      )
+                                    }
+                                    disabled={updatingTypeId === it.issue_type_id}
+                                    className={`inline-flex items-center px-2.5 py-1 rounded-full text-xs font-medium border transition-colors disabled:opacity-50 ${
+                                      isSelected
+                                        ? "bg-blue-100 text-blue-800 border-blue-300 dark:bg-blue-900/30 dark:text-blue-300 dark:border-blue-700"
+                                        : "bg-muted/50 text-muted-foreground border-border hover:bg-muted"
+                                    }`}
+                                  >
+                                    {isSelected && (
+                                      <svg className="w-3 h-3 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                                      </svg>
+                                    )}
+                                    {status}
+                                  </button>
+                                );
+                              })}
+                            </div>
+                            {updatingTypeId === it.issue_type_id && (
+                              <div className="flex items-center gap-1 text-xs text-muted-foreground">
+                                <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                                Saving...
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        No issue types configured yet. Click &quot;Sync Issue Types&quot;
+                        to fetch them from your Jira workspace.
+                      </p>
+                    )}
+                  </CollapsibleContent>
+                </Collapsible>
+
+                {/* Sync Project Section */}
+                <Collapsible className="border-t pt-4">
+                  <CollapsibleTrigger className="flex items-center justify-between w-full group">
+                    <div className="flex items-center gap-2">
+                      <svg
+                        className="w-4 h-4 text-muted-foreground transition-transform group-data-[state=open]:rotate-90"
+                        fill="none"
+                        viewBox="0 0 24 24"
+                        stroke="currentColor"
+                      >
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                      </svg>
+                      <h4 className="font-semibold text-sm">Sync Project</h4>
+                      {selectedJiraProjects.size > 0 && (
+                        <span className="text-xs text-muted-foreground">
+                          ({selectedJiraProjects.size} selected)
+                        </span>
+                      )}
+                    </div>
+                  </CollapsibleTrigger>
+                  <CollapsibleContent className="pt-3 space-y-3">
+                    {isJiraProjectsLoading ? (
+                      <div className="flex items-center gap-2 text-muted-foreground text-sm">
+                        <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin" />
+                        <span>Loading projects...</span>
+                      </div>
+                    ) : jiraProjects.length > 0 ? (
+                      <>
+                        <div className="flex items-center justify-between">
+                          <span className="text-sm text-muted-foreground">
+                            {jiraProjects.length} project{jiraProjects.length !== 1 ? "s" : ""} available
+                          </span>
+                          <Button
+                            variant="ghost"
+                            size="sm"
+                            onClick={selectAllJiraProjects}
+                          >
+                            {selectedJiraProjects.size === jiraProjects.length
+                              ? "Deselect All"
+                              : "Select All"}
+                          </Button>
+                        </div>
+
+                        <div className="space-y-2 max-h-64 overflow-y-auto pr-1">
+                          {jiraProjects.map((project) => (
+                            <label
+                              key={project.id}
+                              className={`flex items-center gap-3 p-2.5 rounded-lg border cursor-pointer transition-colors ${
+                                selectedJiraProjects.has(project.key)
+                                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 dark:border-blue-700"
+                                  : "border-border hover:bg-muted/50"
+                              }`}
+                            >
+                              <input
+                                type="checkbox"
+                                checked={selectedJiraProjects.has(project.key)}
+                                onChange={() => toggleJiraProjectSelection(project.key)}
+                                className="rounded border-gray-300"
+                              />
+                              <div className="flex-1 min-w-0">
+                                <div className="flex items-center gap-2">
+                                  <p className="font-medium text-sm truncate">
+                                    {project.name}
+                                  </p>
+                                  <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300">
+                                    {project.key}
+                                  </span>
+                                </div>
+                                <div className="flex items-center gap-3 mt-0.5 text-xs text-muted-foreground">
+                                  <span>{project.projectTypeKey}</span>
+                                </div>
+                              </div>
+                            </label>
+                          ))}
+                        </div>
+
+                        <div className="flex items-center gap-3">
+                          <Button
+                            onClick={handleSyncJira}
+                            disabled={isJiraSyncing}
+                            size="sm"
+                          >
+                            {isJiraSyncing ? (
+                              <>
+                                <div className="w-3 h-3 border-2 border-current border-t-transparent rounded-full animate-spin mr-1" />
+                                Syncing Issues...
+                              </>
+                            ) : (
+                              <>
+                                <svg
+                                  className="w-3.5 h-3.5 mr-1"
+                                  fill="none"
+                                  viewBox="0 0 24 24"
+                                  stroke="currentColor"
+                                >
+                                  <path
+                                    strokeLinecap="round"
+                                    strokeLinejoin="round"
+                                    strokeWidth={2}
+                                    d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"
+                                  />
+                                </svg>
+                                {selectedJiraProjects.size > 0
+                                  ? `Sync ${selectedJiraProjects.size} project${selectedJiraProjects.size > 1 ? "s" : ""}`
+                                  : "Sync All Projects"}
+                              </>
+                            )}
+                          </Button>
+                          <span className="text-xs text-muted-foreground">
+                            Fetches issues and generates embeddings for task analysis
+                          </span>
+                        </div>
+
+                        {jiraSyncResult && (
+                          <div className="p-3 bg-green-50 border border-green-200 rounded-lg dark:bg-green-900/20 dark:border-green-800 text-sm space-y-1">
+                            <p className="font-medium text-green-800 dark:text-green-200">
+                              Sync {jiraSyncResult.status === "completed" ? "Completed" : "Completed with Errors"}
+                            </p>
+                            <div className="grid grid-cols-2 gap-x-4 gap-y-1 text-green-700 dark:text-green-300 text-xs">
+                              <span>Projects synced: {jiraSyncResult.projects_synced.length}</span>
+                              <span>Issues synced: {jiraSyncResult.issues_synced}</span>
+                              <span>Embeddings: {jiraSyncResult.embeddings_generated}</span>
+                              <span>Duration: {jiraSyncResult.sync_duration_seconds}s</span>
+                            </div>
+                            {jiraSyncResult.errors.length > 0 && (
+                              <div className="mt-2 text-xs text-red-700 dark:text-red-300">
+                                {jiraSyncResult.errors.slice(0, 3).map((e, i) => (
+                                  <p key={i}>{e}</p>
+                                ))}
+                                {jiraSyncResult.errors.length > 3 && (
+                                  <p>...and {jiraSyncResult.errors.length - 3} more errors</p>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        )}
+                      </>
+                    ) : (
+                      <p className="text-sm text-muted-foreground">
+                        No projects found. Make sure your Jira workspace has accessible projects.
+                      </p>
+                    )}
+                  </CollapsibleContent>
+                </Collapsible>
               </div>
             ) : (
               <p className="text-sm text-muted-foreground">
@@ -428,7 +836,8 @@ export default function ConfigurationPage() {
             )}
           </CardContent>
 
-          <CardFooter className="flex gap-3">
+          <div className="border-t" />
+          <CardFooter className="flex justify-end gap-3">
             {isJiraLoading ? null : jiraStatus?.connected ? (
               <>
                 <Button
@@ -507,9 +916,11 @@ export default function ConfigurationPage() {
                     </span>
                   )}
                 </CardTitle>
-                <CardDescription>
-                  Install the GitHub App on your organization to analyze pull requests and developer contributions.
-                </CardDescription>
+                {!githubStatus?.connected && (
+                  <CardDescription>
+                    Install the GitHub App on your organization to analyze pull requests and developer contributions.
+                  </CardDescription>
+                )}
               </div>
             </div>
           </CardHeader>
@@ -758,7 +1169,8 @@ export default function ConfigurationPage() {
             )}
           </CardContent>
 
-          <CardFooter className="flex gap-3">
+          <div className="border-t" />
+          <CardFooter className="flex justify-end gap-3">
             {isGithubLoading ? null : githubStatus?.connected ? (
               <>
                 {githubStatus.org_name && githubStatus.installation_id && (
