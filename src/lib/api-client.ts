@@ -172,14 +172,6 @@ export const githubApi = {
 };
 
 // Jira API Types
-export interface JiraUser {
-  account_id: string;
-  display_name: string | null;
-  email_address: string | null;
-  avatar_url: string | null;
-  active: boolean;
-}
-
 export interface JiraProject {
   id: string;
   key: string;
@@ -223,53 +215,6 @@ export interface JiraSyncResponse {
   embeddings_generated: number;
   errors: string[];
   sync_duration_seconds: number;
-}
-
-export interface DeveloperWorkload {
-  jira_account_id: string;
-  display_name: string | null;
-  email: string | null;
-  open_issues: number;
-  in_progress_issues: number;
-  in_review_issues: number;
-  total_active_issues: number;
-  high_priority_count: number;
-  medium_priority_count: number;
-  low_priority_count: number;
-  bugs_count: number;
-  tasks_count: number;
-  stories_count: number;
-  other_count: number;
-  workload_score: number;
-  last_updated: string | null;
-}
-
-export interface JiraIssueContent {
-  issue_id: string;
-  issue_key: string;
-  project_key: string;
-  summary: string;
-  description: string | null;
-  issue_type: string;
-  status: string;
-  priority: string | null;
-  labels: string[];
-  assignee: JiraUser | null;
-  reporter: JiraUser | null;
-  issue_url: string;
-  comments: JiraComment[];
-  created_at: string | null;
-  updated_at: string | null;
-  resolved_at: string | null;
-  context: string | null;
-}
-
-export interface JiraComment {
-  id: string;
-  author: JiraUser;
-  body: string;
-  created: string;
-  updated: string | null;
 }
 
 export interface JiraIssueTypeStatus {
