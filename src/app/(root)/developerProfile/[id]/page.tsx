@@ -20,7 +20,7 @@ export default function DeveloperProfilePage(){
             try{
                 setLoading(true)
                 const token = localStorage.getItem("access_token");
-                const response = await fetch(`http://127.0.01:8000/api/v1/profiles/${developerId}`,{
+                const response = await fetch(`http://127.0.0.1:8000/api/v1/profiles/${developerId}`,{
                     method: "GET",
                     headers: {
                         "Authorization": `Bearer ${token}`,
@@ -29,6 +29,7 @@ export default function DeveloperProfilePage(){
                 });
                 if(!response.ok) throw new Error("Failed to fetch profile");
                 const data = await response.json()
+                console.log("Full profile data: ",data)
                 setProfile(data)
             }catch(error){
                 console.error("Error: ",error)
@@ -57,29 +58,35 @@ export default function DeveloperProfilePage(){
                 {/*LEFT SIDE GRID */}
                 <div className="md:col-span-3 lg:col-span-3">
                     {/*PROFILE CARD SECTION*/}
-                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden mb-4">
+                    <Card className="transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden mb-4">
                         <CardContent className="pt-1 pb-1 px-6 flex flex-col items-center text-center">
                             <div className="relative mb-2">
                                 <Avatar className="h-32 w-32 border-4 border-white shadow-xl">
-                                    <AvatarImage src="https://github.com.shadcn.png" alt="Developer" />
-                                    <AvatarFallback>NA</AvatarFallback>
+                                    <AvatarImage src={profile.github_avatar_url} alt="Developer" />
+                                    <AvatarFallback>{(profile.jira_display_name || "D")[0]}</AvatarFallback>
                                 </Avatar>
                             </div>
 
                             <div className="text-center">
-                                <h2 className="text-2xl font-bold text-slate-800 "> Avishka Chasith</h2>
-                                <p className="text-slate-500 text-sm font-medium">RPA Developer</p>
+                                <h2 className="text-2xl font-bold text-white-800 "> {profile.jira_display_name || profile.github_display_name || "Unknown Developer"}</h2>
+                                <p className="text-slate-500 text-sm font-medium">{profile.position}</p>
                             </div>
 
                             <div className="flex gap-3 mt-4">
-                                <Button variant="outline" size="icon" className="rounded-xl h-12 w-12 border-slate-200 shadow-sm hover:bg-slate-50">
-                                    <Github className="h-6 w-6 text-slate-700"/>
+                                <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl border-none bg-[#24292e] shadow-md hover:bg-[#1a1e22] transition-all overflow-hidden"
+                                    onClick={()=> profile.github_login && window.open(`https://github.com/${profile.github_login}`,'_blank')}>
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" className="h-8 w-8 brightness-0 invert"/>
                                 </Button>
-                                <Button variant="outline" size="icon" className="rounded-xl h-12 w-12 border-slate-200 shadow-sm hover:bg-slate-50">
-                                    <Laptop2 className="h-6 w-6 text-slate-700"/>
+                                <Button variant="ghost" size="icon" className="h-10 w-10 border-slate-700 bg-slate-800/50 shadow-sm hover:bg-slate-700 transition-all overflow-hidden"
+                                    onClick={()=>profile.jira_account_id && window.open(`https://id.atlassin.com/manage-profile`,'_blank')}>
+                                    <img src="https://cdn.worldvectorlogo.com/logos/jira-1.svg" alt="Jira" className="h-8 w-8 object-contain"/>
                                 </Button>
-                                <Button variant="outline" size="icon" className="rounded-xl h-12 w-12 border-slate-200 shadow-sm hover:bg-slate-50">
-                                    <Mail className="h-6 w-6 text-slate-700"/>
+                                <Button variant="ghost" size="icon" className="h-10 w-10 border-slate-200 shadow-sm hover:bg-slate-50"
+                                    onClick={()=>{
+                                        const email = profile.jira_email || profile.github_email || "contact@resourceiq.lk";
+                                        window.location.href = `mailto:${email}`
+                                    }}>
+                                    <img src="https://upload.wikimedia.org/wikipedia/commons/7/7e/Gmail_icon_%282020%29.svg" alt="Gmail" className="h-8 w-8 object-contain"/>
                                 </Button>
                             </div>
                             <div className="w-full h-px bg-border my-5"/>
@@ -87,15 +94,15 @@ export default function DeveloperProfilePage(){
                             <div className="w-full sp-y-4 text-sm text-slate-600 px-1">
                                 <div className="flex items-center gap-3 pb-1">
                                     <Mail className="h-4 w-4 text-slate-400"/>
-                                    <span>avishka.gunathilaka@iit.com</span>
+                                    <span>{profile.jira_email || profile.github_email || "No email available"}</span>
                                 </div>
                                 <div className="flex items-center gap-3 pb-1">
                                     <Phone className="h-4 w-4 text-slate-400"/>
-                                    <span> +94 714571965</span>
+                                    <span> {profile.phone_number||"Contact number not provided"}</span>
                                 </div>
                                 <div className="flex items-center gap-3 pb-1">
                                     <MapPin className="h-4 w-4 text-slate-400"/>
-                                    <span>Colombo 09</span>
+                                    <span>{profile.address}</span>
                                 </div>
                                 <div className="flex items-center gap-3 pb-1">
                                     <Github className="h-4 w-4 text-slate-400"/>
@@ -109,7 +116,7 @@ export default function DeveloperProfilePage(){
                         </CardContent>
                     </Card>
                     {/*SKILLS SECTION*/}
-                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
+                    <Card className="transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
                         <CardContent className="p-6">
                             <div className="flex justify-between items-center mb-6">
                                 <h3 className="text-xl font-bold text-slate-700">Skills</h3>
@@ -118,7 +125,16 @@ export default function DeveloperProfilePage(){
                                 </Button> */}
                             </div>
                             <div className="flex flex-wrap gap-2">
-                                {[
+                                {profile.skills && profile.skills.length > 0 ? (
+                                    profile.skills.map((skill:string)=>(
+                                        <div key={skill} className="px-3 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-medium text-xs bg-white">
+                                            {skill}
+                                        </div>
+                                    ))
+                                ):(
+                                    <p className="text-xs text-slate-400">No skills listed</p>
+                                )}
+                                {/* {[
                                     "Figma", "HTML", "React", "Tailwind CSS", "Java", "JavaScript", 
                                     "Python", "Node.js", "Laravel", "Photoshop", "Selenium", 
                                     "Appium", "Springboot", "FastAPI", "Oracle", "Github"
@@ -126,7 +142,7 @@ export default function DeveloperProfilePage(){
                                     <div key={skill} className="px-4 py-1.5 rounded-lg border border-slate-200 text-slate-600 font-medium text-xs hover:border-card hover:text-purple-600 transition-all cursor-pointer bg-white hover:bg-card">
                                         {skill}
                                     </div>
-                                 ))}
+                                 ))} */}
                             </div>
                         </CardContent>
                     </Card>
@@ -134,15 +150,15 @@ export default function DeveloperProfilePage(){
 
                 <div className="md:col-span-7 lg:col-span-9 space-y-6">
                     {/*WORKLOAD SECTION*/}
-                    <Card className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
+                    <Card className="transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
                     <CardContent className="p-6">
                         <div className="flex justify-between items-center mb-6">
-                            <h3 className="text-xl font-bold text-slate-700">My work Load</h3>
-                            <Button className="bg-gradient-to-r from-purple-400 to-emarald-400 hover:opacity-90 text-slate-900 font-bold rounded-full px-6 h-9 border-none shadow-sm">
+                            <h3 className="text-xl font-bold text-slate-700">My Work Load</h3>
+                            <Button className="bg purple-400 to-emarald-400 hover:opacity-90 text-slate-900 font-bold px-6 h-9 border-none shadow-sm">
                                 Assign a Task
                             </Button>
                         </div>
-                        <div className="space-y-2 max-h-[350px] overflow-y-auto pr-2 custom-scrollbar">
+                        <div className="space-y-2 max-h-[350px] overflow-y-auto pr-20 custom-scrollbar">
                             {[
                                 {id:"AD-18756",status:"Inprogress"},
                                 {id: "AD-12354",status:"PR Review"},
@@ -165,7 +181,7 @@ export default function DeveloperProfilePage(){
                             ))}
                         </div>
                         <div className="mt-4 flex justify-end">
-                            <button className="text-[10px] font-bold flex items-center gap-1 bg-emerald-400/10 text-emerald-600 px-4 py-1 rounded-full hover:bg-emerald-200/30 transition-all">
+                            <button className="text-[10px] font-bold flex items-center gap-1 bg-emerald-400/10 text-emerald-600 px-4 py-1  hover:bg-emerald-200/30 transition-all">
                                 See more <span className="text-[8px]">▼</span>
                             </button>
                         </div>
@@ -190,9 +206,9 @@ export default function DeveloperProfilePage(){
                                 { label: "Meeting hours", value: "12h", color: "bg-violet-100 text-violet-600" },
                                 { label: "Velocity Score", value: "85%", color: "bg-teal-100 text-teal-600" }
                             ].map((stat,index)=>(
-                                <Card key={index} className="transition-all duration-300 hover:-translate-y-1 border-2 border-purple-500/20 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
+                                <Card key={index} className="transition-all duration-300 hover:-translate-y-1 hover:border-purple-500/50 shadow-md hover:shadow-xl hover:shadow-500/10 bg-card rounded-1rem overflow-hidden">
                                     <CardContent className="p-4 flex flex-col items-center justify-center text-center space-y-2">
-                                        <div className={`w-12 h-12 ${stat.color} rounded-full flex items-center justify-center font-bold text-lg shadow-inner`}>
+                                        <div className={`bg-card-black${stat.color} py-3 flex items-center justify-center font-extrabold text-4xl shadow-inner`}>
                                             {stat.value}
                                         </div>
                                         <p className="text-[10px] font-bold text-slate-500 uppercase tracking-wider">
