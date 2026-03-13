@@ -73,9 +73,9 @@ export default function DeveloperProfilePage(){
                             </div>
 
                             <div className="flex gap-3 mt-4">
-                                <Button variant="ghost" size="icon" className="h-10 w-10 rounded-xl border-none bg-[#24292e] shadow-md hover:bg-[#1a1e22] transition-all overflow-hidden"
+                                <Button variant="ghost" size="icon" className="h-10 w-10 border-none bg-black shadow-lg hover:bg-zinc-900 transition-all overflow-hidden"
                                     onClick={()=> profile.github_login && window.open(`https://github.com/${profile.github_login}`,'_blank')}>
-                                    <img src="https://upload.wikimedia.org/wikipedia/commons/9/91/Octicons-mark-github.svg" alt="GitHub" className="h-8 w-8 brightness-0 invert"/>
+                                    <img src="https://github.githubassets.com/images/modules/logos_page/GitHub-Mark.png" alt="GitHub" className="h-8 w-8 contrast-0"/>
                                 </Button>
                                 <Button variant="ghost" size="icon" className="h-10 w-10 border-slate-700 bg-slate-800/50 shadow-sm hover:bg-slate-700 transition-all overflow-hidden"
                                     onClick={()=>profile.jira_account_id && window.open(`https://id.atlassin.com/manage-profile`,'_blank')}>
