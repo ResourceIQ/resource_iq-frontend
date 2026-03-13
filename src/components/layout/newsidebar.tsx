@@ -63,7 +63,8 @@ import {
   ChevronRightIcon,
   PieChartIcon,
   FrameIcon,
-  MapIcon
+  MapIcon,
+  Ticket
 } from "lucide-react"
 import { useTheme } from "next-themes"
 
@@ -102,6 +103,12 @@ export function AppSidebar() {
         title: "Developers",
         url: "/developers",
         icon: <Users />,
+        items: [] as { title: string; url: string }[]
+      },
+      {
+        title: "Jira",
+        url: "/jira",
+        icon: <Ticket />,
         items: [] as { title: string; url: string }[]
       },
       {
@@ -277,7 +284,7 @@ export function AppSidebar() {
               </DropdownMenuTrigger>
               <DropdownMenuContent className="w-(--radix-dropdown-menu-trigger-width) min-w-56 rounded-lg" align="end" sideOffset={4}>
                 <DropdownMenuLabel className="p-0 font-normal">
-                  <Item size="xs">
+                  <Item size="sm">
                     <ItemMedia>
                       <Avatar className="size-8 rounded-lg">
                         <AvatarImage

@@ -12,7 +12,12 @@ export const customFetch = async <T>(
         ...(token ? { Authorization: `Bearer ${token}` } : {}),
     };
 
-    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${url}`;
+    let cleanUrl = url;
+    if (url.startsWith('/api/v1') && API_BASE_URL.endsWith('/api/v1')) {
+        cleanUrl = url.replace('/api/v1', '');
+    }
+
+    const fullUrl = url.startsWith('http') ? url : `${API_BASE_URL}${cleanUrl}`;
 
     const response = await fetch(fullUrl, {
         ...options,
