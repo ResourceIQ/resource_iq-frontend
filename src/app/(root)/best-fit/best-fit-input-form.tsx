@@ -15,16 +15,23 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
-import { Loader2 } from "lucide-react"
+import { ExternalLink, Loader2, RotateCcw } from "lucide-react"
 import { FormEvent, useEffect, useState } from "react"
 import { jiraApi, JiraIssueType, JiraProject } from "@/lib/api-client"
+
+interface CreatedIssue {
+  issue_key: string
+  issue_url: string
+  assigned_to: string | null
+}
 
 interface BestFitFormProps {
   onSearch: (title: string, description: string) => void
   onCreateTask: (title: string, description: string, issueType: string) => void
+  onNewTask: () => void
   isLoading: boolean
   isCreatingTask: boolean
-  isTaskCreated: boolean
+  createdIssue: CreatedIssue | null
   selectedProject: string
   onProjectChange: (projectKey: string) => void
   selectedIssueType: string
@@ -34,14 +41,16 @@ interface BestFitFormProps {
 export function BestFitForm({
   onSearch,
   onCreateTask,
+  onNewTask,
   isLoading,
   isCreatingTask,
-  isTaskCreated,
+  createdIssue,
   selectedProject,
   onProjectChange,
   selectedIssueType,
   onIssueTypeChange,
 }: BestFitFormProps) {
+  const isTaskCreated = !!createdIssue
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
@@ -89,7 +98,7 @@ export function BestFitForm({
                   <Select
                     value={selectedProject}
                     onValueChange={onProjectChange}
-                    disabled={projectsLoading}
+                    disabled={projectsLoading || isTaskCreated}
                   >
                     <SelectTrigger className="w-full">
                       <SelectValue placeholder={projectsLoading ? "Loading..." : "Select a project"} />
@@ -110,7 +119,7 @@ export function BestFitForm({
                   <Select
                     value={selectedIssueType}
                     onValueChange={onIssueTypeChange}
-                    disabled={issueTypesLoading}
+                    disabled={issueTypesLoading || isTaskCreated}
                   >
                     <SelectTrigger className="w-[160px]">
                       <SelectValue placeholder={issueTypesLoading ? "Loading..." : "Type"} />
@@ -133,6 +142,8 @@ export function BestFitForm({
                   id="task-title"
                   placeholder="Access Token Issue"
                   required
+                  readOnly={isTaskCreated}
+                  value={title}
                   onChange={(e) => setTitle(e.target.value)}
                 />
               </Field>
@@ -144,6 +155,8 @@ export function BestFitForm({
                   id="task-description"
                   placeholder="Describe the issue or task in detail"
                   required
+                  readOnly={isTaskCreated}
+                  value={description}
                   onChange={(e) => setDescription(e.target.value)}
                 />
               </Field>
@@ -151,18 +164,36 @@ export function BestFitForm({
           </FieldSet>
           <FieldSeparator />
           <div className="flex flex-row-reverse gap-2">
-            <Button type="submit" disabled={isLoading}>
-              {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Find Best Fits'}
-            </Button>
-            {!isTaskCreated && (
-              <Button
-                type="button"
-                variant="outline"
-                disabled={isCreatingTask || !selectedProject || !title}
-                onClick={() => onCreateTask(title, description, selectedIssueType)}
-              >
-                {isCreatingTask ? <Loader2 className="size-4 animate-spin" /> : 'Create Task'}
-              </Button>
+            {isTaskCreated ? (
+              <>
+                <Button type="button" variant="outline" onClick={onNewTask}>
+                  <RotateCcw className="size-4" />
+                  New Task
+                </Button>
+                <Button type="button" asChild>
+                  <a href={createdIssue!.issue_url} target="_blank" rel="noopener noreferrer">
+                    <ExternalLink className="size-4" />
+                    View in Jira
+                  </a>
+                </Button>
+              </>
+            ) : (
+              <>
+                <Button
+                  type="submit"
+                  disabled={isLoading || !selectedProject || !title || !description}
+                >
+                  {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Find Best Fits'}
+                </Button>
+                <Button
+                  type="button"
+                  variant="outline"
+                  disabled={isCreatingTask || !selectedProject || !title}
+                  onClick={() => onCreateTask(title, description, selectedIssueType)}
+                >
+                  {isCreatingTask ? <Loader2 className="size-4 animate-spin" /> : 'Create Task'}
+                </Button>
+              </>
             )}
           </div>
         </FieldGroup>

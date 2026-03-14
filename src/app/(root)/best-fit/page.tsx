@@ -86,6 +86,17 @@ export default function BestFitPage() {
         setSelectedFit(fit)
     }
 
+    const handleNewTask = useCallback(() => {
+        setSelectedFit(null)
+        setSelectedProject('')
+        setSelectedIssueType('Task')
+        setCreatedIssue(null)
+        setIsCreatingTask(false)
+        setIsAssigning(false)
+        taskTitleRef.current = ''
+        taskDescriptionRef.current = ''
+    }, [])
+
     const handleCreateTask = useCallback(async (title: string, description: string, issueType: string) => {
         taskTitleRef.current = title
         taskDescriptionRef.current = description
@@ -186,9 +197,10 @@ export default function BestFitPage() {
                         <BestFitForm
                             onSearch={handleSearch}
                             onCreateTask={handleCreateTask}
+                            onNewTask={handleNewTask}
                             isLoading={isPending}
                             isCreatingTask={isCreatingTask}
-                            isTaskCreated={!!createdIssue}
+                            createdIssue={createdIssue}
                             selectedProject={selectedProject}
                             onProjectChange={setSelectedProject}
                             selectedIssueType={selectedIssueType}
