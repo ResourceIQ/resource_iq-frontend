@@ -56,7 +56,7 @@ export function BestFitForm({ onSearch, isLoading }: BestFitFormProps) {
                   required
                   value={project}
                   onChange={(e) => setProject(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-1.5 text-sm rounded-lg bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition-colors"
                 >
                   <option value="" disabled>Select a project</option>
                   <option value="project1">Project 1</option>
@@ -75,7 +75,7 @@ export function BestFitForm({ onSearch, isLoading }: BestFitFormProps) {
                   required
                   value={title}
                   onChange={(e) => handleTitleChange(e.target.value)}
-                  className="w-full px-4 py-2 rounded-lg border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-3 py-1.5 text-sm rounded-lg bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition-colors"
                 >
                   <option value="" disabled>Select a title</option>
                   <option value="task1">UI Improvement</option>
@@ -95,7 +95,7 @@ export function BestFitForm({ onSearch, isLoading }: BestFitFormProps) {
                   onChange={(e) => setDescription(e.target.value)}
                   placeholder="Description will auto fill or you can edit..."
                   required
-                  className="border border-gray-300 focus:ring-2 focus:ring-blue-500"
+                  className="bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition-colors"
                 />
               </Field>
 
