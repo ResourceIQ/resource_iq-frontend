@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button"
 import {
   Field,
@@ -17,8 +19,20 @@ interface BestFitFormProps {
 
 export function BestFitForm({ onSearch, isLoading }: BestFitFormProps) {
 
+  const [project, setProject] = useState('')
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+
+  const taskDescriptions: Record<string, string> = {
+    task1: "UI Design related task.",
+    task2: "Backend API related task.",
+    task3: "Performance optimization task."
+  }
+
+  const handleTitleChange = (value: string) => {
+    setTitle(value)
+    setDescription(taskDescriptions[value] || '')
+  }
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault()
@@ -27,38 +41,75 @@ export function BestFitForm({ onSearch, isLoading }: BestFitFormProps) {
 
   return (
     <div className="w-full flex justify-center">
-      <form className="w-full" onSubmit={handleSubmit}>
+      <form className="w-full max-w-xl space-y-6" onSubmit={handleSubmit}>
         <FieldGroup>
           <FieldSet>
             <FieldGroup>
+
+              {/* Project Select */}
+              <Field>
+                <FieldLabel htmlFor="project">
+                  Project
+                </FieldLabel>
+                <select
+                  id="project"
+                  required
+                  value={project}
+                  onChange={(e) => setProject(e.target.value)}
+                  className="w-full px-3 py-1.5 text-sm rounded-lg bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition-colors"
+                >
+                  <option value="" disabled>Select a project</option>
+                  <option value="project1">Project 1</option>
+                  <option value="project2">Project 2</option>
+                  <option value="project3">Project 3</option>
+                </select>
+              </Field>
+
+              {/* Title Select */}
               <Field>
                 <FieldLabel htmlFor="task-title">
                   Title
                 </FieldLabel>
-                <Input
+                <select
                   id="task-title"
-                  placeholder="Access Token Issue"
                   required
-                  onChange={(e) => setTitle(e.target.value)}
-                />
+                  value={title}
+                  onChange={(e) => handleTitleChange(e.target.value)}
+                  className="w-full px-3 py-1.5 text-sm rounded-lg bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition-colors"
+                >
+                  <option value="" disabled>Select a title</option>
+                  <option value="task1">UI Improvement</option>
+                  <option value="task2">API Integration</option>
+                  <option value="task3">Performance Fix</option>
+                </select>
               </Field>
+
+              {/* Description Auto Fill */}
               <Field>
                 <FieldLabel htmlFor="task-description">
                   Description
                 </FieldLabel>
                 <Textarea
                   id="task-description"
-                  placeholder="Describe the issue or task in detail"
-                  required
+                  value={description}
                   onChange={(e) => setDescription(e.target.value)}
+                  placeholder="Description will auto fill or you can edit..."
+                  required
+                  className="bg-background text-foreground border border-input focus:ring-2 focus:ring-ring focus:outline-none transition-colors"
                 />
               </Field>
+
             </FieldGroup>
           </FieldSet>
+
           <FieldSeparator />
+
           <div className="flex flex-row-reverse">
-            <Button type="submit">Find Best Fits</Button>
+            <Button type="submit" disabled={isLoading}>
+              {isLoading ? "Searching..." : "Find Best Fits"}
+            </Button>
           </div>
+
         </FieldGroup>
       </form>
     </div>
