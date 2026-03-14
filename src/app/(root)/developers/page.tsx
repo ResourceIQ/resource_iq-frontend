@@ -17,6 +17,7 @@ import {
 import { Card, CardContent, CardHeader, CardTitle} from "@/components/ui/card"
 import { MoreHorizontal, ArrowUpDown, ChevronDown, Loader2 } from "lucide-react"
 import { error, profile } from "console"
+import Link from "next/link"
 
 export type Developer = {
     id: string
@@ -37,14 +38,14 @@ interface ResourceProfile{
     total_workload: number
 }
 
-const developers: Developer[] =[
-    {id: "1", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: "RPA Developer"},
-    {id: "2", name: "Diluka Lahiru", jiraEmail: "lahiru@gmail.com", githubEmail: "lahiru@gmail.com", role: "RPA Developer"},
-    {id: "3", name: "Senuja Imeth", jiraEmail: "senuja@gmail.com", githubEmail: "senuja@gmail.com", role: "Full Stack Developer"},
-    {id: "4", name: "Hirusha Lakshan", jiraEmail: "hirusha@gmail.com", githubEmail: "hirusha@gmail.com", role: "IOT Developer"},
-    {id: "5", name: "Nirodha Adikari", jiraEmail: "nirodha@gmail.com", githubEmail: "nirodha@gmail.com", role: "Full Stack Developer"},
-    {id: "6", name: "Supuni Liyanage", jiraEmail: "supuni@gmail.com", githubEmail: "supuni@gmail.com", role: "Front-End Developer"}
-]
+// const developers: Developer[] =[
+//     {id: "1", name: "Avishka Chasith", jiraEmail: "achasith@gmail.com", githubEmail: "achasith@gmail.com", role: "RPA Developer"},
+//     {id: "2", name: "Diluka Lahiru", jiraEmail: "lahiru@gmail.com", githubEmail: "lahiru@gmail.com", role: "RPA Developer"},
+//     {id: "3", name: "Senuja Imeth", jiraEmail: "senuja@gmail.com", githubEmail: "senuja@gmail.com", role: "Full Stack Developer"},
+//     {id: "4", name: "Hirusha Lakshan", jiraEmail: "hirusha@gmail.com", githubEmail: "hirusha@gmail.com", role: "IOT Developer"},
+//     {id: "5", name: "Nirodha Adikari", jiraEmail: "nirodha@gmail.com", githubEmail: "nirodha@gmail.com", role: "Full Stack Developer"},
+//     {id: "6", name: "Supuni Liyanage", jiraEmail: "supuni@gmail.com", githubEmail: "supuni@gmail.com", role: "Front-End Developer"}
+// ]
 
 export default function DevelopersPage() {
 
@@ -52,7 +53,7 @@ export default function DevelopersPage() {
     const[isLoading, setIsLoading] = useState(true)   // Loading status
     const [searchQuery, setSearchQuery] = useState("")  // State for the search text
 
-    const[selectIds, setSelectIds] = useState<number[]>([])   // State for the chexbox selected developers
+    const[selectIds, setSelectIds] = useState<string[]>([])   // State for the chexbox selected developers
     useEffect(()=>{
         async function fetchProfiles(){
             try{
@@ -95,7 +96,7 @@ export default function DevelopersPage() {
         return name.includes(search) || email.includes(search) || skillMatch
     })
 
-    const selectRow = (id: number)=>{
+    const selectRow = (id: string)=>{
         setSelectIds((prev)=>prev.includes(id) ? prev.filter((item)=> item !== id) : [...prev, id]
         
     )
@@ -106,7 +107,7 @@ export default function DevelopersPage() {
             setSelectIds([])
         }
         else{
-            setSelectIds(filteredProfiles.map((dev) => dev.id))
+            setSelectIds(filteredProfiles.map((profile) => profile.user_id))
         }
     }
 
@@ -151,13 +152,20 @@ export default function DevelopersPage() {
                                     </TableRow>
                                 ): filteredProfiles.length>0 ?(
                                     filteredProfiles.map((profile)=>(
-                                        <TableRow key={profile.id} className={selectIds.includes(profile.id)? "bg-muted/50":""}>
+                                        <TableRow key={profile.user_id} className={selectIds.includes(profile.user_id)? "bg-muted/50":""}>
                                              <TableCell>
-                                                <Checkbox checked={selectIds.includes(profile.id)}
-                                                    onCheckedChange={()=> selectRow(profile.id)}
+                                                <Checkbox checked={selectIds.includes(profile.user_id)}
+                                                    onCheckedChange={()=> selectRow(profile.user_id)}
                                                 />
                                             </TableCell>
-                                            <TableCell className="font-medium">{profile.jira_display_name || profile.github_display_name|| "Unknown"}</TableCell>
+                                            <TableCell className="font-medium">
+                                                <Link 
+                                                    href={`/developerProfile/${profile.user_id}`}
+                                                    className="text-purple-600 hover:text-purple-800 hover:underline transition-all"
+                                                >
+                                                    {profile.jira_display_name || profile.github_display_name|| "Unknown"}
+                                                </Link>
+                                            </TableCell>
                                             <TableCell>{profile.jira_email || "Not Linked"}</TableCell>
                                             <TableCell>{profile.github_email || "Not Linked"}</TableCell>
                                             <TableCell>
@@ -175,6 +183,13 @@ export default function DevelopersPage() {
                                                     )}
                                                 </div>
                                             </TableCell>
+                                            {/* <TableCell>
+                                                <Link href={`developerProfile/${profile.id}`}>
+                                                    <Button variant="ghost" size="sm" className="h-8 text-[10px] text-purple-600 font-bold border border-purple-100 rounded-full hover:bg-purple-50 px-3">
+                                                        View Profile
+                                                    </Button>
+                                                </Link>
+                                            </TableCell> */}
                                             <TableCell>
                                                 <Button variant="ghost" size="icon" className="h-8 w-8">
                                                     <MoreHorizontal className="h-4 w-4"/>
