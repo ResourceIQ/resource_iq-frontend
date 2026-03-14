@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import { Albert_Sans } from "next/font/google";
 import { AuthGuard } from "@/components/auth/auth-guard";
 import { ThemeProvider } from "@/components/theme-provider"
+import { Toaster } from "sonner"
 import "./globals.css";
 import Providers from "./providers";
 
@@ -65,6 +66,7 @@ export default function RootLayout({
               {children}
             </Providers>
           </AuthGuard>
+          <Toaster richColors position="bottom-right" />
         </ThemeProvider>
 
       </body>
