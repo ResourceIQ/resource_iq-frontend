@@ -1,3 +1,5 @@
+"use client";
+
 import { Button } from "@/components/ui/button"
 import {
   Field,
@@ -92,7 +94,7 @@ export function BestFitForm({
 
   return (
     <div className="w-full flex justify-center">
-      <form className="w-full" onSubmit={handleSubmit}>
+      <form className="w-full max-w-xl space-y-6" onSubmit={handleSubmit}>
         <FieldGroup>
           <FieldSet>
             <FieldGroup>
