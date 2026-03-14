@@ -164,36 +164,35 @@ export function BestFitForm({
           </FieldSet>
           <FieldSeparator />
           <div className="flex flex-row-reverse gap-2">
-            {isTaskCreated ? (
+            {isTaskCreated && (
               <>
                 <Button type="button" variant="outline" onClick={onNewTask}>
                   <RotateCcw className="size-4" />
                   New Task
                 </Button>
-                <Button type="button" asChild>
+                <Button type="button" variant="outline" asChild>
                   <a href={createdIssue!.issue_url} target="_blank" rel="noopener noreferrer">
                     <ExternalLink className="size-4" />
                     View in Jira
                   </a>
                 </Button>
               </>
-            ) : (
-              <>
-                <Button
-                  type="submit"
-                  disabled={isLoading || !selectedProject || !title || !description}
-                >
-                  {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Find Best Fits'}
-                </Button>
-                <Button
-                  type="button"
-                  variant="outline"
-                  disabled={isCreatingTask || !selectedProject || !title}
-                  onClick={() => onCreateTask(title, description, selectedIssueType)}
-                >
-                  {isCreatingTask ? <Loader2 className="size-4 animate-spin" /> : 'Create Task'}
-                </Button>
-              </>
+            )}
+            <Button
+              type="submit"
+              disabled={isLoading || !selectedProject || !title || !description}
+            >
+              {isLoading ? <Loader2 className="size-4 animate-spin" /> : 'Find Best Fits'}
+            </Button>
+            {!isTaskCreated && (
+              <Button
+                type="button"
+                variant="outline"
+                disabled={isCreatingTask || !selectedProject || !title}
+                onClick={() => onCreateTask(title, description, selectedIssueType)}
+              >
+                {isCreatingTask ? <Loader2 className="size-4 animate-spin" /> : 'Create Task'}
+              </Button>
             )}
           </div>
         </FieldGroup>
