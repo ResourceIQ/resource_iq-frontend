@@ -21,11 +21,12 @@ import { useScoreGetBestFits } from '@/api/generated/score/score'
 import { ScoreProfile } from '@/api/model/scoreProfile'
 import { useHeaderLoader } from '@/hooks/use-header-loader'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
-import { CheckCircle2, ChevronRightIcon, Loader2, UserCheck, XCircle } from 'lucide-react'
+import { ChevronRightIcon, Loader2, UserCheck } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { JiraIcon } from '@atlaskit/logo';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { jiraApi } from '@/lib/api-client'
+import { toast } from 'sonner'
 
 
 interface CreatedIssue {
@@ -42,8 +43,6 @@ export default function BestFitPage() {
     const [createdIssue, setCreatedIssue] = useState<CreatedIssue | null>(null)
     const [isCreatingTask, setIsCreatingTask] = useState(false)
     const [isAssigning, setIsAssigning] = useState(false)
-    const [errorMessage, setErrorMessage] = useState<string | null>(null)
-    const [successMessage, setSuccessMessage] = useState<string | null>(null)
     const taskTitleRef = useRef('')
     const taskDescriptionRef = useRef('')
     const { start, finish } = useHeaderLoader()
@@ -68,14 +67,8 @@ export default function BestFitPage() {
         }
     }, [bestFitsList, selectedFit])
 
-    const clearMessages = () => {
-        setErrorMessage(null)
-        setSuccessMessage(null)
-    }
-
     const handleSearch = (taskTitle: string, taskDescription: string) => {
         setSelectedFit(null)
-        clearMessages()
         taskTitleRef.current = taskTitle
         taskDescriptionRef.current = taskDescription
         start()
@@ -91,19 +84,17 @@ export default function BestFitPage() {
 
     const handleFitChange = (fit: ScoreProfile) => {
         setSelectedFit(fit)
-        clearMessages()
     }
 
     const handleCreateTask = useCallback(async (title: string, description: string, issueType: string) => {
-        clearMessages()
         taskTitleRef.current = title
         taskDescriptionRef.current = description
         if (!selectedProject) {
-            setErrorMessage('Please select a Jira project first')
+            toast.error('Please select a Jira project first')
             return
         }
         if (!title) {
-            setErrorMessage('Task title is required')
+            toast.error('Task title is required')
             return
         }
 
@@ -120,26 +111,25 @@ export default function BestFitPage() {
                 issue_url: result.issue_url,
                 assigned_to: null,
             })
-            setSuccessMessage(`Created ${result.issue_key}`)
+            toast.success(`Created ${result.issue_key}`)
         } catch (err: unknown) {
-            setErrorMessage(err instanceof Error ? err.message : 'Failed to create Jira issue')
+            toast.error(err instanceof Error ? err.message : 'Failed to create Jira issue')
         } finally {
             setIsCreatingTask(false)
         }
     }, [selectedProject])
 
     const handleCreateAndAssign = useCallback(async () => {
-        clearMessages()
         if (!selectedProject) {
-            setErrorMessage('Please select a Jira project first')
+            toast.error('Please select a Jira project first')
             return
         }
         if (!taskTitleRef.current) {
-            setErrorMessage('Task title is required')
+            toast.error('Task title is required')
             return
         }
         if (!selectedFit) {
-            setErrorMessage('Please select a user to assign')
+            toast.error('Please select a user to assign')
             return
         }
 
@@ -157,19 +147,18 @@ export default function BestFitPage() {
                 issue_url: result.issue_url,
                 assigned_to: result.assigned_to,
             })
-            setSuccessMessage(`Created ${result.issue_key} and assigned to ${result.assigned_to}`)
+            toast.success(`Created ${result.issue_key} and assigned to ${result.assigned_to}`)
         } catch (err: unknown) {
-            setErrorMessage(err instanceof Error ? err.message : 'Failed to create and assign Jira issue')
+            toast.error(err instanceof Error ? err.message : 'Failed to create and assign Jira issue')
         } finally {
             setIsAssigning(false)
         }
     }, [selectedProject, selectedFit, selectedIssueType])
 
     const handleAssign = useCallback(async () => {
-        clearMessages()
         if (!createdIssue) return
         if (!selectedFit) {
-            setErrorMessage('Please select a user to assign')
+            toast.error('Please select a user to assign')
             return
         }
 
@@ -177,9 +166,9 @@ export default function BestFitPage() {
         try {
             const result = await jiraApi.assignIssue(createdIssue.issue_key, selectedFit.user_id)
             setCreatedIssue(prev => prev ? { ...prev, assigned_to: result.assigned_to } : prev)
-            setSuccessMessage(`${createdIssue.issue_key} assigned to ${result.assigned_to}`)
+            toast.success(`${createdIssue.issue_key} assigned to ${result.assigned_to}`)
         } catch (err: unknown) {
-            setErrorMessage(err instanceof Error ? err.message : 'Failed to assign issue')
+            toast.error(err instanceof Error ? err.message : 'Failed to assign issue')
         } finally {
             setIsAssigning(false)
         }
@@ -211,18 +200,6 @@ export default function BestFitPage() {
                                     ? (error as any).detail
                                     : 'Failed to fetch'}
                             </p>
-                        )}
-                        {errorMessage && (
-                            <div className="flex items-center gap-2 text-sm text-red-600 bg-red-50 dark:bg-red-950/30 dark:text-red-400 rounded-md p-2 mt-2">
-                                <XCircle className="size-4 shrink-0" />
-                                <span>{errorMessage}</span>
-                            </div>
-                        )}
-                        {successMessage && (
-                            <div className="flex items-center gap-2 text-sm text-green-600 bg-green-50 dark:bg-green-950/30 dark:text-green-400 rounded-md p-2 mt-2">
-                                <CheckCircle2 className="size-4 shrink-0" />
-                                <span>{successMessage}</span>
-                            </div>
                         )}
                     </CardContent>
                 </Card>
