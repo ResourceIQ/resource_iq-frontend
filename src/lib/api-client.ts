@@ -171,6 +171,35 @@ export const githubApi = {
   }),
 };
 
+// Jira Issue Creation Types
+export interface JiraCreateIssueRequest {
+  project_key: string;
+  summary: string;
+  description?: string;
+  issue_type?: string;
+  assignee_user_id?: string;
+}
+
+export interface JiraCreateIssueResponse {
+  issue_key: string;
+  issue_url: string;
+  summary: string;
+  assigned_to: string | null;
+}
+
+export interface JiraAssignIssueResponse {
+  issue_key: string;
+  assigned_to: string | null;
+}
+
+export interface JiraIssueType {
+  id: string;
+  name: string;
+  description: string | null;
+  subtask: boolean;
+  icon_url: string | null;
+}
+
 // Jira API Types
 export interface JiraProject {
   id: string;
@@ -241,6 +270,10 @@ export const jiraApi = {
   getProjects: (): Promise<JiraProject[]> =>
     apiFetch('/jira/projects', { method: 'GET' }),
 
+  // Issue Types
+  getIssueTypes: (): Promise<JiraIssueType[]> =>
+    apiFetch('/jira/issue-types', { method: 'GET' }),
+
   // Sync
   syncIssues: (request: JiraSyncRequest): Promise<JiraSyncResponse> =>
     apiFetch('/jira/sync', {
@@ -262,5 +295,17 @@ export const jiraApi = {
     apiFetch(`/jira/issue-type-statuses/${issueTypeId}`, {
       method: 'PUT',
       body: JSON.stringify({ selected_statuses: selectedStatuses }),
+    }),
+
+  createIssue: (request: JiraCreateIssueRequest): Promise<JiraCreateIssueResponse> =>
+    apiFetch('/jira/issues', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  assignIssue: (issueKey: string, assigneeUserId: string): Promise<JiraAssignIssueResponse> =>
+    apiFetch(`/jira/issues/${issueKey}/assignee`, {
+      method: 'PUT',
+      body: JSON.stringify({ assignee_user_id: assigneeUserId }),
     }),
 };

@@ -1,6 +1,6 @@
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useCallback, useEffect, useRef, useState } from 'react'
 import {
     Card,
     CardAction,
@@ -21,31 +21,46 @@ import { useScoreGetBestFits } from '@/api/generated/score/score'
 import { ScoreProfile } from '@/api/model/scoreProfile'
 import { useHeaderLoader } from '@/hooks/use-header-loader'
 import { Item, ItemActions, ItemContent, ItemDescription, ItemTitle } from '@/components/ui/item'
-import { ChevronRightIcon } from 'lucide-react'
+import { ChevronRightIcon, Loader2, UserCheck } from 'lucide-react'
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { JiraIcon } from '@atlaskit/logo';
 import { SiGithub } from '@icons-pack/react-simple-icons';
+import { jiraApi } from '@/lib/api-client'
+import { toast } from '@/lib/toast'
+
+
+interface CreatedIssue {
+    issue_key: string
+    issue_url: string
+    assigned_to: string | null
+}
 
 
 export default function BestFitPage() {
     const [selectedFit, setSelectedFit] = useState<ScoreProfile | null>(null)
+    const [selectedProject, setSelectedProject] = useState('')
+    const [selectedIssueType, setSelectedIssueType] = useState('Task')
+    const [createdIssue, setCreatedIssue] = useState<CreatedIssue | null>(null)
+    const [isCreatingTask, setIsCreatingTask] = useState(false)
+    const [isAssigning, setIsAssigning] = useState(false)
+    const taskTitleRef = useRef('')
+    const taskDescriptionRef = useRef('')
     const { start, finish } = useHeaderLoader()
     const {
-        mutate, // This is the function to trigger the POST
+        mutate,
         data: apiResponse,
         isPending,
         isError,
-        error
+        error,
+        reset: resetBestFits,
     } = useScoreGetBestFits()
 
-    // Access the data safely, supporting both raw array and { data: [] } shapes
     const bestFitsList = Array.isArray(apiResponse)
         ? apiResponse
         : (apiResponse?.data && Array.isArray(apiResponse.data))
             ? apiResponse.data
             : [];
 
-    // Auto-select the first result when data arrives
     useEffect(() => {
         if (bestFitsList.length > 0 && !selectedFit) {
             setSelectedFit(bestFitsList[0])
@@ -55,8 +70,9 @@ export default function BestFitPage() {
 
     const handleSearch = (taskTitle: string, taskDescription: string) => {
         setSelectedFit(null)
+        taskTitleRef.current = taskTitle
+        taskDescriptionRef.current = taskDescription
         start()
-        // Execute the Mutation
         mutate({
             data: {
                 task_title: taskTitle,
@@ -71,6 +87,104 @@ export default function BestFitPage() {
         setSelectedFit(fit)
     }
 
+    const handleNewTask = useCallback(() => {
+        setSelectedFit(null)
+        setCreatedIssue(null)
+        setIsCreatingTask(false)
+        setIsAssigning(false)
+        taskTitleRef.current = ''
+        taskDescriptionRef.current = ''
+        resetBestFits()
+    }, [resetBestFits])
+
+    const handleCreateTask = useCallback(async (title: string, description: string, issueType: string) => {
+        taskTitleRef.current = title
+        taskDescriptionRef.current = description
+        if (!selectedProject) {
+            toast.error('Please select a Jira project first')
+            return
+        }
+        if (!title) {
+            toast.error('Task title is required')
+            return
+        }
+
+        setIsCreatingTask(true)
+        try {
+            const result = await jiraApi.createIssue({
+                project_key: selectedProject,
+                summary: title,
+                description: description || undefined,
+                issue_type: issueType,
+            })
+            setCreatedIssue({
+                issue_key: result.issue_key,
+                issue_url: result.issue_url,
+                assigned_to: null,
+            })
+            toast.success(`Created ${result.issue_key}`)
+        } catch (err: unknown) {
+            toast.error(err instanceof Error ? err.message : 'Failed to create Jira issue')
+        } finally {
+            setIsCreatingTask(false)
+        }
+    }, [selectedProject])
+
+    const handleCreateAndAssign = useCallback(async () => {
+        if (!selectedProject) {
+            toast.error('Please select a Jira project first')
+            return
+        }
+        if (!taskTitleRef.current) {
+            toast.error('Task title is required')
+            return
+        }
+        if (!selectedFit) {
+            toast.error('Please select a user to assign')
+            return
+        }
+
+        setIsAssigning(true)
+        try {
+            const result = await jiraApi.createIssue({
+                project_key: selectedProject,
+                summary: taskTitleRef.current,
+                description: taskDescriptionRef.current || undefined,
+                issue_type: selectedIssueType,
+                assignee_user_id: selectedFit.user_id,
+            })
+            setCreatedIssue({
+                issue_key: result.issue_key,
+                issue_url: result.issue_url,
+                assigned_to: result.assigned_to,
+            })
+            toast.success(`Created ${result.issue_key} and assigned to ${result.assigned_to}`)
+        } catch (err: unknown) {
+            toast.error(err instanceof Error ? err.message : 'Failed to create and assign Jira issue')
+        } finally {
+            setIsAssigning(false)
+        }
+    }, [selectedProject, selectedFit, selectedIssueType])
+
+    const handleAssign = useCallback(async () => {
+        if (!createdIssue) return
+        if (!selectedFit) {
+            toast.error('Please select a user to assign')
+            return
+        }
+
+        setIsAssigning(true)
+        try {
+            const result = await jiraApi.assignIssue(createdIssue.issue_key, selectedFit.user_id)
+            setCreatedIssue(prev => prev ? { ...prev, assigned_to: result.assigned_to } : prev)
+            toast.success(`${createdIssue.issue_key} assigned to ${result.assigned_to}`)
+        } catch (err: unknown) {
+            toast.error(err instanceof Error ? err.message : 'Failed to assign issue')
+        } finally {
+            setIsAssigning(false)
+        }
+    }, [createdIssue, selectedFit])
+
     return (
         <div className="w-full mx-auto flex justify-between gap-4">
 
@@ -80,10 +194,17 @@ export default function BestFitPage() {
                         <CardTitle>Find Your Best Fit</CardTitle>
                     </CardHeader>
                     <CardContent>
-                        {/* 8. Connect the form prop */}
                         <BestFitForm
                             onSearch={handleSearch}
+                            onCreateTask={handleCreateTask}
+                            onNewTask={handleNewTask}
                             isLoading={isPending}
+                            isCreatingTask={isCreatingTask}
+                            createdIssue={createdIssue}
+                            selectedProject={selectedProject}
+                            onProjectChange={setSelectedProject}
+                            selectedIssueType={selectedIssueType}
+                            onIssueTypeChange={setSelectedIssueType}
                         />
                         {isError && (
                             <p className="text-red-500 mt-2">
@@ -97,7 +218,6 @@ export default function BestFitPage() {
             </div>
             <div className="w-2/5">
                 <div className="flex flex-col gap-4">
-                    {/* best fit card */}
                     {selectedFit ? (
                         <Card className="rounded-3xl shadow-[-3px_3px_3px_rgba(45,212,191,0.3),3px_-3px_3px_rgba(168,85,247,0.4)]">
                             <CardHeader>
@@ -116,7 +236,7 @@ export default function BestFitPage() {
                                     <TabsContent value="github">
                                         <Card>
                                             <CardHeader>
-                                                <CardDescription>{selectedFit.user_name}'s most relevant GitHub activities</CardDescription>
+                                                <CardDescription>{selectedFit.user_name}&apos;s most relevant GitHub activities</CardDescription>
                                             </CardHeader>
                                             <CardContent>
                                                 {selectedFit.pr_info?.map((pr) => (
@@ -139,10 +259,54 @@ export default function BestFitPage() {
                                     </TabsContent>
                                 </Tabs>
                             </CardContent>
-                            <CardFooter>
-                                <Button className="w-full">
-                                    Assign
-                                </Button>
+                            <CardFooter className="flex flex-col gap-2">
+                                {createdIssue && (
+                                    <div className="w-full flex items-center justify-between rounded-md border p-3">
+                                        <div className="flex flex-col gap-0.5">
+                                            <a
+                                                href={createdIssue.issue_url}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="text-sm font-medium underline"
+                                            >
+                                                {createdIssue.issue_key}
+                                            </a>
+                                            {createdIssue.assigned_to ? (
+                                                <span className="text-xs text-muted-foreground flex items-center gap-1">
+                                                    <UserCheck className="size-3" />
+                                                    {createdIssue.assigned_to}
+                                                </span>
+                                            ) : (
+                                                <span className="text-xs text-muted-foreground">Unassigned</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                )}
+                                {!createdIssue ? (
+                                    <Button
+                                        className="w-full"
+                                        disabled={isAssigning}
+                                        onClick={handleCreateAndAssign}
+                                    >
+                                        {isAssigning ? (
+                                            <Loader2 className="size-4 animate-spin" />
+                                        ) : (
+                                            'Create and Assign'
+                                        )}
+                                    </Button>
+                                ) : (
+                                    <Button
+                                        className="w-full"
+                                        disabled={isAssigning}
+                                        onClick={handleAssign}
+                                    >
+                                        {isAssigning ? (
+                                            <Loader2 className="size-4 animate-spin" />
+                                        ) : (
+                                            createdIssue.assigned_to ? 'Reassign' : 'Assign'
+                                        )}
+                                    </Button>
+                                )}
                             </CardFooter>
                         </Card>
                     ) : (
@@ -152,7 +316,6 @@ export default function BestFitPage() {
                             </CardContent>
                         </Card>
                     )}
-                    {/* best fits list */}
                     <Card className="flex-1 flex flex-col">
                         <CardHeader>
                             <CardTitle>Best-Fits</CardTitle>
