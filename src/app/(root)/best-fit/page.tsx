@@ -86,15 +86,17 @@ export default function BestFitPage() {
         setSelectedFit(fit)
     }
 
+    const [formResetKey, setFormResetKey] = useState(0)
+
     const handleNewTask = useCallback(() => {
         setSelectedFit(null)
-        setSelectedProject('')
         setSelectedIssueType('Task')
         setCreatedIssue(null)
         setIsCreatingTask(false)
         setIsAssigning(false)
         taskTitleRef.current = ''
         taskDescriptionRef.current = ''
+        setFormResetKey(k => k + 1)
     }, [])
 
     const handleCreateTask = useCallback(async (title: string, description: string, issueType: string) => {
@@ -195,6 +197,7 @@ export default function BestFitPage() {
                     </CardHeader>
                     <CardContent>
                         <BestFitForm
+                            key={formResetKey}
                             onSearch={handleSearch}
                             onCreateTask={handleCreateTask}
                             onNewTask={handleNewTask}
