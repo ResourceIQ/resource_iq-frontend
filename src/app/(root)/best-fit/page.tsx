@@ -26,7 +26,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { JiraIcon } from '@atlaskit/logo';
 import { SiGithub } from '@icons-pack/react-simple-icons';
 import { jiraApi } from '@/lib/api-client'
-import { toast } from 'sonner'
+import { toast } from '@/lib/toast'
 
 
 interface CreatedIssue {

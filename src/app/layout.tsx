@@ -66,13 +66,7 @@ export default function RootLayout({
               {children}
             </Providers>
           </AuthGuard>
-          <Toaster
-            richColors
-            position="bottom-right"
-            toastOptions={{
-              style: { fontSize: '14px', padding: '16px 20px' },
-            }}
-          />
+          <Toaster position="bottom-right" />
         </ThemeProvider>
 
       </body>
