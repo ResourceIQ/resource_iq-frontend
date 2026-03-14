@@ -51,7 +51,8 @@ export default function BestFitPage() {
         data: apiResponse,
         isPending,
         isError,
-        error
+        error,
+        reset: resetBestFits,
     } = useScoreGetBestFits()
 
     const bestFitsList = Array.isArray(apiResponse)
@@ -93,7 +94,8 @@ export default function BestFitPage() {
         setIsAssigning(false)
         taskTitleRef.current = ''
         taskDescriptionRef.current = ''
-    }, [])
+        resetBestFits()
+    }, [resetBestFits])
 
     const handleCreateTask = useCallback(async (title: string, description: string, issueType: string) => {
         taskTitleRef.current = title
