@@ -54,6 +54,12 @@ export function BestFitForm({
 
   const [title, setTitle] = useState('')
   const [description, setDescription] = useState('')
+
+  const handleNewTask = () => {
+    setTitle('')
+    setDescription('')
+    onNewTask()
+  }
   const [projects, setProjects] = useState<JiraProject[]>([])
   const [projectsLoading, setProjectsLoading] = useState(false)
   const [issueTypes, setIssueTypes] = useState<JiraIssueType[]>([])
@@ -166,7 +172,7 @@ export function BestFitForm({
           <div className="flex flex-row-reverse gap-2">
             {isTaskCreated && (
               <>
-                <Button type="button" variant="outline" onClick={onNewTask}>
+                <Button type="button" variant="outline" onClick={handleNewTask}>
                   <RotateCcw className="size-4" />
                   New Task
                 </Button>
