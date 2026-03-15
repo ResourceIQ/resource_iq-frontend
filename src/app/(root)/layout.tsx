@@ -1,6 +1,6 @@
 "use client" // Layout needs to be client-side to hold the ref
 
-import { SidebarProvider, SidebarInset } from "@/components/ui/sidebar"
+import { SidebarProvider, SidebarInset, SidebarTrigger } from "@/components/ui/sidebar"
 import { AppSidebar } from "@/components/layout/newsidebar"
 import BreadcrumbHeader from "@/components/layout/breadcrumb-header"
 import LoadingBar from "react-top-loading-bar"
@@ -14,6 +14,9 @@ function LayoutContent({ children }: { children: React.ReactNode }) {
             <AppSidebar />
             <SidebarInset>
                 <header className="flex h-16 shrink-0 items-center gap-2 border-b px-4 bg-white dark:bg-card shadow-sm sticky top-0 z-10 relative">
+                    <div className="flex items-center md:hidden">
+                        <SidebarTrigger className="mr-2" />
+                    </div>
                     <BreadcrumbHeader />
                     <div className="absolute bottom-0 left-0 w-full z-50">
                         <LoadingBar 

@@ -171,15 +171,36 @@ export const githubApi = {
   }),
 };
 
-// Jira API Types
-export interface JiraUser {
-  account_id: string;
-  display_name: string | null;
-  email_address: string | null;
-  avatar_url: string | null;
-  active: boolean;
+// Jira Issue Creation Types
+export interface JiraCreateIssueRequest {
+  project_key: string;
+  summary: string;
+  description?: string;
+  issue_type?: string;
+  assignee_user_id?: string;
 }
 
+export interface JiraCreateIssueResponse {
+  issue_key: string;
+  issue_url: string;
+  summary: string;
+  assigned_to: string | null;
+}
+
+export interface JiraAssignIssueResponse {
+  issue_key: string;
+  assigned_to: string | null;
+}
+
+export interface JiraIssueType {
+  id: string;
+  name: string;
+  description: string | null;
+  subtask: boolean;
+  icon_url: string | null;
+}
+
+// Jira API Types
 export interface JiraProject {
   id: string;
   key: string;
@@ -225,53 +246,6 @@ export interface JiraSyncResponse {
   sync_duration_seconds: number;
 }
 
-export interface DeveloperWorkload {
-  jira_account_id: string;
-  display_name: string | null;
-  email: string | null;
-  open_issues: number;
-  in_progress_issues: number;
-  in_review_issues: number;
-  total_active_issues: number;
-  high_priority_count: number;
-  medium_priority_count: number;
-  low_priority_count: number;
-  bugs_count: number;
-  tasks_count: number;
-  stories_count: number;
-  other_count: number;
-  workload_score: number;
-  last_updated: string | null;
-}
-
-export interface JiraIssueContent {
-  issue_id: string;
-  issue_key: string;
-  project_key: string;
-  summary: string;
-  description: string | null;
-  issue_type: string;
-  status: string;
-  priority: string | null;
-  labels: string[];
-  assignee: JiraUser | null;
-  reporter: JiraUser | null;
-  issue_url: string;
-  comments: JiraComment[];
-  created_at: string | null;
-  updated_at: string | null;
-  resolved_at: string | null;
-  context: string | null;
-}
-
-export interface JiraComment {
-  id: string;
-  author: JiraUser;
-  body: string;
-  created: string;
-  updated: string | null;
-}
-
 export interface JiraIssueTypeStatus {
   id: number;
   issue_type_id: string;
@@ -292,66 +266,20 @@ export const jiraApi = {
   disconnect: (): Promise<{ message: string }> =>
     apiFetch('/jira/auth/disconnect', { method: 'POST' }),
 
-  // Projects & Users
+  // Projects
   getProjects: (): Promise<JiraProject[]> =>
     apiFetch('/jira/projects', { method: 'GET' }),
 
-  getUsers: (maxResults: number = 100): Promise<JiraUser[]> =>
-    apiFetch(`/jira/users?max_results=${maxResults}`, { method: 'GET' }),
+  // Issue Types
+  getIssueTypes: (): Promise<JiraIssueType[]> =>
+    apiFetch('/jira/issue-types', { method: 'GET' }),
 
-  getProjectUsers: (projectKey: string, maxResults: number = 100): Promise<JiraUser[]> =>
-    apiFetch(`/jira/projects/${projectKey}/users?max_results=${maxResults}`, { method: 'GET' }),
-
-  getUserByAccountId: (accountId: string): Promise<JiraUser> =>
-    apiFetch(`/jira/users/${accountId}`, { method: 'GET' }),
-
-  // Sync & Data
+  // Sync
   syncIssues: (request: JiraSyncRequest): Promise<JiraSyncResponse> =>
     apiFetch('/jira/sync', {
       method: 'POST',
       body: JSON.stringify(request),
     }),
-
-  getIssueVectors: (params?: {
-    project_key?: string;
-    assignee_account_id?: string;
-    limit?: number;
-  }): Promise<Record<string, unknown>[]> => {
-    const searchParams = new URLSearchParams();
-    if (params?.project_key) searchParams.append('project_key', params.project_key);
-    if (params?.assignee_account_id) searchParams.append('assignee_account_id', params.assignee_account_id);
-    if (params?.limit) searchParams.append('limit', params.limit.toString());
-    const query = searchParams.toString() ? `?${searchParams.toString()}` : '';
-    return apiFetch(`/jira/vectors${query}`, { method: 'GET' });
-  },
-
-  getIssueVector: (issueKey: string): Promise<Record<string, unknown>> =>
-    apiFetch(`/jira/vectors/${issueKey}`, { method: 'GET' }),
-
-  // Workload
-  getWorkloadByAccount: (jiraAccountId: string): Promise<DeveloperWorkload> =>
-    apiFetch(`/jira/workload/${jiraAccountId}`, { method: 'GET' }),
-
-  getAllWorkloads: (): Promise<DeveloperWorkload[]> =>
-    apiFetch('/jira/workloads', { method: 'GET' }),
-
-  // Search
-  searchSimilarIssues: (params: {
-    query: string;
-    n_results?: number;
-    project_key?: string;
-    assignee_account_id?: string;
-  }): Promise<Record<string, unknown>[]> => {
-    const searchParams = new URLSearchParams();
-    searchParams.append('query', params.query);
-    if (params.n_results) searchParams.append('n_results', params.n_results.toString());
-    if (params.project_key) searchParams.append('project_key', params.project_key);
-    if (params.assignee_account_id) searchParams.append('assignee_account_id', params.assignee_account_id);
-    return apiFetch(`/jira/search/similar?${searchParams.toString()}`, { method: 'POST' });
-  },
-
-  getIssueContext: (issueKey: string): Promise<JiraIssueContent> =>
-    apiFetch(`/jira/issues/${issueKey}/context`, { method: 'GET' }),
 
   // Issue Type Status Configuration
   syncIssueTypeStatuses: (): Promise<JiraIssueTypeStatus[]> =>
@@ -367,5 +295,17 @@ export const jiraApi = {
     apiFetch(`/jira/issue-type-statuses/${issueTypeId}`, {
       method: 'PUT',
       body: JSON.stringify({ selected_statuses: selectedStatuses }),
+    }),
+
+  createIssue: (request: JiraCreateIssueRequest): Promise<JiraCreateIssueResponse> =>
+    apiFetch('/jira/issues', {
+      method: 'POST',
+      body: JSON.stringify(request),
+    }),
+
+  assignIssue: (issueKey: string, assigneeUserId: string): Promise<JiraAssignIssueResponse> =>
+    apiFetch(`/jira/issues/${issueKey}/assignee`, {
+      method: 'PUT',
+      body: JSON.stringify({ assignee_user_id: assigneeUserId }),
     }),
 };
